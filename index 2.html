@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mappa della Filosofia Occidentale</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,sans-serif;background:#f6f5f1;color:#1a1a18;line-height:1.5;min-height:100vh}
+header{background:#fff;border-bottom:1px solid #e2e1da;padding:1.5rem 2rem 1rem}
+.nav{display:flex;gap:20px;margin-bottom:1rem;font-size:13px}
+.nav a{color:#888;text-decoration:none;padding-bottom:4px;border-bottom:2px solid transparent;transition:all .12s}
+.nav a:hover{color:#1a1a18}
+.nav a.current{color:#1a1a18;font-weight:600;border-bottom-color:#1a1a18}
+header h1{font-size:24px;font-weight:600;letter-spacing:-.3px;margin-bottom:4px}
+header p{font-size:13px;color:#888;max-width:640px}
+.legend{background:#fff;border-bottom:1px solid #e2e1da;padding:.65rem 2rem;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.legend-title{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#aaa;margin-right:4px}
+.legend-item{font-size:11px;color:#666;display:flex;align-items:center;gap:4px;cursor:pointer;transition:color .12s}
+.legend-item:hover,.legend-item.active{color:#1a1a18;font-weight:600}
+.ldot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.controls{background:#fff;border-bottom:1px solid #e2e1da;padding:.75rem 2rem;display:flex;gap:6px;flex-wrap:wrap;align-items:center;position:sticky;top:0;z-index:20;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.filter-btn{font-size:11px;padding:4px 12px;border-radius:20px;border:1px solid #d5d4cd;background:transparent;color:#555;cursor:pointer;transition:all .13s;white-space:nowrap}
+.filter-btn:hover{border-color:#888;color:#1a1a18}
+.filter-btn.active{background:#1a1a18;color:#fff;border-color:#1a1a18;font-weight:500}
+.filter-btn.school-active{color:#fff;font-weight:500}
+.cnt{margin-left:auto;font-size:11px;color:#bbb;white-space:nowrap}
+main{padding:1.5rem 2rem 3rem;max-width:1300px}
+.era-block{margin-bottom:2.25rem}
+.era-label{font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#bbb;margin-bottom:.8rem;padding-left:10px;border-left:3px solid #e2e1da}
+.cards-row{display:flex;gap:10px;flex-wrap:wrap}
+.phil-card{width:198px;min-height:118px;border-radius:11px;border:1px solid #e5e4de;background:#fff;padding:11px 13px 11px 16px;cursor:pointer;position:relative;overflow:hidden;transition:border-color .15s,transform .1s,box-shadow .15s;user-select:none}
+.phil-card:hover{border-color:#aaa;transform:translateY(-1px);box-shadow:0 3px 12px rgba(0,0,0,.08)}
+.phil-card.selected{border-width:2px;transform:translateY(-1px)}
+.school-bar{position:absolute;top:0;left:0;width:4px;height:100%;border-radius:4px 0 0 4px}
+.card-date{font-size:10px;color:#bbb;margin-bottom:2px}
+.card-name{font-size:14px;font-weight:600;margin-bottom:4px;color:#1a1a18}
+.card-school-badge{font-size:10px;padding:2px 8px;border-radius:10px;display:inline-block;margin-bottom:6px;font-weight:500}
+.card-summary{font-size:11px;color:#777;line-height:1.45}
+.detail-panel{border:1px solid #e2e1da;border-radius:11px;background:#fafaf8;padding:1.25rem 1.5rem;margin-top:.75rem;display:none;animation:fadeIn .18s ease}
+.detail-panel.open{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.detail-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.85rem}
+.detail-name{font-size:19px;font-weight:600;letter-spacing:-.2px}
+.detail-meta{font-size:12px;color:#999;margin-top:3px}
+.detail-close{font-size:17px;cursor:pointer;color:#bbb;border:none;background:none;padding:2px 7px;border-radius:5px;line-height:1;transition:all .12s}
+.detail-close:hover{color:#333;background:#eee}
+.concept-list{list-style:none;display:flex;flex-direction:column;gap:7px}
+.concept-list li{font-size:13px;color:#555;padding:8px 12px;background:#fff;border-radius:8px;border:1px solid #e5e4de;line-height:1.5}
+.concept-list li strong{color:#1a1a18;font-weight:600}
+.detail-footer{margin-top:1rem}
+.deep-btn{font-size:12px;padding:6px 14px;border-radius:7px;border:1px solid #c5d4f0;background:#f0f5ff;color:#1d4ed8;cursor:pointer;font-weight:500;transition:all .13s}
+.deep-btn:hover{background:#dbeafe;border-color:#93c5fd}
+.copy-box{margin-top:.75rem;background:#f4f3ef;border-radius:7px;padding:10px 13px;font-size:12px;color:#555;display:none;border:1px solid #e2e1da}
+.copy-box.open{display:block}
+.copy-box code{display:block;margin:6px 0;font-family:monospace;color:#1a1a18;background:#fff;padding:6px 10px;border-radius:5px;border:1px solid #e2e1da;word-break:break-word}
+.empty{text-align:center;padding:3rem;color:#aaa;font-size:14px}
+footer{text-align:center;padding:1.5rem;font-size:11px;color:#ccc;border-top:1px solid #e5e4de;background:#fff;margin-top:2rem}
+@media(max-width:600px){main{padding:1rem}header{padding:1.25rem 1rem}.phil-card{width:calc(50% - 5px);min-width:140px}}
+</style>
+</head>
+<body>
+<header>
+  <nav class="nav">
+    <a href="index.html" class="current">Timeline</a>
+    <a href="concetti.html">Concetti</a>
+  </nav>
+  <h1>Mappa della Filosofia Occidentale</h1>
+  <p>Clicca su un filosofo per esplorare i concetti chiave &middot; Filtra per scuola &middot; Schema in aggiornamento continuo</p>
+</header>
+<div class="legend" id="legend"></div>
+<div class="controls" id="ctrl"></div>
+<main id="main"></main>
+<footer>Schema di apprendimento filosofico &mdash; aggiornato con Claude</footer>
+<script>
+var SC={presocratica:'#5DCAA5',classica:'#7F77DD',ellenistica:'#EF9F27',medievale:'#378ADD',rinascimento:'#97C459',razionalismo:'#D4537E',empirismo:'#D85A30',idealismo:'#1D9E75',positivismo:'#BA7517',esistenzialismo:'#C05080',contemporanea:'#888780'};
+var SBG={presocratica:'#e6f9f3',classica:'#eeedfe',ellenistica:'#fef3e0',medievale:'#e6f2fc',rinascimento:'#edf7e2',razionalismo:'#fde8f0',empirismo:'#fceee8',idealismo:'#e4f5ee',positivismo:'#fef3e0',esistenzialismo:'#fce8f0',contemporanea:'#f2f1ee'};
+var SCT={presocratica:'#0a5940',classica:'#3c3489',ellenistica:'#7a4500',medievale:'#0c447c',rinascimento:'#2e5a0a',razionalismo:'#7a1e3e',empirismo:'#7a2910',idealismo:'#0a5940',positivismo:'#7a4500',esistenzialismo:'#7a1e3e',contemporanea:'#4a4944'};
+var DATA=[
+{id:0,name:'Talete',date:'~624\u2013546 a.C.',school:'presocratica',era:'Antica (VII\u2013V sec. a.C.)',summary:'Primo filosofo occidentale. L\'acqua come principio di tutte le cose.',concepts:[{t:'Arch\xe9',d:'Il principio originario \xe8 l\'acqua: primo tentativo razionale di spiegare il cosmo senza ricorrere ai miti o agli d\xe8i.'},{t:'Monismo naturalistico',d:'Tutto deriva da un\'unica sostanza materiale \u2014 fondamento di ogni futura filosofia della natura.'},{t:'Panpsichismo',d:'L\'universo \xe8 animato: anche la materia inorganica (es. la calamita) possiede una forma di anima.'}]},
+{id:1,name:'Eraclito',date:'~535\u2013475 a.C.',school:'presocratica',era:'Antica (VII\u2013V sec. a.C.)',summary:'Il divenire come unica realt\xe0. Il Logos come ragione cosmica.',concepts:[{t:'Panta rei',d:'"Tutto scorre, nulla \xe8 stabile." Il cambiamento perpetuo \xe8 la sola costante dell\'universo.'},{t:'Logos',d:'Ragione cosmica che governa il divenire \u2014 principio di ordine nascosto nel caos apparente.'},{t:'Unit\xe0 degli opposti',d:'Gli opposti si implicano reciprocamente: senza guerra non c\'è pace, senza morte non c\'è vita.'}]},
+{id:2,name:'Parmenide',date:'~515\u2013450 a.C.',school:'presocratica',era:'Antica (VII\u2013V sec. a.C.)',summary:'L\'essere \xe8 uno, immobile, eterno. Il divenire \xe8 pura illusione.',concepts:[{t:'Essere e non-essere',d:'"L\'essere \xe8, il non-essere non \xe8." Prima formulazione rigorosa del problema metafisico.'},{t:'Via della verit\xe0 vs opinione',d:'La ragione (aletheia) rivela l\'essere immobile; i sensi producono solo doxa, apparenza ingannevole.'}]},
+{id:3,name:'Pitagora',date:'~570\u2013495 a.C.',school:'presocratica',era:'Antica (VII\u2013V sec. a.C.)',summary:'Il numero come struttura profonda della realt\xe0.',concepts:[{t:'Numero come arch\xe9',d:'La realt\xe0 \xe8 strutturata matematicamente: i numeri non descrivono le cose, sono l\'essenza stessa delle cose.'},{t:'Metempsicosi',d:'L\'anima immortale trasmigra in corpi diversi dopo la morte, in un ciclo di purificazione progressiva.'},{t:'Armonia cosmica',d:'L\'universo \xe8 un kosmos armonioso governato da proporzioni numeriche \u2014 la musica delle sfere.'}]},
+{id:4,name:'Socrate',date:'~470\u2013399 a.C.',school:'classica',era:'Classica (V\u2013IV sec. a.C.)',summary:'Maieutica, cura dell\'anima, il sapere di non sapere.',concepts:[{t:'Maieutica',d:'L\'arte di far "partorire" la verit\xe0 gi\xe0 presente nell\'interlocutore attraverso domande \u2014 non insegna, aiuta a ricordare.'},{t:'Ironia socratica',d:'"So di non sapere." Il riconoscimento dell\'ignoranza come unico punto di partenza autentico del pensiero.'},{t:'Cura dell\'anima',d:'Il fine della vita \xe8 migliorare la propria anima, non accumulare ricchezze o potere.'},{t:'Virt\xf9 = conoscenza',d:'Chi conosce il bene non pu\xf2 fare il male: il vizio \xe8 sempre ignoranza.'}]},
+{id:5,name:'Platone',date:'~428\u2013348 a.C.',school:'classica',era:'Classica (V\u2013IV sec. a.C.)',summary:'Il mondo delle Idee come unica realt\xe0 vera. Dualismo anima/corpo.',concepts:[{t:'Teoria delle Idee',d:'Le Idee (Forme) sono eterne, immutabili, perfette; il mondo sensibile \xe8 loro copia imperfetta e transitoria.'},{t:'Allegoria della caverna',d:'Gli uomini incatenati scambiano ombre per realt\xe0. La filosofia \xe8 il faticoso percorso di ascesa verso la luce del Sole (il Bene).'},{t:'Dualismo anima/corpo',d:'L\'anima immortale \xe8 imprigionata nel corpo; la conoscenza \xe8 anamnesi \u2014 ricordo di ci\xf2 che l\'anima ha gi\xe0 contemplato.'},{t:'Repubblica ideale',d:'Lo Stato giusto \xe8 governato dai filosofi-re, custodi della verit\xe0.'}]},
+{id:6,name:'Aristotele',date:'~384\u2013322 a.C.',school:'classica',era:'Classica (V\u2013IV sec. a.C.)',summary:'Il realismo come risposta a Platone. Logica, etica, fisica, metafisica.',concepts:[{t:'Sostanza e forma',d:'Le Idee non esistono separate dalla materia: forma e materia sono inscindibili nella sostanza concreta.'},{t:'Potenza e atto',d:'Ogni cosa tende alla propria realizzazione compiuta (entel\xe9cheia) \u2014 il processo \xe8 parte della realt\xe0.'},{t:'Eudaimonia',d:'La felicit\xe0 come fine supremo dell\'uomo: vita vissuta secondo la virt\xf9 e l\'uso eccellente della ragione.'},{t:'Logica formale',d:'Fondatore della logica: sillogismo, categorie, principio di non-contraddizione \u2014 strumenti del pensiero rigoroso per 2000 anni.'}]},
+{id:7,name:'Epicuro',date:'~341\u2013270 a.C.',school:'ellenistica',era:'Ellenistica (IV\u2013I sec. a.C.)',summary:'L\'atarassia come fine della vita. Il piacere come assenza di dolore.',concepts:[{t:'Atarassia',d:'Serenit\xe0 dell\'anima come fine supremo \u2014 non il piacere sfrenato, ma la quiete, l\'assenza di turbamento.'},{t:'Tetrafarmaco',d:'"Non temere gli d\xe8i, non temere la morte, il bene \xe8 facile a trovarsi, il male \xe8 facile a sopportarsi."'},{t:'Atomismo',d:'Il mondo \xe8 fatto di atomi in moto nel vuoto: nessun destino, nessuna provvidenza divina, solo caso e necessit\xe0.'},{t:'Amicizia',d:'Tra i piaceri, l\'amicizia \xe8 il pi\xf9 grande e il pi\xf9 duraturo.'}]},
+{id:8,name:'Zenone di Cizio',date:'~334\u2013262 a.C.',school:'ellenistica',era:'Ellenistica (IV\u2013I sec. a.C.)',summary:'Fondatore dello Stoicismo. Vivere secondo natura e ragione.',concepts:[{t:'Logos universale',d:'L\'universo \xe8 retto da un logos razionale (il fuoco divino) a cui l\'uomo deve conformare la propria vita.'},{t:'Apatheia',d:'Libert\xe0 dalle passioni irrazionali: non insensibilit\xe0, ma dominio di s\xe9 \u2014 le sole cose "in nostro potere" sono i giudizi e le scelte.'},{t:'Cosmopolitismo',d:'Tutti gli uomini sono cittadini del mondo, uniti dalla ragione comune che trascende ogni frontiera.'},{t:'Indifferenti (adiaphora)',d:'Salute, ricchezza, fama non sono n\xe9 beni n\xe9 mali: solo la virt\xf9 \xe8 bene.'}]},
+{id:9,name:'Sesto Empirico',date:'~160\u2013210 d.C.',school:'ellenistica',era:'Ellenistica (IV\u2013I sec. a.C.)',summary:'Lo scetticismo radicale. La sospensione del giudizio come via alla pace.',concepts:[{t:'Epoch\xe9',d:'Sospensione del giudizio su ogni affermazione: non possiamo sapere nulla con certezza.'},{t:'Atarassia scettica',d:'La serenit\xe0 nasce dall\'astenersi da giudizi dogmatici: chi non afferma nulla non pu\xf2 essere deluso.'},{t:'Isostenia',d:'Per ogni argomento esiste un argomento contrario di pari forza \u2014 impossibile decidere chi ha ragione.'}]},
+{id:10,name:'Agostino',date:'354\u2013430 d.C.',school:'medievale',era:'Medievale (I\u2013XIV sec.)',summary:'Fede e ragione unite. La citt\xe0 di Dio contro la citt\xe0 degli uomini.',concepts:[{t:'Interiority\xe0',d:'"Rientra in te stesso: nell\'uomo interiore abita la verit\xe0." La coscienza come luogo di incontro con Dio.'},{t:'Tempo e memoria',d:'Il tempo esiste solo nella mente: presente del passato (memoria), del presente (attenzione), del futuro (attesa).'},{t:'Citt\xe0 di Dio',d:'Dualismo tra storia umana (peccato, amor sui) e citt\xe0 divina (salvezza, amor Dei).'},{t:'Grazia e libero arbitrio',d:'L\'uomo \xe8 libero ma la salvezza dipende dalla grazia imperscrutabile di Dio \u2014 tensione mai risolta.'}]},
+{id:11,name:"Tommaso d'Aquino",date:'1225\u20131274',school:'medievale',era:'Medievale (I\u2013XIV sec.)',summary:'La grande sintesi tra Aristotele e il Cristianesimo.',concepts:[{t:'Fede e ragione',d:'Non si contraddicono: la ragione naturale prepara e la fede sopraelevala \u2014 due vie verso la stessa verit\xe0.'},{t:'Cinque vie cosmologiche',d:'Prove dell\'esistenza di Dio: motore immobile, causa prima, essere necessario, perfezione massima, finalit\xe0 cosmica.'},{t:'Analogia entis',d:'L\'essere di Dio e quello delle creature non \xe8 n\xe9 identico n\xe9 equivoco: \xe8 analogico \u2014 partecipazione dell\'infinito nel finito.'},{t:'Legge naturale',d:'La ragione umana partecipa della legge eterna divina: fondamento dell\'etica laica e del diritto naturale.'}]},
+{id:12,name:'Machiavelli',date:'1469\u20131527',school:'rinascimento',era:'Rinascimento (XIV\u2013XVII sec.)',summary:'La politica separata dall\'etica. Virt\xf9, fortuna e potere.',concepts:[{t:'Virt\xf9 e fortuna',d:'Il principe deve dominare la fortuna con ingegno e forza: "\xe8 meglio essere impetuoso che rispettivo."'},{t:'Realismo politico',d:'La politica segue proprie leggi, indipendenti dalla morale cristiana \u2014 prima separazione netta.'},{t:'Autonomia della politica',d:'Il potere si mantiene con la prudenza e talvolta con la forza: ci\xf2 che vale in pace non vale in guerra.'}]},
+{id:13,name:'Descartes',date:'1596\u20131650',school:'razionalismo',era:'Moderna (XVII\u2013XVIII sec.)',summary:'Il dubbio metodico come fondamento. Il cogito ergo sum.',concepts:[{t:'Cogito ergo sum',d:'"Penso, dunque sono." L\'unica certezza indubbitabile: il soggetto pensante non pu\xf2 dubitare di stare dubitando.'},{t:'Dubbio metodico',d:'Dubitare sistematicamente di tutto \u2014 sensi, matematica, esistenza del mondo \u2014 per trovare almeno una verit\xe0 assoluta.'},{t:'Dualismo mente/corpo',d:'Res cogitans (mente pensante) e res extensa (materia estesa) sono due sostanze radicalmente distinte.'},{t:'Idee innate',d:'Alcune idee (Dio, estensione) non vengono dall\'esperienza ma sono innate: la ragione \xe8 autosufficiente.'}]},
+{id:14,name:'Spinoza',date:'1632\u20131677',school:'razionalismo',era:'Moderna (XVII\u2013XVIII sec.)',summary:'Deus sive Natura. Un\'unica sostanza infinita, geometricamente necessaria.',concepts:[{t:'Panteismo',d:'"Dio ossia Natura" \u2014 Dio non \xe8 trascendente ma identico alla totalit\xe0 dell\'essere. Tutto \xe8 necessariamente come \xe8.'},{t:'Determinismo assoluto',d:'Tutto avviene secondo leggi eterne e necessarie: il libero arbitrio \xe8 illusione nata dall\'ignoranza delle cause.'},{t:'Conatus',d:'Ogni cosa tende a perseverare nel proprio essere \u2014 principio fondamentale dell\'esistenza.'},{t:'Sub specie aeternitatis',d:'La beatitudine nasce dal vedere le cose "sotto il profilo dell\'eternit\xe0" \u2014 liberarsi dalle passioni con la conoscenza.'}]},
+{id:15,name:'Leibniz',date:'1646\u20131716',school:'razionalismo',era:'Moderna (XVII\u2013XVIII sec.)',summary:'Le monadi come unit\xe0 fondamentali. Il miglior mondo possibile.',concepts:[{t:'Monadi',d:'L\'universo \xe8 composto da sostanze semplici, indivisibili e senza finestre (monadi): ogni monade rispecchia l\'intero universo.'},{t:'Armonia prestabilita',d:'Dio ha sincronizzato le monadi ab initio in modo che si corrispondano senza interagire direttamente.'},{t:'Ottimismo metafisico',d:'"Questo \xe8 il migliore dei mondi possibili" \u2014 Dio sceglie tra infiniti mondi quello con il massimo di bene.'},{t:'Calcolo infinitesimale',d:'Co-inventore del calcolo (con Newton): la matematica come chiave dell\'armonia cosmica.'}]},
+{id:16,name:'Locke',date:'1632\u20131704',school:'empirismo',era:'Moderna (XVII\u2013XVIII sec.)',summary:'La tabula rasa. Tutta la conoscenza viene dall\'esperienza.',concepts:[{t:'Tabula rasa',d:'La mente alla nascita \xe8 foglio bianco: nessuna idea innata, tutta la conoscenza viene dall\'esperienza sensibile.'},{t:'Idee semplici e complesse',d:'Le idee semplici arrivano passivamente dai sensi; quelle complesse le costruisce attivamente la mente combinandole.'},{t:'Liberalismo politico',d:'Stato fondato su contratto sociale, separazione dei poteri, diritti naturali inalienabili (vita, libert\xe0, propriet\xe0).'},{t:'Tolleranza religiosa',d:'Lo Stato non pu\xf2 imporre credenze religiose: prima teorizzazione sistematica della tolleranza come principio politico.'}]},
+{id:17,name:'Hume',date:'1711\u20131776',school:'empirismo',era:'Moderna (XVII\u2013XVIII sec.)',summary:'Lo scetticismo empirista. La causalit\xe0 \xe8 abitudine mentale.',concepts:[{t:'Problema della causalit\xe0',d:'Non percepiamo mai la connessione necessaria tra causa ed effetto: \xe8 solo un\'abitudine mentale, non una verit\xe0 logica.'},{t:'Bundle theory of self',d:'Il s\xe9 non \xe8 una sostanza stabile: \xe8 un fascio di percezioni in continuo mutamento, senza un nucleo identitario fisso.'},{t:'Problema dell\'induzione',d:'Non esiste giustificazione razionale per estendere l\'esperienza passata al futuro \u2014 problema irrisolto ancora oggi.'},{t:'Emotivismo etico',d:'"La ragione \xe8 e deve essere schiava delle passioni": i giudizi morali sono espressioni di sentimenti, non fatti.'}]},
+{id:18,name:'Kant',date:'1724\u20131804',school:'idealismo',era:'Moderna (XVII\u2013XVIII sec.)',summary:'La rivoluzione copernicana. Le categorie a priori strutturano l\'esperienza.',concepts:[{t:'Rivoluzione copernicana',d:'Non la mente si adatta al mondo, ma il mondo si adatta alle forme a priori della mente: spazio, tempo, causalit\xe0.'},{t:'Categorie a priori',d:'Strutture della mente (causalit\xe0, sostanza, unit\xe0...) che rendono possibile l\'esperienza \u2014 non vengono da essa.'},{t:'Imperativo categorico',d:'"Agisci solo secondo quella massima che puoi al contempo volere che divenga legge universale per tutti."'},{t:'Cosa in s\xe9 (noumeno)',d:'La realt\xe0 in s\xe9 \xe8 radicalmente inconoscibile; conosciamo solo i fenomeni \u2014 le cose come appaiono alla struttura della nostra mente.'}]},
+{id:19,name:'Hegel',date:'1770\u20131831',school:'idealismo',era:'Moderna (XVII\u2013XVIII sec.)',summary:'La dialettica come motore della storia. Lo Spirito che si realizza.',concepts:[{t:'Dialettica',d:'Tesi \u2192 antitesi \u2192 sintesi (Aufhebung): il movimento dell\'essere \xe8 contraddizione che si supera conservando entrambi i momenti.'},{t:'Spirito assoluto',d:'La realt\xe0 intera \xe8 Spirito che si auto-realizza prendendo coscienza di s\xe9 attraverso la storia umana.'},{t:'Fenomenologia dello spirito',d:'Il percorso della coscienza individuale e collettiva verso la conoscenza assoluta.'},{t:'Razionale = reale',d:'"Ci\xf2 che \xe8 razionale \xe8 reale, ci\xf2 che \xe8 reale \xe8 razionale." La storia non \xe8 accidente: ha una logica necessaria.'}]},
+{id:20,name:'Marx',date:'1818\u20131883',school:'positivismo',era:'Ottocento (XIX sec.)',summary:'Il materialismo storico. La struttura economica determina la coscienza.',concepts:[{t:'Materialismo storico',d:'Le forze produttive e i rapporti di produzione determinano la coscienza, la cultura, la politica \u2014 non viceversa.'},{t:'Alienazione',d:'Il lavoratore \xe8 estraniato dal prodotto del suo lavoro, da s\xe9 stesso, dagli altri uomini e dalla propria natura.'},{t:'Lotta di classe',d:'"La storia di ogni societ\xe0 \xe8 storia di lotte di classe" \u2014 il motore della storia.'},{t:'Critica dell\'ideologia',d:'Le idee dominanti sono le idee della classe dominante: la filosofia borghese maschera rapporti di potere.'}]},
+{id:21,name:'Comte',date:'1798\u20131857',school:'positivismo',era:'Ottocento (XIX sec.)',summary:'Il positivismo come filosofia della scienza. La legge dei tre stadi.',concepts:[{t:'Legge dei tre stadi',d:'Teologico (spiegazione con d\xe8i) \u2192 Metafisico (con forze astratte) \u2192 Positivo (con leggi scientifiche).'},{t:'Sociologia come scienza',d:'Fondatore della sociologia: la societ\xe0 pu\xf2 e deve essere studiata con metodo scientifico.'},{t:'Gerarchia delle scienze',d:'Matematica \u2192 Astronomia \u2192 Fisica \u2192 Chimica \u2192 Biologia \u2192 Sociologia: ogni livello si fonda sul precedente.'}]},
+{id:22,name:'Schopenhauer',date:'1788\u20131860',school:'esistenzialismo',era:'Ottocento (XIX sec.)',summary:'Il mondo come volont\xe0 e rappresentazione. Il pessimismo come lucidità.',concepts:[{t:'Volont\xe0 cieca',d:'Sotto il velo dei fenomeni opera un\'unica Volont\xe0 irrazionale, insaziabile, priva di scopo \u2014 radice di ogni sofferenza.'},{t:'Pessimismo radicale',d:'La vita oscilla tra dolore (desiderio insoddisfatto) e noia (desiderio soddisfatto).'},{t:'Arte come liberazione',d:'La contemplazione estetica \u2014 specie la musica \u2014 libera momentaneamente dalla tirannia della Volont\xe0.'},{t:'Noluntas e compassione',d:'La via alla pace: negazione della volont\xe0 di vivere, ascesi, compassione come riconoscimento dell\'altro come s\xe9.'}]},
+{id:23,name:'Kierkegaard',date:'1813\u20131855',school:'esistenzialismo',era:'Ottocento (XIX sec.)',summary:'L\'individuo singolo. L\'angoscia. I tre stadi dell\'esistenza.',concepts:[{t:'Tre stadi dell\'esistenza',d:'Estetico (piacere, immediato) \u2192 Etico (dovere, scelta) \u2192 Religioso (fede paradossale che rompe l\'etica).'},{t:'Angoscia',d:'"La vertigine della libert\xe0": il sentimento abissale che nasce dall\'infinit\xe0 delle possibilit\xe0 davanti a noi.'},{t:'Salto della fede',d:'La fede \xe8 un paradosso che sfida la ragione \u2014 Abramo che sacrifica Isacco: deve essere irragionevole.'},{t:'Il singolo vs il sistema',d:'Critica radicale a Hegel: la filosofia astratta dimentica l\'individuo concreto nella sua situazione irripetibile.'}]},
+{id:24,name:'Nietzsche',date:'1844\u20131900',school:'esistenzialismo',era:'Ottocento (XIX sec.)',summary:'Morte di Dio. Nichilismo. Volont\xe0 di potenza. Oltreuomo.',concepts:[{t:'Morte di Dio',d:'"Dio \xe8 morto e noi l\'abbiamo ucciso." La crisi di tutti i valori assoluti \u2014 apertura al nichilismo o a una nuova creazione.'},{t:'Volont\xe0 di potenza',d:'Il principio vitale fondamentale: non dominio sugli altri, ma autoaffermazione creativa, superamento continuo di s\xe9.'},{t:'Oltreuomo (Übermensch)',d:'L\'uomo che, dopo la morte di Dio, crea nuovi valori al di l\xe0 del bene e del male.'},{t:'Eterno ritorno',d:'"Vorresti che questa vita si ripetesse infinite volte, esattamente cos\xec?" Test esistenziale massimo di affermazione della vita.'}]},
+{id:25,name:'Wittgenstein',date:'1889\u20131951',school:'contemporanea',era:'Novecento (XX sec.)',summary:'I limiti del linguaggio come limiti del mondo. I giochi linguistici.',concepts:[{t:'Immagine del mondo (Tractatus)',d:'"I limiti del mio linguaggio sono i limiti del mio mondo." Il linguaggio descrive fatti; ci\xf2 che non si pu\xf2 dire va taciuto.'},{t:'Giochi linguistici (Ricerche)',d:'Il significato \xe8 l\'uso in un contesto: il linguaggio \xe8 pratica sociale, non specchio logico del mondo.'},{t:'Critica alla metafisica',d:'I problemi filosofici tradizionali sono pseudo-problemi nati da fraintendimenti del linguaggio.'},{t:'Terapia filosofica',d:'La filosofia non risolve problemi ma li dissolve: mostrare come il linguaggio ci inganna.'}]},
+{id:26,name:'Heidegger',date:'1889\u20131976',school:'esistenzialismo',era:'Novecento (XX sec.)',summary:'L\'essere-nel-mondo. L\'Esserci. L\'autenticit\xe0 e la morte.',concepts:[{t:'Esserci (Dasein)',d:'L\'uomo \xe8 l\'ente che si interroga sul proprio essere \u2014 sempre gi\xe0 "gettato" nel mondo, non soggetto neutro cartesiano.'},{t:'Essere-per-la-morte',d:'La morte come possibilit\xe0 pi\xf9 propria e inalienabile dell\'Esserci: assumerla in anticipo \xe8 fonte dell\'esistenza autentica.'},{t:'Cura (Sorge)',d:'La struttura fondamentale dell\'Esserci: ogni azione umana \xe8 gi\xe0 sempre prendersi cura di qualcosa o qualcuno.'},{t:'Critica della tecnica',d:'La modernit\xe0 tecnica dimentica la domanda sull\'essere, trattando tutto come risorsa disponibile (Gestell).'}]},
+{id:27,name:'Sartre',date:'1905\u20131980',school:'esistenzialismo',era:'Novecento (XX sec.)',summary:'L\'esistenza precede l\'essenza. Libert\xe0 radicale e responsabilit\xe0.',concepts:[{t:'Esistenza precede essenza',d:'Non c\'è natura umana predefinita: siamo ci\xf2 che scegliamo di essere con le nostre azioni, senza scuse.'},{t:'Libert\xe0 radicale',d:'"Siamo condannati ad essere liberi": nessuna essenza, nessun Dio, nessuna natura ci esime dalla scelta.'},{t:'Malafede (mauvaise foi)',d:'L\'autoingannio che nega la propria libert\xe0 identificandosi con un ruolo fisso \u2014 il cameriere che "è" un cameriere.'},{t:'L\'inferno sono gli altri',d:'La coscienza degli altri mi oggettifica: il conflitto \xe8 la struttura fondamentale delle relazioni umane.'}]},
+{id:28,name:'Foucault',date:'1926\u20131984',school:'contemporanea',era:'Novecento (XX sec.)',summary:'Potere/sapere. Genealogia delle istituzioni. Biopolitica.',concepts:[{t:'Potere/sapere',d:'Ogni forma di conoscenza \xe8 intrecciata con relazioni di potere \u2014 non esiste sapere neutro o innocente.'},{t:'Biopolitica',d:'Il potere moderno governa non pi\xf9 i corpi individuali ma la vita biologica delle popolazioni intere.'},{t:'Genealogia',d:'Metodo nietzscheano per smontare la pretesa di universalit\xe0 di concetti come follia, sessualit\xe0, prigione, normalit\xe0.'},{t:'Soggettivazione',d:'Il soggetto non preesiste al potere: siamo prodotti dai discorsi e dalle pratiche che ci classificano e ci formano.'}]}
+];
+var cf=null,sel=null;
+function vis(){return cf?DATA.filter(function(d){return d.school===cf}):DATA}
+function byEra(arr){var m={};arr.forEach(function(d){(m[d.era]=m[d.era]||[]).push(d)});return m}
+function render(){
+  var v=vis();
+  var ce=document.getElementById('cnt');
+  if(ce)ce.textContent=v.length+' filosofi';
+  var groups=byEra(v);
+  var main=document.getElementById('main');
+  main.innerHTML='';
+  if(v.length===0){main.innerHTML='<div class="empty">Nessun filosofo trovato.</div>';return}
+  Object.keys(groups).forEach(function(era){
+    var ps=groups[era];
+    var block=document.createElement('div');
+    block.className='era-block';
+    var lbl=document.createElement('div');
+    lbl.className='era-label';
+    lbl.textContent=era;
+    block.appendChild(lbl);
+    var row=document.createElement('div');
+    row.className='cards-row';
+    var selP=null;
+    ps.forEach(function(p){
+      var c=document.createElement('div');
+      c.className='phil-card'+(p.id===sel?' selected':'');
+      if(p.id===sel)c.style.borderColor=SC[p.school];
+      c.innerHTML='<div class="school-bar" style="background:'+SC[p.school]+'"></div><div class="card-date">'+p.date+'</div><div class="card-name">'+p.name+'</div><span class="card-school-badge" style="background:'+SBG[p.school]+';color:'+SCT[p.school]+'">'+p.school+'</span><div class="card-summary">'+p.summary+'</div>';
+      c.addEventListener('click',function(){
+        sel=sel===p.id?null:p.id;
+        render();
+        if(sel!==null){setTimeout(function(){var op=document.querySelector('.detail-panel.open');if(op)op.scrollIntoView({behavior:'smooth',block:'nearest'});},60);}
+      });
+      row.appendChild(c);
+      if(p.id===sel)selP=p;
+    });
+    block.appendChild(row);
+    if(selP){
+      var panel=buildPanel(selP);
+      block.appendChild(panel);
+    }
+    main.appendChild(block);
+  });
+}
+function buildPanel(p){
+  var dp=document.createElement('div');
+  dp.className='detail-panel open';
+  dp.style.borderLeftColor=SC[p.school];
+  dp.style.borderLeftWidth='3px';
+  var items=p.concepts.map(function(c){return '<li><strong>'+c.t+'</strong> &mdash; '+c.d+'</li>';}).join('');
+  dp.innerHTML='<div class="detail-header"><div><div class="detail-name">'+p.name+'</div><div class="detail-meta">'+p.date+' &nbsp;&middot;&nbsp; '+p.school+'</div></div><button class="detail-close" id="dp-close">&#x2715;</button></div><ul class="concept-list">'+items+'</ul><div class="detail-footer"><button class="deep-btn" id="dp-deep">Approfondisci '+p.name+' &rarr;</button></div>';
+  setTimeout(function(){
+    var cb=document.getElementById('dp-close');
+    var db=document.getElementById('dp-deep');
+    if(cb)cb.addEventListener('click',function(){sel=null;render();});
+    if(db)db.addEventListener('click',function(){
+      alert('Per approfondire '+p.name+', chedi a Claude:\n\n"Approfondisci la filosofia di '+p.name+': opere principali, contesto storico, influenze ricevute e lascito nella storia della filosofia."');
+    });
+  },10);
+  return dp;
+}
+function buildLegend(){
+  var schools=Object.keys(SC);
+  var lg=document.getElementById('legend');
+  lg.innerHTML='<span class="legend-title">Scuola</span>';
+  schools.forEach(function(s){
+    var item=document.createElement('span');
+    item.className='legend-item'+(cf===s?' active':'');
+    item.innerHTML='<span class="ldot" style="background:'+SC[s]+'"></span>'+s;
+    item.addEventListener('click',function(){cf=cf===s?null:s;sel=null;buildLegend();buildControls();render();});
+    lg.appendChild(item);
+  });
+}
+function buildControls(){
+  var schools=Object.keys(SC);
+  var ctrl=document.getElementById('ctrl');
+  ctrl.innerHTML='';
+  var allBtn=document.createElement('button');
+  allBtn.className='filter-btn'+(cf===null?' active':'');
+  allBtn.textContent='Tutte le scuole';
+  allBtn.addEventListener('click',function(){cf=null;sel=null;buildLegend();buildControls();render();});
+  ctrl.appendChild(allBtn);
+  schools.forEach(function(s){
+    var btn=document.createElement('button');
+    var isA=cf===s;
+    btn.className='filter-btn'+(isA?' school-active':'');
+    if(isA){btn.style.background=SC[s];btn.style.borderColor=SC[s];}
+    btn.textContent=s;
+    btn.addEventListener('click',function(){cf=cf===s?null:s;sel=null;buildLegend();buildControls();render();});
+    ctrl.appendChild(btn);
+  });
+  var badge=document.createElement('span');
+  badge.className='cnt';
+  badge.id='cnt';
+  badge.textContent=vis().length+' filosofi';
+  ctrl.appendChild(badge);
+}
+buildLegend();
+buildControls();
+render();
+</script>
+</body>
+</html>
