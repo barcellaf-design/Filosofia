@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Filosofia &mdash; Domande</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --orange:#FF6B35;--black:#0A0A0A;--white:#FFFFFF;--cream:#FAF9F6;
+  --gray-100:#F4F3EF;--gray-200:#E8E7E1;--gray-400:#9A998F;--gray-600:#55544E;
+  --mono:'JetBrains Mono',monospace;--sans:'Inter',-apple-system,sans-serif;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--cream);color:var(--black);font-weight:400;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+.nav-top{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(250,249,246,.88);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--gray-200)}
+.nav-inner{max-width:1400px;margin:0 auto;padding:18px 40px;display:flex;justify-content:space-between;align-items:center}
+.logo{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.5px;text-transform:uppercase}
+.logo-dot{display:inline-block;width:7px;height:7px;background:var(--orange);border-radius:50%;margin-right:8px;vertical-align:middle}
+.nav-links{display:flex;gap:32px;list-style:none}
+.nav-links a{color:var(--gray-600);text-decoration:none;font-size:13px;font-weight:500;transition:color .2s;font-family:var(--mono);letter-spacing:.3px}
+.nav-links a:hover{color:var(--black)}
+.nav-links a.active{color:var(--black);position:relative}
+.nav-links a.active::after{content:'';position:absolute;bottom:-24px;left:0;right:0;height:2px;background:var(--orange)}
+
+.hero{padding:140px 40px 80px;max-width:1400px;margin:0 auto}
+.hero-meta{font-family:var(--mono);font-size:11px;color:var(--gray-400);letter-spacing:1px;text-transform:uppercase;margin-bottom:40px;display:flex;gap:24px;align-items:center}
+.hero-meta-dot{width:6px;height:6px;background:var(--orange);border-radius:50%}
+.hero h1{font-size:clamp(52px,9vw,128px);font-weight:800;line-height:.95;letter-spacing:-.04em;margin-bottom:40px;max-width:1200px}
+.hero h1 em{font-style:italic;font-weight:400;color:var(--orange)}
+.hero-desc{font-size:20px;line-height:1.5;max-width:640px;color:var(--gray-600);margin-bottom:40px}
+
+/* Question selector */
+.q-selector{padding:40px 40px 60px;max-width:1400px;margin:0 auto}
+.section-label{font-family:var(--mono);font-size:11px;color:var(--gray-400);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:24px;display:flex;align-items:center;gap:12px}
+.section-num{color:var(--orange);font-weight:500}
+.q-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1px;background:var(--gray-200);border:1px solid var(--gray-200)}
+.q-btn{background:var(--cream);padding:28px 24px 24px;text-align:left;border:none;cursor:pointer;transition:background .2s;font-family:var(--sans);display:flex;flex-direction:column;gap:16px;min-height:140px}
+.q-btn:hover{background:var(--white)}
+.q-btn.active{background:var(--black);color:var(--white)}
+.q-btn.active .q-num{color:var(--orange)}
+.q-btn.active .q-meta{color:var(--gray-400)}
+.q-num{font-family:var(--mono);font-size:11px;color:var(--orange);letter-spacing:1px;font-weight:500}
+.q-label{font-size:24px;font-weight:700;letter-spacing:-.02em;line-height:1.1}
+.q-meta{font-family:var(--mono);font-size:11px;color:var(--gray-400);margin-top:auto;letter-spacing:.3px}
+
+/* Answers section */
+.answers{padding:80px 40px 120px;max-width:1400px;margin:0 auto}
+.answer-header{margin-bottom:60px;padding-bottom:40px;border-bottom:1px solid var(--gray-200)}
+.answer-label{font-family:var(--mono);font-size:11px;color:var(--orange);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:16px;font-weight:500}
+.answer-q{font-size:clamp(40px,6vw,72px);font-weight:800;letter-spacing:-.03em;line-height:1;margin-bottom:24px}
+.answer-q em{font-style:italic;font-weight:400;color:var(--orange)}
+.answer-intro{font-size:18px;line-height:1.5;color:var(--gray-600);max-width:720px}
+
+.positions{display:grid;grid-template-columns:1fr;gap:1px;background:var(--gray-200);border:1px solid var(--gray-200)}
+.position{background:var(--cream);padding:48px 40px;display:grid;grid-template-columns:220px 1fr;gap:40px;align-items:flex-start}
+.position-side{display:flex;flex-direction:column;gap:8px}
+.position-num{font-family:var(--mono);font-size:13px;color:var(--orange);letter-spacing:1px;font-weight:500}
+.position-label{font-size:18px;font-weight:700;letter-spacing:-.01em;line-height:1.2;margin-bottom:8px}
+.position-phil{font-family:var(--mono);font-size:12px;color:var(--gray-600);letter-spacing:.3px;line-height:1.6}
+.position-content{font-size:17px;line-height:1.6;color:var(--black)}
+.position-content p{margin-bottom:16px}
+.position-content p:last-child{margin-bottom:0}
+.position-quote{font-size:22px;font-weight:500;font-style:italic;color:var(--orange);padding:20px 0;line-height:1.4;border-left:3px solid var(--orange);padding-left:24px;margin:20px 0}
+
+footer{border-top:1px solid var(--gray-200);padding:60px 40px 40px;text-align:center}
+.footer-inner{max-width:1400px;margin:0 auto}
+.footer-logo{font-family:var(--mono);font-size:14px;font-weight:500;letter-spacing:.5px;text-transform:uppercase;margin-bottom:16px}
+.footer-text{font-size:12px;color:var(--gray-400);font-family:var(--mono);letter-spacing:.5px}
+
+@media(max-width:768px){
+  .nav-inner{padding:14px 20px}
+  .nav-links{gap:16px}
+  .hero{padding:100px 20px 50px}
+  .hero h1{font-size:44px}
+  .hero-desc{font-size:17px}
+  .q-selector{padding:30px 20px 40px}
+  .q-grid{grid-template-columns:1fr}
+  .answers{padding:50px 20px 80px}
+  .position{grid-template-columns:1fr;gap:20px;padding:32px 24px}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav-top">
+  <div class="nav-inner">
+    <div class="logo"><span class="logo-dot"></span>Filosofia / 03</div>
+    <ul class="nav-links">
+      <li><a href="index.html">Timeline</a></li>
+      <li><a href="concetti.html">Concetti</a></li>
+      <li><a href="domande.html" class="active">Domande</a></li>
+    </ul>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-meta">
+    <span class="hero-meta-dot"></span>
+    <span>Capitolo 03</span>
+    <span>/</span>
+    <span>Domande</span>
+  </div>
+  <h1>Una domanda.<br>Pi\xf9 <em>filosofi.</em></h1>
+  <p class="hero-desc">Scegli una grande questione e confronta direttamente le risposte dei pensatori che se ne sono occupati. Non un catalogo, ma un dibattito. Ogni posizione \xe8 sintetica, leggibile, diretta.</p>
+</section>
+
+<section class="q-selector">
+  <div class="section-label"><span class="section-num">01</span> Scegli una domanda</div>
+  <div class="q-grid" id="q-grid"></div>
+</section>
+
+<section class="answers" id="answers"></section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo"><span class="logo-dot"></span>Filosofia</div>
+    <div class="footer-text">Schema di apprendimento &mdash; in aggiornamento continuo</div>
+  </div>
+</footer>
+
+<script>
+var QUESTIONS=[
+  {
+    id:'felicita',
+    label:'Cos\'\xe8 la felicit\xe0?',
+    meta:'4 posizioni',
+    intro:'Gli antichi concordano che la felicit\xe0 \xe8 il fine dell\'uomo. Ma cosa sia, nessuno lo dice allo stesso modo. \xc8 quiete? \xc8 dovere? \xc8 virt\xf9 attiva? \xc8 un\'illusione da superare?',
+    positions:[
+      {label:'Felicit\xe0 come virt\xf9 attiva',phil:'Aristotele \u2014 ~384\u2013322 a.C.',quote:'"La felicit\xe0 \xe8 un\'attivit\xe0 dell\'anima secondo virt\xf9."',content:'La felicit\xe0 (eudaimonia) non \xe8 uno stato emotivo n\xe9 un piacere: \xe8 l\'attivit\xe0 eccellente dell\'anima razionale, esercitata nel corso di una vita intera. Chi \xe8 felice fa bene ci\xf2 che l\'uomo \xe8 chiamato a fare: ragionare, scegliere, vivere in comunit\xe0. Non basta sentirsi bene un giorno \u2014 una rondine non fa primavera.'},
+      {label:'Felicit\xe0 come quiete',phil:'Epicuro \u2014 ~341\u2013270 a.C.',quote:'"Il piacere \xe8 principio e fine della vita beata."',content:'Ma attenzione a cosa Epicuro chiama "piacere": non l\'eccesso n\xe9 la ricerca di stimoli, bens\xec l\'assenza di dolore nel corpo (aponia) e di turbamento nell\'anima (atarassia). Desideri pochi e naturali, amicizia, filosofia. Pi\xf9 togli, pi\xf9 sei libero dalla paura degli d\xe8i e della morte.'},
+      {label:'Felicit\xe0 come apatheia',phil:'Zenone, Stoici \u2014 ~334\u2013262 a.C.',quote:'"Solo la virt\xf9 \xe8 bene."',content:'Salute, ricchezza, fama non sono beni: sono indifferenti. Ci\xf2 che conta \xe8 vivere secondo ragione e natura, padroni dei propri giudizi. La felicit\xe0 non dipende da ci\xf2 che ci capita, ma da come lo interpretiamo. Distingui ci\xf2 che \xe8 in tuo potere da ci\xf2 che non lo \xe8.'},
+      {label:'Felicit\xe0 \xe8 un\'illusione',phil:'Schopenhauer \u2014 1788\u20131860',content:'La vita oscilla tra il dolore del desiderio insoddisfatto e la noia quando \xe8 soddisfatto. Non c\'\xe8 via d\'uscita stabile: chi crede alla felicit\xe0 non ha capito la struttura della vita. Al massimo, brevi liberazioni: l\'arte (soprattutto la musica), la compassione, l\'ascesi. Ma la felicit\xe0 come stato continuo \xe8 un inganno.'}
+    ]
+  },
+  {
+    id:'liberta',
+    label:'Siamo liberi di scegliere?',
+    meta:'4 posizioni',
+    intro:'Nessuna domanda divide pi\xf9 radicalmente i filosofi. Per alcuni la libert\xe0 \xe8 illusione dovuta alla nostra ignoranza delle cause. Per altri \xe8 il fatto pi\xf9 fondamentale dell\'esistenza umana.',
+    positions:[
+      {label:'La libert\xe0 \xe8 illusione',phil:'Spinoza \u2014 1632\u20131677',quote:'"Gli uomini si credono liberi perch\xe9 ignorano le cause che li determinano."',content:'Tutto avviene secondo leggi necessarie della Natura (che \xe8 Dio). Il libero arbitrio \xe8 un\'illusione: sentiamo di scegliere ma siamo spinti da cause di cui non siamo consapevoli. La vera libert\xe0 non \xe8 scegliere, ma comprendere questa necessit\xe0 \u2014 e questo aumenta la nostra potenza d\'agire.'},
+      {label:'Libert\xe0 come autonomia razionale',phil:'Kant \u2014 1724\u20131804',content:'Siamo liberi non nel senso di agire contro le leggi della natura, ma di darci da soli la legge morale. Quando agisco per dovere razionale \u2014 non per impulso n\xe9 per vantaggio \u2014 sono autonomo, autore di me stesso. La libert\xe0 \xe8 l\'autonomia della ragione pratica.'},
+      {label:'Libert\xe0 radicale',phil:'Sartre \u2014 1905\u20131980',quote:'"Siamo condannati ad essere liberi."',content:'Non c\'\xe8 natura umana che ci preceda, nessun Dio che ci dia uno scopo. Siamo gettati nel mondo e costretti a scegliere chi essere, continuamente. Questa libert\xe0 \xe8 insopportabile: per fuggirla ci identifichiamo con ruoli fissi (il cameriere, il padre, l\'italiano). Sartre chiama questo "malafede" \u2014 la menzogna fondamentale.'},
+      {label:'Libert\xe0 come angoscia',phil:'Kierkegaard \u2014 1813\u20131855',quote:'"L\'angoscia \xe8 la vertigine della libert\xe0."',content:'Guardare l\'infinit\xe0 delle possibilit\xe0 davanti a s\xe9 produce un\'angoscia abissale. Scegliere chiude porte per sempre. La libert\xe0 non \xe8 leggera: \xe8 il peso pi\xf9 grande. Solo il salto della fede pu\xf2 riscattarla \u2014 ma \xe8 un paradosso irrazionale.'}
+    ]
+  },
+  {
+    id:'dio',
+    label:'Dio esiste?',
+    meta:'4 posizioni',
+    intro:'Dalle cinque vie tomiste alle provocazioni di Nietzsche, passando per il panteismo di Spinoza. La domanda non \xe8 solo teologica \u2014 \xe8 la domanda sul senso, sul fondamento, sull\'assoluto.',
+    positions:[
+      {label:'Dio si dimostra con la ragione',phil:"Tommaso d'Aquino \u2014 1225\u20131274",content:'Cinque vie razionali conducono all\'esistenza di Dio: il motore immobile (qualcosa deve muovere il tutto), la causa prima (non si pu\xf2 risalire all\'infinito), l\'essere necessario (da qualcosa di contingente non viene nulla), la perfezione massima (i gradi di bont\xe0 implicano un vertice), la finalit\xe0 cosmica (l\'ordine implica un ordinatore). Fede e ragione si confermano a vicenda.'},
+      {label:'Dio \xe8 la Natura stessa',phil:'Spinoza \u2014 1632\u20131677',quote:'"Deus sive Natura."',content:'Dio non \xe8 un creatore personale separato dal mondo: Dio \xe8 la sostanza unica e infinita, identica alla Natura. Tutto ci\xf2 che esiste \xe8 modo di Dio, espressione necessaria del suo essere. Un panteismo rigoroso che scandalizz\xf2 sia cristiani che ebrei \u2014 Spinoza fu scomunicato.'},
+      {label:'Dio \xe8 morto',phil:'Nietzsche \u2014 1844\u20131900',quote:'"Dio \xe8 morto. E noi l\'abbiamo ucciso."',content:'Non un\'affermazione atea banale: una diagnosi storica. I valori assoluti che reggevano la cultura occidentale \u2014 verit\xe0, bene, bellezza \u2014 si fondavano su Dio. Ora che Dio non \xe8 pi\xf9 credibile, quei valori franano con lui. La scelta: sprofondare nel nichilismo o creare valori nuovi. L\'Oltreuomo \xe8 chi sceglie la seconda via.'},
+      {label:'Il salto irrazionale',phil:'Kierkegaard \u2014 1813\u20131855',content:'Dio non si dimostra: si incontra nel paradosso. La fede non \xe8 continuazione della ragione ma sua rottura. Abramo che alza il coltello su Isacco \u00e8 l\'archetipo: eticamente inaccettabile, religiosamente supremo. La fede esige il salto nel non-senso \u2014 non \xe8 ragionevole, e proprio per questo \xe8 vera.'}
+    ]
+  },
+  {
+    id:'conoscenza',
+    label:'Come conosciamo?',
+    meta:'4 posizioni',
+    intro:'I razionalisti partono dalla mente, gli empiristi dai sensi. Kant risolve la disputa spostando il problema: la conoscenza nasce dall\'incontro tra ci\xf2 che ci arriva e le strutture che abbiamo.',
+    positions:[
+      {label:'Dalla ragione pura',phil:'Descartes \u2014 1596\u20131650',quote:'"Cogito ergo sum."',content:'I sensi ingannano, il mondo potrebbe essere un sogno, un genio maligno potrebbe ingannarmi su tutto. Ma non pu\xf2 ingannarmi sul fatto che sto pensando. Il cogito \xe8 il punto zero della conoscenza: da qui, con la sola ragione, ricostruisco tutto il resto. Alcune idee (Dio, estensione) sono innate, non vengono dall\'esperienza.'},
+      {label:'Solo dall\'esperienza',phil:'Locke, Hume \u2014 XVII-XVIII sec.',content:'La mente alla nascita \xe8 tabula rasa. Tutto ci\xf2 che sappiamo viene dai sensi \u2014 nulla \xe8 nell\'intelletto che non sia prima stato nei sensi. Hume porta l\'empirismo alle estreme conseguenze: anche la causalit\xe0 non si vede, \xe8 solo un\'abitudine mentale. E il s\xe9? Nemmeno quello esiste come sostanza: \xe8 un fascio di percezioni.'},
+      {label:'Dall\'incontro tra mente e mondo',phil:'Kant \u2014 1724\u20131804',content:'Gli empiristi hanno ragione: senza esperienza non c\'\xe8 conoscenza. I razionalisti hanno ragione: senza strutture mentali l\'esperienza \xe8 caos. La soluzione: conosciamo i fenomeni \u2014 le cose come appaiono a una mente strutturata con spazio, tempo e categorie. La "cosa in s\xe9" ci resta inaccessibile per sempre.'},
+      {label:'Il linguaggio come limite',phil:'Wittgenstein \u2014 1889\u20131951',quote:'"I limiti del mio linguaggio sono i limiti del mio mondo."',content:'Non possiamo pensare fuori dal linguaggio. Molti problemi filosofici tradizionali (Dio, l\'essere, l\'anima) nascono da usi scorretti del linguaggio: sembrano domande, sono fraintendimenti. La filosofia non risolve, dissolve: mostra come il linguaggio ci confonde.'}
+    ]
+  },
+  {
+    id:'vivere',
+    label:'Come si deve vivere?',
+    meta:'4 posizioni',
+    intro:'La domanda pi\xf9 pratica della filosofia. Ogni scuola offre una risposta diversa \u2014 ma tutte partono dal riconoscere che la vita umana richiede una direzione scelta consapevolmente.',
+    positions:[
+      {label:'Con virt\xf9 e ragione',phil:'Socrate, Aristotele \u2014 IV sec. a.C.',content:'Socrate: chi conosce il bene non pu\xf2 fare il male. Vivere bene significa conoscere s\xe9 stessi e curare la propria anima, non il corpo o le ricchezze. Aristotele aggiunge: la virt\xf9 non \xe8 solo conoscenza, \xe8 abito acquisito con la pratica. Il giusto mezzo tra eccessi. Una vita buona \xe8 un esercizio quotidiano.'},
+      {label:'Dominando le passioni',phil:'Stoici \u2014 III sec. a.C.',quote:'"Non \xe8 ci\xf2 che ti accade che ti disturba, ma il tuo giudizio su di esso."',content:'Distingui rigorosamente tra ci\xf2 che dipende da te (giudizi, scelte, desideri) e ci\xf2 che non dipende da te (salute, ricchezza, fama, morte). Preoccupati solo del primo gruppo. Accogli ci\xf2 che accade come parte del logos cosmico. Libert\xe0 interiore anche in catene.'},
+      {label:'Scegliendo autenticamente',phil:'Kierkegaard, Heidegger \u2014 XIX-XX sec.',content:'La maggior parte degli uomini vive in modo inautentico: nei ruoli, nelle opinioni del "si dice", evitando di guardare in faccia la propria finitezza. Vivere bene significa assumere la propria morte, scegliere davvero, uscire dall\'anonimato. Non c\'\xe8 ricetta: c\'\xe8 solo la decisione personale, ripetuta.'},
+      {label:'Creando valori nuovi',phil:'Nietzsche \u2014 1844\u20131900',quote:'"Diventa ci\xf2 che sei."',content:'Il cristianesimo e la morale comune sono morali del gregge: difendono i deboli castrando i forti. Chi vive davvero rovescia le tavole, crea valori propri, dice s\xec alla vita anche nei suoi aspetti tragici. Test decisivo: vorresti rivivere la tua vita infinite volte, esattamente cos\xec? Se s\xec, stai vivendo bene.'}
+    ]
+  },
+  {
+    id:'realta',
+    label:'Cos\'\xe8 reale?',
+    meta:'4 posizioni',
+    intro:'La domanda metafisica per eccellenza. Esiste una realt\xe0 oltre le apparenze? \xc8 mentale o materiale? Una sostanza o molte? Fissa o in divenire?',
+    positions:[
+      {label:'L\'Essere immobile',phil:'Parmenide \u2014 ~515\u2013450 a.C.',quote:'"L\'essere \xe8, il non-essere non \xe8."',content:'Il cambiamento che vediamo \xe8 illusione dei sensi. Logicamente, solo l\'essere esiste, ed \xe8 uno, eterno, immobile. Il divenire implicherebbe che qualcosa passi dal non-essere all\'essere, ma il non-essere non \xe8 \u2014 quindi \xe8 impossibile. La ragione contraddice radicalmente l\'esperienza.'},
+      {label:'Il puro divenire',phil:'Eraclito \u2014 ~535\u2013475 a.C.',quote:'"Non si pu\xf2 scendere due volte nello stesso fiume."',content:'Esattamente l\'opposto. Niente \xe8 permanente: tutto scorre continuamente. Ci\xf2 che chiamiamo "cose" sono solo momenti fugaci in un flusso perenne. Ma questo flusso non \xe8 caos: \xe8 governato dal Logos, ragione cosmica nascosta. Gli opposti si trasformano l\'uno nell\'altro.'},
+      {label:'Le Idee eterne',phil:'Platone \u2014 ~428\u2013348 a.C.',content:'Il mondo sensibile (mutevole, corruttibile, imperfetto) non \xe8 davvero reale. Esiste solo come copia imperfetta delle Idee: Forme eterne, immutabili, perfette. Esiste l\'Idea di cavallo, non i cavalli singoli che invecchiano e muoiono. La conoscenza non \xe8 percezione ma reminiscenza dell\'anima che ha gi\xe0 visto le Idee.'},
+      {label:'La sostanza concreta',phil:'Aristotele \u2014 ~384\u2013322 a.C.',content:'Rifiuta il suo maestro: le Idee non esistono separate dalle cose. Reale \xe8 la sostanza concreta \u2014 questo cavallo qui, questo uomo qui \u2014 fatta di materia e forma inseparabili. La realt\xe0 non \xe8 statica: \xe8 potenza che si attualizza, tendenza di ogni essere verso la propria piena realizzazione.'}
+    ]
+  }
+];
+
+var currentQ=QUESTIONS[0].id;
+
+function buildQuestions(){
+  var grid=document.getElementById('q-grid');
+  grid.innerHTML='';
+  QUESTIONS.forEach(function(q,idx){
+    var btn=document.createElement('button');
+    btn.className='q-btn'+(currentQ===q.id?' active':'');
+    var num=String(idx+1).padStart(2,'0');
+    btn.innerHTML='<div class="q-num">Domanda \u2014 '+num+'</div><div class="q-label">'+q.label+'</div><div class="q-meta">'+q.meta+'</div>';
+    btn.addEventListener('click',function(){
+      currentQ=q.id;
+      buildQuestions();
+      renderAnswers();
+      document.getElementById('answers').scrollIntoView({behavior:'smooth',block:'start'});
+    });
+    grid.appendChild(btn);
+  });
+}
+
+function renderAnswers(){
+  var q=QUESTIONS.find(function(x){return x.id===currentQ});
+  var qIdx=QUESTIONS.findIndex(function(x){return x.id===currentQ});
+  var num=String(qIdx+1).padStart(2,'0');
+  var answers=document.getElementById('answers');
+  var positions=q.positions.map(function(p,idx){
+    var pNum=String(idx+1).padStart(2,'0');
+    var quoteHtml=p.quote?'<div class="position-quote">'+p.quote+'</div>':'';
+    return '<div class="position"><div class="position-side"><div class="position-num">Posizione '+pNum+'</div><div class="position-label">'+p.label+'</div><div class="position-phil">'+p.phil+'</div></div><div class="position-content">'+quoteHtml+'<p>'+p.content+'</p></div></div>';
+  }).join('');
+  answers.innerHTML='<div class="answer-header"><div class="answer-label">Domanda \u2014 '+num+'</div><h2 class="answer-q">'+q.label.replace('?','<em>?</em>')+'</h2><p class="answer-intro">'+q.intro+'</p></div><div class="positions">'+positions+'</div>';
+}
+
+buildQuestions();
+renderAnswers();
+</script>
+</body>
+</html>
