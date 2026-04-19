@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Filosofia — Una conversazione lunga 2500 anni</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Fraunces:ital,wght@0,400;0,500;0,700;0,800;1,400;1,500;1,700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --orange:#FF6B35;
+  --orange-soft:rgba(255,107,53,.15);
+  --orange-mist:rgba(255,107,53,.08);
+  --black:#0A0A0A;
+  --white:#FFFFFF;
+  --cream:#FAF7F0;
+  --cream-warm:#F2EEDF;
+  --cream-deeper:#E8E3D0;
+  --gray-100:#F0EDE5;
+  --gray-200:#E0DDD0;
+  --gray-300:#C9C6B8;
+  --gray-400:#8F8E82;
+  --gray-600:#55544A;
+  --mono:'JetBrains Mono',monospace;
+  --sans:'Inter',-apple-system,sans-serif;
+  --serif:'Fraunces',Georgia,serif;
+}
+
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--cream);color:var(--black);font-weight:400;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden;position:relative}
+
+/* ═══ AURA (radial gradient that breathes in background) ═══ */
+.aura{position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:0;overflow:hidden}
+.aura-glow{position:absolute;width:900px;height:900px;border-radius:50%;background:radial-gradient(circle at center,var(--orange-soft) 0%,var(--orange-mist) 30%,transparent 65%);filter:blur(40px);opacity:.85;transition:transform .6s cubic-bezier(.2,.9,.3,1)}
+.aura-glow-1{top:-200px;left:-200px;animation:auraFloat1 20s ease-in-out infinite}
+.aura-glow-2{top:30%;right:-300px;width:700px;height:700px;opacity:.6;animation:auraFloat2 25s ease-in-out infinite}
+.aura-glow-3{bottom:-200px;left:30%;width:800px;height:800px;opacity:.45;animation:auraFloat3 30s ease-in-out infinite}
+@keyframes auraFloat1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(80px,40px) scale(1.1)}}
+@keyframes auraFloat2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-60px,-30px) scale(.95)}}
+@keyframes auraFloat3{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-40px,-50px) scale(1.05)}}
+
+/* ═══ NAV ═══ */
+.nav-top{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(250,247,240,.72);backdrop-filter:blur(24px) saturate(1.4);-webkit-backdrop-filter:blur(24px) saturate(1.4);border-bottom:1px solid rgba(224,221,208,.6)}
+.nav-inner{max-width:1400px;margin:0 auto;padding:18px 40px;display:flex;justify-content:space-between;align-items:center}
+.logo{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.5px;text-transform:uppercase;color:var(--black);text-decoration:none;transition:opacity .2s;cursor:pointer}
+.logo:hover{opacity:.6}
+.logo-dot{display:inline-block;width:7px;height:7px;background:var(--orange);border-radius:50%;margin-right:8px;vertical-align:middle;box-shadow:0 0 12px var(--orange)}
+.nav-links{display:flex;gap:28px;list-style:none}
+.nav-links a{color:var(--gray-600);text-decoration:none;font-size:13px;font-weight:500;transition:color .2s;font-family:var(--mono);letter-spacing:.3px}
+.nav-links a:hover{color:var(--black)}
+.nav-links a.active{color:var(--black);position:relative}
+.nav-links a.active::after{content:'';position:absolute;bottom:-24px;left:0;right:0;height:2px;background:var(--orange)}
+
+.nav-burger{display:none;width:44px;height:44px;border:none;background:transparent;cursor:pointer;padding:0;position:relative;z-index:120;margin-right:-8px}
+.nav-burger span{display:block;width:24px;height:2px;background:var(--black);position:absolute;left:10px;transition:transform .3s ease,opacity .2s ease,top .3s ease;border-radius:2px}
+.nav-burger span:nth-child(1){top:15px}
+.nav-burger span:nth-child(2){top:21px}
+.nav-burger span:nth-child(3){top:27px}
+.nav-burger.open span:nth-child(1){top:21px;transform:rotate(45deg)}
+.nav-burger.open span:nth-child(2){opacity:0}
+.nav-burger.open span:nth-child(3){top:21px;transform:rotate(-45deg)}
+
+.nav-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:var(--cream);z-index:115;padding:80px 24px 32px;flex-direction:column;justify-content:space-between;overflow-y:auto}
+.nav-overlay.open{display:flex;animation:overlayIn .28s cubic-bezier(.2,.9,.3,1)}
+@keyframes overlayIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.nav-overlay::before{content:'';position:absolute;top:-10%;right:-20%;width:60%;height:60%;background:radial-gradient(circle,var(--orange-soft) 0%,transparent 60%);filter:blur(40px);pointer-events:none}
+.nav-overlay-links{list-style:none;display:flex;flex-direction:column;padding:0;margin-top:20px;position:relative;z-index:2}
+.nav-overlay-links li{border-top:1px solid var(--gray-200)}
+.nav-overlay-links li:last-child{border-bottom:1px solid var(--gray-200)}
+.nav-overlay-links a{display:flex;justify-content:space-between;align-items:center;padding:22px 4px;font-size:28px;font-weight:700;letter-spacing:-.02em;color:var(--black);text-decoration:none;font-family:var(--sans)}
+.nav-overlay-links a.active{color:var(--orange)}
+.nav-overlay-links a::after{content:'→';font-size:20px;color:var(--gray-400);font-weight:400}
+.nav-overlay-links a.active::after{color:var(--orange)}
+.nav-overlay-links .nav-num{font-family:var(--mono);font-size:11px;color:var(--gray-400);letter-spacing:1px;text-transform:uppercase;font-weight:500;margin-right:14px;display:inline-block;min-width:28px;font-style:normal}
+.nav-overlay-footer{font-family:var(--mono);font-size:10px;color:var(--gray-400);letter-spacing:.5px;text-transform:uppercase;display:flex;justify-content:space-between;align-items:center;padding-top:24px;position:relative;z-index:2}
+
+/* ═══ CONTENT WRAPPER (above aura) ═══ */
+.content{position:relative;z-index:1}
+
+/* ═══ HERO ═══ */
+.hero{padding:160px 40px 100px;max-width:1400px;margin:0 auto;position:relative;min-height:90vh;display:flex;flex-direction:column;justify-content:center}
+.hero-meta{font-family:var(--mono);font-size:11px;color:var(--gray-400);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:40px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.hero-meta-dot{width:6px;height:6px;background:var(--orange);border-radius:50%;box-shadow:0 0 10px var(--orange)}
+.hero h1{font-family:var(--serif);font-size:clamp(60px,11vw,180px);font-weight:700;line-height:.9;letter-spacing:-.04em;margin-bottom:40px;max-width:1300px}
+.hero h1 em{font-style:italic;font-weight:400;color:var(--orange)}
+.hero-desc{font-size:clamp(18px,1.9vw,22px);line-height:1.5;max-width:640px;color:var(--gray-600);font-weight:400}
+
+.hero-scroll-indicator{position:absolute;bottom:40px;left:40px;display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:10px;color:var(--gray-400);letter-spacing:1px;text-transform:uppercase}
+.hero-scroll-line{width:40px;height:1px;background:var(--gray-400);position:relative;overflow:hidden}
+.hero-scroll-line::after{content:'';position:absolute;left:0;top:0;width:100%;height:100%;background:var(--orange);animation:scrollLine 2.5s cubic-bezier(.5,0,.5,1) infinite}
+@keyframes scrollLine{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+
+/* ═══ STATS ═══ */
+.stats{max-width:1400px;margin:0 auto;padding:60px 40px;display:grid;grid-template-columns:repeat(4,1fr);gap:24px;border-top:1px solid var(--gray-200);position:relative}
+.stat-num{font-family:var(--serif);font-size:clamp(40px,5vw,64px);font-weight:700;color:var(--black);line-height:1;letter-spacing:-.03em}
+.stat-num em{color:var(--orange);font-style:italic;font-weight:400}
+.stat-label{font-size:10px;color:var(--gray-400);font-family:var(--mono);letter-spacing:1px;text-transform:uppercase;margin-top:12px}
+
+/* ═══ CHAPTERS ═══ */
+.chapters{max-width:1400px;margin:0 auto;padding:80px 40px 40px}
+.chapters-intro{margin-bottom:60px;max-width:900px}
+.chapters-intro-label{font-family:var(--mono);font-size:11px;color:var(--orange);letter-spacing:1.2px;text-transform:uppercase;font-weight:500;margin-bottom:16px}
+.chapters-intro-title{font-family:var(--serif);font-size:clamp(36px,5vw,72px);font-weight:700;letter-spacing:-.03em;line-height:1.02}
+.chapters-intro-title em{color:var(--orange);font-style:italic;font-weight:400}
+
+.chapter{padding:48px 48px;margin-bottom:14px;position:relative;transition:transform .4s cubic-bezier(.2,.9,.3,1);overflow:hidden;border-radius:16px}
+.chapter::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;opacity:0;transition:opacity .5s;pointer-events:none;z-index:1}
+.chapter:hover{transform:translateY(-3px)}
+.chapter:hover::before{opacity:1}
+
+.chapter.tone-1{background:var(--cream-warm)}
+.chapter.tone-1::before{background:radial-gradient(ellipse at top right,rgba(255,107,53,.12),transparent 60%)}
+
+.chapter.tone-2{background:var(--cream-deeper)}
+.chapter.tone-2::before{background:radial-gradient(ellipse at bottom left,rgba(255,107,53,.1),transparent 55%)}
+
+.chapter.tone-3{background:#0F0E0C;color:var(--white)}
+.chapter.tone-3::before{background:radial-gradient(ellipse at center,rgba(255,107,53,.18),transparent 60%)}
+
+.chapter.tone-4{background:var(--cream-warm);border:1px solid var(--gray-300)}
+.chapter.tone-4::before{background:radial-gradient(ellipse at top left,rgba(255,107,53,.1),transparent 55%)}
+
+.chapter-inner{display:grid;grid-template-columns:200px 1fr 280px;gap:48px;align-items:center;position:relative;z-index:2}
+.chapter-num{font-family:var(--mono);font-size:12px;color:var(--orange);letter-spacing:1.2px;font-weight:500;display:flex;flex-direction:column;gap:6px}
+.chapter-num .cap{color:var(--gray-400);font-size:10px;letter-spacing:1px}
+.chapter.tone-3 .chapter-num{color:var(--orange)}
+.chapter.tone-3 .chapter-num .cap{color:var(--gray-400)}
+
+.chapter-title{font-family:var(--serif);font-size:clamp(36px,4.2vw,64px);font-weight:700;letter-spacing:-.03em;line-height:.95;margin-bottom:20px}
+.chapter-title em{color:var(--orange);font-style:italic;font-weight:400}
+.chapter.tone-3 .chapter-title{color:var(--white)}
+.chapter-desc{font-size:15px;line-height:1.6;color:var(--gray-600);margin-bottom:28px;max-width:480px}
+.chapter.tone-3 .chapter-desc{color:var(--gray-300)}
+.chapter-cta{display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.7px;text-transform:uppercase;color:var(--black);text-decoration:none;border-bottom:1.5px solid var(--black);padding-bottom:4px;transition:all .3s cubic-bezier(.2,.9,.3,1)}
+.chapter.tone-3 .chapter-cta{color:var(--white);border-bottom-color:var(--white)}
+.chapter-cta:hover{color:var(--orange);border-bottom-color:var(--orange);gap:16px}
+.chapter.tone-3 .chapter-cta:hover{color:var(--orange);border-bottom-color:var(--orange)}
+
+.chapter-visual{display:flex;align-items:center;justify-content:center;min-height:160px}
+
+/* Visuals */
+.vis-timeline{width:100%;position:relative;padding:10px 0}
+.vis-timeline-line{position:absolute;left:50%;top:0;bottom:0;width:1px;background:currentColor;opacity:.2;transform:translateX(-.5px)}
+.vis-timeline-dot{display:block;width:11px;height:11px;border-radius:50%;border:1.5px solid currentColor;margin:14px auto;position:relative;z-index:2;background:var(--cream-warm)}
+.vis-timeline-dot:nth-child(odd){background:var(--orange);border-color:var(--orange);box-shadow:0 0 16px rgba(255,107,53,.5)}
+.chapter.tone-2 .vis-timeline-dot{background:var(--cream-deeper)}
+.chapter.tone-2 .vis-timeline-dot:nth-child(odd){background:var(--orange);border-color:var(--orange)}
+
+.vis-chips{display:flex;flex-direction:column;gap:8px;width:100%}
+.vis-chip{padding:11px 16px;border:1px solid currentColor;border-radius:100px;font-family:var(--mono);font-size:11px;letter-spacing:.3px;opacity:.85;text-align:center;transition:all .3s}
+.vis-chip.accent{background:var(--orange);border-color:var(--orange);color:var(--white);opacity:1;font-weight:500;box-shadow:0 4px 20px rgba(255,107,53,.3)}
+.chapter.tone-3 .vis-chip{border-color:var(--gray-600);color:var(--gray-300)}
+.chapter.tone-3 .vis-chip.accent{color:var(--white);background:var(--orange);border-color:var(--orange)}
+
+.vis-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%}
+.vis-cell{padding:16px 12px;border:1px solid currentColor;font-family:var(--mono);font-size:10px;letter-spacing:.3px;opacity:.7;text-align:center;min-height:56px;display:flex;align-items:center;justify-content:center;line-height:1.3}
+.vis-cell.accent{background:var(--orange);border-color:var(--orange);color:var(--white);opacity:1;font-weight:500;box-shadow:0 4px 20px rgba(255,107,53,.3)}
+
+.vis-graph{width:100%;height:140px}
+
+/* ═══ QUOTES ═══ */
+.quotes-section{padding:80px 40px 60px;max-width:1400px;margin:0 auto;position:relative}
+.quotes-header{font-family:var(--mono);font-size:11px;color:var(--gray-400);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:28px;display:flex;align-items:center;gap:12px}
+.quotes-header-num{color:var(--orange);font-weight:500}
+
+.quotes-box{background:var(--black);color:var(--white);border-radius:20px;padding:64px 72px 48px;position:relative;overflow:hidden;cursor:pointer;border:1px solid var(--black)}
+.quotes-box::after{content:'';position:absolute;top:-20%;right:-10%;width:60%;height:140%;background:radial-gradient(ellipse,rgba(255,107,53,.15),transparent 60%);filter:blur(30px);pointer-events:none}
+.quotes-box::before{content:'"';position:absolute;top:-20px;left:48px;font-family:var(--serif);font-size:180px;line-height:1;color:var(--orange);opacity:.95;font-style:italic;font-weight:400;pointer-events:none;z-index:1}
+.quote-slide{display:none;position:relative;z-index:2;padding-top:56px}
+.quote-slide.active{display:block;animation:quoteFade .6s cubic-bezier(.2,.9,.3,1)}
+@keyframes quoteFade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.quote-text{font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(26px,3.6vw,44px);line-height:1.22;letter-spacing:-.015em;color:var(--white);max-width:900px;margin-bottom:40px}
+.quote-attribution{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap}
+.quote-author-name{font-family:var(--sans);font-size:15px;font-weight:600;color:var(--white);letter-spacing:-.01em;margin-bottom:4px}
+.quote-author-meta{font-family:var(--mono);font-size:10px;color:var(--gray-400);letter-spacing:.5px}
+.quote-progress{display:flex;gap:6px;align-items:center}
+.quote-dot{width:24px;height:3px;background:rgba(255,255,255,.25);transition:background .3s}
+.quote-dot.active{background:var(--orange);box-shadow:0 0 12px rgba(255,107,53,.6)}
+.quote-dot.past{background:rgba(255,255,255,.5)}
+.quotes-hint{font-family:var(--mono);font-size:10px;color:var(--gray-400);letter-spacing:.5px;margin-top:16px;text-align:center;opacity:.7}
+
+/* ═══ FOOTER ═══ */
+footer{border-top:1px solid var(--gray-200);padding:80px 40px 40px;margin-top:60px;position:relative;overflow:hidden}
+footer::before{content:'';position:absolute;bottom:-50%;left:30%;width:500px;height:500px;background:radial-gradient(circle,var(--orange-soft),transparent 60%);filter:blur(50px);pointer-events:none}
+.footer-inner{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:end;position:relative;z-index:2}
+.footer-logo-big{font-family:var(--serif);font-size:clamp(40px,6vw,80px);font-weight:700;letter-spacing:-.03em;line-height:1}
+.footer-logo-big em{color:var(--orange);font-style:italic;font-weight:400}
+.footer-meta{font-family:var(--mono);font-size:10px;color:var(--gray-400);letter-spacing:.5px;text-align:right}
+.footer-meta div{margin-bottom:6px}
+.footer-meta strong{color:var(--black);font-weight:500}
+
+/* ═══ SCROLL ANIMATIONS ═══ */
+.reveal{opacity:0;transform:translateY(40px);transition:opacity .9s cubic-bezier(.2,.9,.3,1),transform .9s cubic-bezier(.2,.9,.3,1)}
+.reveal.in{opacity:1;transform:translateY(0)}
+.reveal.delay-1{transition-delay:.1s}
+.reveal.delay-2{transition-delay:.2s}
+.reveal.delay-3{transition-delay:.3s}
+.reveal.delay-4{transition-delay:.4s}
+
+/* Parallax elements use transform via JS */
+.parallax{will-change:transform}
+
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:768px){
+  .nav-links{display:none}
+  .nav-burger{display:block}
+  .nav-inner{padding:14px 20px}
+  .hero{padding:130px 20px 80px;min-height:80vh}
+  .hero h1{font-size:64px}
+  .hero-desc{font-size:17px}
+  .hero-scroll-indicator{left:20px;bottom:24px}
+  .stats{padding:40px 20px;grid-template-columns:1fr 1fr;gap:24px}
+  .chapters{padding:60px 20px 20px}
+  .chapters-intro-title{font-size:36px}
+  .chapter{padding:32px 24px;margin-bottom:12px}
+  .chapter-inner{grid-template-columns:1fr;gap:24px}
+  .chapter-num{flex-direction:row;gap:12px;align-items:center}
+  .chapter-title{font-size:40px}
+  .chapter-desc{font-size:15px}
+  .chapter-visual{min-height:auto}
+  .quotes-section{padding:40px 20px 30px}
+  .quotes-box{padding:36px 24px 28px}
+  .quotes-box::before{font-size:100px;top:-10px;left:16px}
+  .quote-slide{padding-top:32px}
+  .quote-text{font-size:22px;margin-bottom:24px}
+  .quote-attribution{flex-direction:column;align-items:flex-start;gap:14px}
+  footer{padding:60px 20px 32px}
+  .footer-inner{grid-template-columns:1fr;gap:24px}
+  .footer-meta{text-align:left}
+  .aura-glow{filter:blur(60px)}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .aura-glow{animation:none!important}
+  .reveal{opacity:1!important;transform:none!important}
+  .hero-scroll-line::after{animation:none!important}
+}
+</style>
+</head>
+<body>
+
+<!-- AURA BACKGROUND -->
+<div class="aura">
+  <div class="aura-glow aura-glow-1"></div>
+  <div class="aura-glow aura-glow-2"></div>
+  <div class="aura-glow aura-glow-3"></div>
+</div>
+
+<nav class="nav-top">
+  <div class="nav-inner">
+    <a href="index.html" class="logo"><span class="logo-dot"></span>Filosofia</a>
+    <ul class="nav-links">
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="timeline.html">Timeline</a></li>
+      <li><a href="concetti.html">Concetti</a></li>
+      <li><a href="domande.html">Domande</a></li>
+      <li><a href="dialoghi.html">Dialoghi</a></li>
+    </ul>
+    <button class="nav-burger" id="nav-burger" aria-label="Apri menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="nav-overlay" id="nav-overlay">
+  <ul class="nav-overlay-links">
+    <li><a href="index.html" class="active"><span><span class="nav-num">01</span>Home</span></a></li>
+    <li><a href="timeline.html"><span><span class="nav-num">02</span>Timeline</span></a></li>
+    <li><a href="concetti.html"><span><span class="nav-num">03</span>Concetti</span></a></li>
+    <li><a href="domande.html"><span><span class="nav-num">04</span>Domande</span></a></li>
+    <li><a href="dialoghi.html"><span><span class="nav-num">05</span>Dialoghi</span></a></li>
+  </ul>
+  <div class="nav-overlay-footer">
+    <span>Filosofia · 2026</span>
+    <span>In aggiornamento</span>
+  </div>
+</div>
+
+<div class="content">
+
+<section class="hero">
+  <div class="hero-meta reveal">
+    <span class="hero-meta-dot"></span>
+    <span>Edizione 2026</span>
+    <span>/</span>
+    <span>Schema di apprendimento</span>
+  </div>
+  <h1 class="reveal delay-1 parallax" data-parallax-speed="0.15">Un sito per capire<br>la <em>filosofia.</em></h1>
+  <p class="hero-desc reveal delay-2 parallax" data-parallax-speed="0.08">Non un'enciclopedia. Non un corso. Un percorso curato attraverso venticinque secoli di pensiero, pensato per chi vuole vedere, non solo leggere.</p>
+
+  <div class="hero-scroll-indicator">
+    <span>Scorri</span>
+    <div class="hero-scroll-line"></div>
+  </div>
+</section>
+
+<section class="stats">
+  <div class="reveal"><div class="stat-num">29</div><div class="stat-label">Filosofi</div></div>
+  <div class="reveal delay-1"><div class="stat-num">8</div><div class="stat-label">Concetti</div></div>
+  <div class="reveal delay-2"><div class="stat-num">6</div><div class="stat-label">Domande</div></div>
+  <div class="reveal delay-3"><div class="stat-num"><em>33</em></div><div class="stat-label">Dialoghi</div></div>
+</section>
+
+<section class="chapters">
+  <div class="chapters-intro reveal">
+    <div class="chapters-intro-label">I quattro capitoli</div>
+    <h2 class="chapters-intro-title">Quattro modi di<br><em>esplorare</em> la filosofia.</h2>
+  </div>
+
+  <article class="chapter tone-1 reveal">
+    <div class="chapter-inner">
+      <div class="chapter-num"><span class="cap">Capitolo</span><span>02 · Timeline</span></div>
+      <div>
+        <h3 class="chapter-title">Da Talete<br>a <em>Foucault.</em></h3>
+        <p class="chapter-desc">Una timeline verticale che attraversa 2500 anni, filosofo dopo filosofo, epoca dopo epoca. Per orientarti nella storia del pensiero.</p>
+        <a href="timeline.html" class="chapter-cta">Esplora la Timeline <span>→</span></a>
+      </div>
+      <div class="chapter-visual">
+        <div class="vis-timeline">
+          <div class="vis-timeline-line"></div>
+          <div class="vis-timeline-dot"></div>
+          <div class="vis-timeline-dot"></div>
+          <div class="vis-timeline-dot"></div>
+          <div class="vis-timeline-dot"></div>
+          <div class="vis-timeline-dot"></div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <article class="chapter tone-2 reveal">
+    <div class="chapter-inner">
+      <div class="chapter-num"><span class="cap">Capitolo</span><span>03 · Concetti</span></div>
+      <div>
+        <h3 class="chapter-title">Otto temi,<br>molti <em>filosofi.</em></h3>
+        <p class="chapter-desc">Gli stessi pensatori affrontano le stesse grandi domande. Raggruppali per tema — essere, libertà, potere, Dio — e vedi chi dialoga con chi.</p>
+        <a href="concetti.html" class="chapter-cta">Esplora i Concetti <span>→</span></a>
+      </div>
+      <div class="chapter-visual">
+        <div class="vis-chips">
+          <div class="vis-chip accent">L'Essere</div>
+          <div class="vis-chip">La Libertà</div>
+          <div class="vis-chip">Il Potere</div>
+          <div class="vis-chip">Dio</div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <article class="chapter tone-3 reveal">
+    <div class="chapter-inner">
+      <div class="chapter-num"><span class="cap">Capitolo</span><span>04 · Domande</span></div>
+      <div>
+        <h3 class="chapter-title">Una domanda,<br><em>più</em> risposte.</h3>
+        <p class="chapter-desc">Invece di leggere un filosofo alla volta, confronta direttamente le loro risposte alle grandi questioni. La filosofia come dibattito, non catalogo.</p>
+        <a href="domande.html" class="chapter-cta">Esplora le Domande <span>→</span></a>
+      </div>
+      <div class="chapter-visual">
+        <div class="vis-grid">
+          <div class="vis-cell accent">Spinoza</div>
+          <div class="vis-cell">Kant</div>
+          <div class="vis-cell">Sartre</div>
+          <div class="vis-cell">Kierkegaard</div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <article class="chapter tone-4 reveal">
+    <div class="chapter-inner">
+      <div class="chapter-num"><span class="cap">Capitolo</span><span>05 · Dialoghi</span></div>
+      <div>
+        <h3 class="chapter-title">Chi parla<br>con <em>chi.</em></h3>
+        <p class="chapter-desc">La vera storia della filosofia è una conversazione: maestri ed eredi, critici e risposte. Una mappa dei legami tra pensatori.</p>
+        <a href="dialoghi.html" class="chapter-cta">Esplora i Dialoghi <span>→</span></a>
+      </div>
+      <div class="chapter-visual">
+        <svg class="vis-graph" viewBox="0 0 280 140" xmlns="http://www.w3.org/2000/svg">
+          <path d="M 30 80 Q 70 30 110 80" fill="none" stroke="#FF6B35" stroke-width="1.5" stroke-dasharray="4 3"/>
+          <path d="M 110 80 Q 160 130 210 80" fill="none" stroke="#0A0A0A" stroke-width="1.5"/>
+          <path d="M 210 80 Q 240 40 260 80" fill="none" stroke="#0A0A0A" stroke-width="1.5" stroke-dasharray="2 3"/>
+          <circle cx="30" cy="80" r="7" fill="#F2EEDF" stroke="#0A0A0A" stroke-width="1.5"/>
+          <circle cx="110" cy="80" r="7" fill="#F2EEDF" stroke="#0A0A0A" stroke-width="1.5"/>
+          <circle cx="210" cy="80" r="7" fill="#F2EEDF" stroke="#0A0A0A" stroke-width="1.5"/>
+          <circle cx="260" cy="80" r="7" fill="#FF6B35" stroke="#FF6B35" stroke-width="1.5"/>
+        </svg>
+      </div>
+    </div>
+  </article>
+</section>
+
+<section class="quotes-section reveal">
+  <div class="quotes-header">
+    <span class="quotes-header-num">P01</span>
+    <span>Parole · citazioni celebri</span>
+  </div>
+  <div class="quotes-box" id="quotes-box-home"></div>
+  <div class="quotes-hint">Le citazioni ruotano automaticamente · Clicca per cambiare</div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo-big reveal"><em>Filosofia.</em><br>In aggiornamento.</div>
+    <div class="footer-meta reveal delay-1">
+      <div><strong>29</strong> filosofi mappati</div>
+      <div><strong>8</strong> concetti trasversali</div>
+      <div><strong>6</strong> grandi domande</div>
+      <div><strong>33</strong> relazioni tracciate</div>
+      <div style="margin-top:16px">Schema di apprendimento · 2026</div>
+    </div>
+  </div>
+</footer>
+
+</div> <!-- end .content -->
+
+<script>
+// ═══ HAMBURGER MENU ═══
+(function(){
+  var burger = document.getElementById('nav-burger');
+  var overlay = document.getElementById('nav-overlay');
+  if (!burger || !overlay) return;
+  function toggle(){
+    var isOpen = overlay.classList.contains('open');
+    if(isOpen){
+      overlay.classList.remove('open');
+      burger.classList.remove('open');
+      document.body.style.overflow = '';
+    } else {
+      overlay.classList.add('open');
+      burger.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+  }
+  burger.addEventListener('click', toggle);
+  overlay.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', function(){
+      overlay.classList.remove('open');
+      burger.classList.remove('open');
+      document.body.style.overflow = '';
+    });
+  });
+})();
+
+// ═══ SCROLL REVEAL ═══
+(function(){
+  if (!('IntersectionObserver' in window)) {
+    document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in')});
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if (entry.isIntersecting){
+        entry.target.classList.add('in');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+  document.querySelectorAll('.reveal').forEach(function(el){ observer.observe(el); });
+})();
+
+// ═══ PARALLAX ON SCROLL ═══
+(function(){
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var elements = document.querySelectorAll('.parallax');
+  if (!elements.length) return;
+
+  var ticking = false;
+  function update(){
+    var scrollY = window.pageYOffset;
+    elements.forEach(function(el){
+      var speed = parseFloat(el.dataset.parallaxSpeed) || 0.1;
+      var offset = scrollY * speed;
+      el.style.transform = 'translateY(' + offset + 'px)';
+    });
+    ticking = false;
+  }
+  function onScroll(){
+    if (!ticking){
+      window.requestAnimationFrame(update);
+      ticking = true;
+    }
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  update();
+})();
+
+// ═══ AURA FOLLOW MOUSE (subtle, desktop only) ═══
+(function(){
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (window.innerWidth < 900) return;
+  var glow1 = document.querySelector('.aura-glow-1');
+  var glow2 = document.querySelector('.aura-glow-2');
+  if (!glow1 || !glow2) return;
+
+  var mouseX = 0, mouseY = 0;
+  var currentX = 0, currentY = 0;
+  document.addEventListener('mousemove', function(e){
+    mouseX = (e.clientX / window.innerWidth - 0.5) * 40;
+    mouseY = (e.clientY / window.innerHeight - 0.5) * 40;
+  });
+  function animate(){
+    currentX += (mouseX - currentX) * 0.03;
+    currentY += (mouseY - currentY) * 0.03;
+    glow1.style.transform = 'translate(' + currentX + 'px, ' + currentY + 'px)';
+    glow2.style.transform = 'translate(' + (-currentX * .7) + 'px, ' + (-currentY * .7) + 'px)';
+    requestAnimationFrame(animate);
+  }
+  animate();
+})();
+
+// ═══ QUOTES ROTATOR ═══
+(function() {
+  var QUOTES = [
+    {text:"Una vita senza ricerca non è degna di essere vissuta.", author:"Socrate", meta:"~470–399 a.C. · classica"},
+    {text:"So di non sapere.", author:"Socrate", meta:"~470–399 a.C. · classica"},
+    {text:"Non si può scendere due volte nello stesso fiume.", author:"Eraclito", meta:"~535–475 a.C. · presocratica"},
+    {text:"Tutto scorre.", author:"Eraclito", meta:"~535–475 a.C. · presocratica"},
+    {text:"L'essere è, il non-essere non è.", author:"Parmenide", meta:"~515–450 a.C. · presocratica"},
+    {text:"La felicità è un'attività dell'anima secondo virtù.", author:"Aristotele", meta:"~384–322 a.C. · classica"},
+    {text:"Abbi il coraggio di servirti della tua propria intelligenza.", author:"Kant", meta:"1724–1804 · idealismo"},
+    {text:"Agisci solo secondo quella massima che puoi volere divenga legge universale.", author:"Kant", meta:"1724–1804 · idealismo"},
+    {text:"Penso, dunque sono.", author:"Descartes", meta:"1596–1650 · razionalismo"},
+    {text:"Dio è morto. E noi l'abbiamo ucciso.", author:"Nietzsche", meta:"1844–1900 · esistenzialismo"},
+    {text:"Ciò che non mi uccide mi rende più forte.", author:"Nietzsche", meta:"1844–1900 · esistenzialismo"},
+    {text:"Diventa ciò che sei.", author:"Nietzsche", meta:"1844–1900 · esistenzialismo"},
+    {text:"Siamo condannati ad essere liberi.", author:"Sartre", meta:"1905–1980 · esistenzialismo"},
+    {text:"L'inferno sono gli altri.", author:"Sartre", meta:"1905–1980 · esistenzialismo"},
+    {text:"I limiti del mio linguaggio sono i limiti del mio mondo.", author:"Wittgenstein", meta:"1889–1951 · contemporanea"},
+    {text:"L'angoscia è la vertigine della libertà.", author:"Kierkegaard", meta:"1813–1855 · esistenzialismo"},
+    {text:"Deus sive Natura.", author:"Spinoza", meta:"1632–1677 · razionalismo"},
+    {text:"Non è ciò che ti accade a disturbarti, ma il tuo giudizio su di esso.", author:"Epitteto", meta:"~50–135 d.C. · stoicismo"}
+  ];
+  function shuffle(arr){var c=arr.slice();for(var i=c.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=c[i];c[i]=c[j];c[j]=t}return c}
+  var selected = shuffle(QUOTES).slice(0, 6);
+  var box = document.getElementById('quotes-box-home');
+  if (!box) return;
+  var slidesHtml = '';
+  selected.forEach(function(q, i) {
+    slidesHtml += '<div class="quote-slide' + (i === 0 ? ' active' : '') + '">' +
+      '<div class="quote-text">' + q.text + '</div>' +
+      '<div class="quote-attribution">' +
+        '<div>' +
+          '<div class="quote-author-name">' + q.author + '</div>' +
+          '<div class="quote-author-meta">' + q.meta + '</div>' +
+        '</div>' +
+        '<div class="quote-progress" data-progress></div>' +
+      '</div>' +
+    '</div>';
+  });
+  box.innerHTML = slidesHtml;
+  function buildDots(i){var d='';for(var k=0;k<selected.length;k++){var cls='quote-dot';if(k===i)cls+=' active';else if(k<i)cls+=' past';d+='<div class="'+cls+'"></div>'}return d}
+  var current = 0, interval;
+  function show(i){var s=box.querySelectorAll('.quote-slide');s.forEach(function(x,k){x.classList.toggle('active',k===i)});var p=s[i].querySelector('[data-progress]');if(p)p.innerHTML=buildDots(i);current=i}
+  function next(){show((current+1)%selected.length)}
+  function start(){stop();interval=setInterval(next,7000)}
+  function stop(){if(interval){clearInterval(interval);interval=null}}
+  box.addEventListener('click', function(){next();start()});
+  box.addEventListener('mouseenter', stop);
+  box.addEventListener('mouseleave', start);
+  show(0); start();
+})();
+</script>
+
+</body>
+</html>
