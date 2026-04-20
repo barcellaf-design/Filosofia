@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Filosofia — Timeline</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --orange:#FF6B35;
+  --orange-soft:rgba(255,107,53,.15);
+  --orange-mist:rgba(255,107,53,.08);
+  --black:#0A0A0A;
+  --white:#FFFFFF;
+  --cream:#FAF7F0;
+  --cream-warm:#F2EEDF;
+  --cream-deeper:#E8E3D0;
+  --gray-100:#F0EDE5;
+  --gray-200:#E0DDD0;
+  --gray-300:#C9C6B8;
+  --gray-400:#8F8E82;
+  --gray-600:#55544A;
+  --mono:'JetBrains Mono',monospace;
+  --sans:'Inter',-apple-system,sans-serif;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--cream);color:var(--black);font-weight:400;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden;position:relative}
+.nav-top{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(250,249,246,.88);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--gray-200)}
+.nav-inner{max-width:1400px;margin:0 auto;padding:18px 40px;display:flex;justify-content:space-between;align-items:center}
+.logo{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.5px;text-transform:uppercase;color:var(--black);text-decoration:none;transition:opacity .2s;cursor:pointer}
+.logo:hover{opacity:.6}
+.logo-dot{display:inline-block;width:7px;height:7px;background:var(--orange);border-radius:50%;margin-right:8px;vertical-align:middle}
+.nav-links{display:flex;gap:28px;list-style:none}
+.nav-links a{color:var(--gray-600);text-decoration:none;font-size:13px;font-weight:500;transition:color .2s;font-family:var(--mono);letter-spacing:.3px}
+.nav-links a:hover{color:var(--black)}
+.nav-links a.active{color:var(--black);position:relative}
+.nav-links a.active::after{content:'';position:absolute;bottom:-24px;left:0;right:0;height:2px;background:var(--orange)}
+.hero{padding:140px 40px 60px;max-width:1400px;margin:0 auto}
+.hero-meta{font-family:var(--mono);font-size:11px;color:var(--gray-400);letter-spacing:1px;text-transform:uppercase;margin-bottom:40px;display:flex;gap:24px;align-items:center}
+.hero-meta-dot{width:6px;height:6px;background:var(--orange);border-radius:50%}
+.hero h1{font-size:clamp(52px,9vw,128px);font-weight:800;line-height:.95;letter-spacing:-.04em;margin-bottom:40px;max-width:1200px}
+.hero h1 em{font-style:italic;font-weight:400;color:var(--orange)}
+.hero-desc{font-size:20px;line-height:1.5;max-width:680px;color:var(--gray-600);margin-bottom:40px}
+.filters-section{padding:16px 40px;max-width:1400px;margin:0 auto;position:sticky;top:62px;background:rgba(250,249,246,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);z-index:50;border-bottom:1px solid var(--gray-200)}
+.filters-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.filter-chip{font-family:var(--mono);font-size:11px;letter-spacing:.5px;padding:7px 14px;border-radius:100px;border:1px solid var(--gray-200);background:transparent;color:var(--gray-600);cursor:pointer;transition:all .15s;text-transform:lowercase;font-weight:500}
+.filter-chip:hover{border-color:var(--black);color:var(--black)}
+.filter-chip.active{background:var(--black);color:var(--white);border-color:var(--black)}
+.timeline-section{padding:80px 40px 120px;max-width:1200px;margin:0 auto;position:relative}
+.timeline-section::before{content:'';position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--gray-200);transform:translateX(-.5px);z-index:1}
+.era-divider{position:relative;z-index:2;margin:80px 0 50px;text-align:center}
+.era-divider:first-child{margin-top:0}
+.era-divider-inner{display:inline-block;background:var(--cream);padding:10px 28px;border:1px solid var(--gray-200);border-radius:100px}
+.era-num{font-family:var(--mono);font-size:11px;color:var(--orange);letter-spacing:1px;font-weight:500;margin-right:10px}
+.era-name{font-family:var(--mono);font-size:11px;color:var(--black);letter-spacing:1px;text-transform:uppercase;font-weight:500}
+.era-period{font-family:var(--mono);font-size:10px;color:var(--gray-400);letter-spacing:.5px;margin-left:10px}
+.phil-entry{position:relative;z-index:2;margin-bottom:70px;display:grid;grid-template-columns:1fr 80px 1fr;gap:0;align-items:center;min-height:180px}
+.phil-entry:last-child{margin-bottom:0}
+.phil-content{padding:0 50px}
+.phil-entry.left .phil-content{grid-column:1;text-align:right}
+.phil-entry.right .phil-content{grid-column:3;text-align:left}
+.phil-center{grid-column:2;display:flex;justify-content:center;align-items:center;position:relative}
+.phil-dot{width:14px;height:14px;border-radius:50%;background:var(--cream);border:2px solid var(--black);cursor:pointer;transition:all .2s;position:relative;z-index:3}
+.phil-entry:hover .phil-dot{background:var(--orange);border-color:var(--orange);transform:scale(1.2)}
+.phil-dot-line{position:absolute;top:50%;height:1px;background:var(--gray-200);z-index:2;transition:background .25s}
+.phil-entry.left .phil-dot-line{right:50%;margin-right:7px;width:calc(50% - 14px)}
+.phil-entry.right .phil-dot-line{left:50%;margin-left:7px;width:calc(50% - 14px)}
+.phil-entry:hover .phil-dot-line{background:var(--orange)}
+.phil-num{font-family:var(--mono);font-size:13px;color:var(--orange);letter-spacing:.8px;font-weight:500;margin-bottom:10px;text-transform:uppercase}
+.phil-date{font-family:var(--mono);font-size:13px;color:var(--gray-400);letter-spacing:.5px;margin-bottom:10px}
+.phil-name{font-size:44px;font-weight:700;letter-spacing:-.03em;line-height:1;margin-bottom:14px;cursor:pointer;display:inline-block;transition:color .2s}
+.phil-name:hover{color:var(--orange)}
+.phil-school{font-family:var(--mono);font-size:10px;color:var(--gray-400);letter-spacing:1px;text-transform:uppercase;margin-bottom:16px}
+.phil-summary{font-size:15px;line-height:1.6;color:var(--gray-600);max-width:440px}
+.phil-entry.left .phil-summary{margin-left:auto}
+.phil-entry.right .phil-summary{margin-right:auto}
+@media(max-width:768px){
+  .nav-inner{padding:14px 20px}
+  .nav-links{gap:14px;font-size:11px}
+  .hero{padding:100px 20px 40px}
+  .hero h1{font-size:44px}
+  .hero-desc{font-size:17px}
+  .filters-section{padding:12px 20px}
+  .timeline-section{padding:40px 20px 80px;max-width:none}
+  .timeline-section::before{left:32px;transform:none}
+  .phil-entry{grid-template-columns:64px 1fr;min-height:auto;margin-bottom:48px}
+  .phil-entry.left .phil-content,.phil-entry.right .phil-content{grid-column:2;text-align:left;padding:0}
+  .phil-center{grid-column:1;justify-content:flex-start;padding-left:26px}
+  .phil-entry.left .phil-dot-line,.phil-entry.right .phil-dot-line{left:50%;margin-left:7px;right:auto;margin-right:0;width:calc(100% - 14px)}
+  .phil-name{font-size:32px}
+  .phil-summary{max-width:none}
+  .phil-entry.left .phil-summary,.phil-entry.right .phil-summary{margin:0}
+  .era-divider{text-align:left;padding-left:20px}
+}
+.detail-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,10,10,.6);backdrop-filter:blur(8px);z-index:200;display:none}
+.detail-overlay.open{display:flex;justify-content:center;align-items:flex-start;padding:80px 20px 40px;overflow-y:auto}
+.detail-card{border-radius:16px;background:var(--cream);max-width:720px;width:100%;padding:56px 56px 48px;position:relative;animation:slideUp .3s cubic-bezier(.2,.9,.3,1)}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.detail-close{position:absolute;top:24px;right:24px;width:40px;height:40px;border-radius:50%;background:var(--gray-100);border:none;cursor:pointer;font-size:18px;color:var(--black);display:flex;align-items:center;justify-content:center;transition:all .15s}
+.detail-close:hover{background:var(--black);color:var(--white)}
+.detail-head{margin-bottom:40px;padding-bottom:32px;border-bottom:1px solid var(--gray-200)}
+.detail-num{font-family:var(--mono);font-size:11px;color:var(--orange);letter-spacing:1.2px;margin-bottom:8px;text-transform:uppercase;font-weight:500}
+.detail-name{font-size:72px;font-weight:800;letter-spacing:-.04em;line-height:.95;margin-bottom:12px}
+.detail-meta{font-family:var(--mono);font-size:12px;color:var(--gray-400);letter-spacing:.5px;display:flex;gap:16px;flex-wrap:wrap}
+.detail-intro{font-size:20px;line-height:1.5;color:var(--black);margin-bottom:40px}
+.detail-section-label{font-family:var(--mono);font-size:11px;color:var(--gray-400);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:20px;font-weight:500}
+.concept-item{padding:24px 0;border-top:1px solid var(--gray-200)}
+.concept-item:last-child{border-bottom:1px solid var(--gray-200)}
+.concept-title{font-size:22px;font-weight:700;letter-spacing:-.01em;margin-bottom:8px}
+.concept-desc{font-size:15px;line-height:1.6;color:var(--gray-600)}
+footer{border-top:1px solid var(--gray-200);padding:60px 40px 40px;text-align:center}
+.footer-inner{max-width:1400px;margin:0 auto}
+.footer-logo{font-family:var(--mono);font-size:14px;font-weight:500;letter-spacing:.5px;text-transform:uppercase;margin-bottom:16px}
+.footer-text{font-size:12px;color:var(--gray-400);font-family:var(--mono);letter-spacing:.5px}
+@media(max-width:768px){.detail-card{padding:40px 28px 32px}.detail-name{font-size:48px}.detail-close{top:16px;right:16px}}
+
+/* ═══ ATMOSPHERIC GRADIENT LAYER (injected) ═══ */
+.aura{position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:0;overflow:hidden}
+.aura-glow{position:absolute;width:900px;height:900px;border-radius:50%;background:radial-gradient(circle at center,var(--orange-soft) 0%,var(--orange-mist) 30%,transparent 65%);filter:blur(40px);opacity:.85;transition:transform .6s cubic-bezier(.2,.9,.3,1);will-change:transform}
+.aura-glow-1{top:-200px;left:-200px;animation:auraFloat1 20s ease-in-out infinite}
+.aura-glow-2{top:30%;right:-300px;width:700px;height:700px;opacity:.6;animation:auraFloat2 25s ease-in-out infinite}
+.aura-glow-3{bottom:-200px;left:30%;width:800px;height:800px;opacity:.45;animation:auraFloat3 30s ease-in-out infinite}
+@keyframes auraFloat1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(80px,40px) scale(1.1)}}
+@keyframes auraFloat2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-60px,-30px) scale(.95)}}
+@keyframes auraFloat3{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-40px,-50px) scale(1.05)}}
+
+/* ═══ SCROLL REVEAL (injected) ═══ */
+.reveal{opacity:0;transform:translateY(40px);transition:opacity .9s cubic-bezier(.2,.9,.3,1),transform .9s cubic-bezier(.2,.9,.3,1)}
+.reveal.in{opacity:1;transform:translateY(0)}
+.reveal.delay-1{transition-delay:.1s}
+.reveal.delay-2{transition-delay:.2s}
+.reveal.delay-3{transition-delay:.3s}
+.reveal.delay-4{transition-delay:.4s}
+
+/* Ensure navigation stays above aura */
+.nav-top{z-index:100}
+main,section,article,footer,.nav-overlay{position:relative;z-index:2}
+
+@media(max-width:768px){
+  .aura-glow{filter:blur(60px);opacity:.5}
+}
+@media(prefers-reduced-motion:reduce){
+  .aura-glow{animation:none!important}
+  .reveal{opacity:1!important;transform:none!important}
+}
+
+
+/* ═══ SOFTENED CORNERS (injected) ═══ */
+.galaxy,.position,.rel-block,.q-btn,.card,.preview-card,.phil-card{border-radius:16px!important}
+.tag,.chip,.filter-chip,.tag-small{border-radius:100px!important}
+
+</style>
+<style>
+/* Font serif per le citazioni - caricato insieme a Inter ma usato solo qui */
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;1,400;1,500&display=swap');
+
+.quotes-section{padding:70px 40px;max-width:1400px;margin:0 auto;position:relative}
+.quotes-header{font-family:var(--mono);font-size:11px;color:var(--gray-400);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:32px;display:flex;align-items:center;gap:12px}
+.quotes-header-num{color:var(--orange);font-weight:500}
+
+.quotes-box{background:var(--black);color:var(--white);border-radius:20px;padding:56px 72px 40px;position:relative;overflow:hidden;cursor:pointer;border:1px solid var(--black)}
+.quotes-box::before{content:'"';position:absolute;top:-20px;left:48px;font-family:'Fraunces',serif;font-size:160px;line-height:1;color:var(--orange);opacity:.95;font-style:italic;font-weight:400;pointer-events:none}
+
+/* Slides stacked - height auto - only the active one takes height */
+.quote-slide{display:none;position:relative;z-index:2;padding-top:48px}
+.quote-slide.active{display:block;animation:quoteFade .5s ease}
+@keyframes quoteFade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+.quote-text{font-family:'Fraunces',serif;font-style:italic;font-weight:400;font-size:clamp(26px,3.4vw,40px);line-height:1.25;letter-spacing:-.015em;color:var(--white);max-width:900px;margin-bottom:32px}
+.quote-attribution{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap}
+.quote-author{display:flex;flex-direction:column;gap:4px}
+.quote-author-name{font-family:var(--sans);font-size:16px;font-weight:600;color:var(--white);letter-spacing:-.01em}
+.quote-author-meta{font-family:var(--mono);font-size:11px;color:var(--gray-400);letter-spacing:.5px}
+.quote-progress{display:flex;gap:6px;align-items:center}
+.quote-dot{width:24px;height:3px;background:rgba(255,255,255,.25);transition:background .3s}
+.quote-dot.active{background:var(--orange)}
+.quote-dot.past{background:rgba(255,255,255,.5)}
+
+.quotes-hint{font-family:var(--mono);font-size:10px;color:var(--gray-400);letter-spacing:.5px;margin-top:16px;text-align:center;opacity:.7}
+
+@media(max-width:768px){
+  .quotes-section{padding:40px 20px}
+  .quotes-box{padding:36px 28px 28px}
+  .quotes-box::before{font-size:100px;top:-10px;left:20px}
+  .quote-slide{padding-top:32px}
+  .quote-text{font-size:20px;margin-bottom:24px}
+  .quote-attribution{flex-direction:column;align-items:flex-start;gap:14px}
+}
+</style>
+<style>
+/* ═══ MOBILE NAV (HAMBURGER) ═══ */
+.nav-burger{display:none;width:40px;height:40px;border:none;background:transparent;cursor:pointer;padding:0;position:relative;z-index:110}
+.nav-burger span{display:block;width:22px;height:1.5px;background:var(--black);position:absolute;left:9px;transition:transform .3s ease,opacity .2s ease,top .3s ease}
+.nav-burger span:nth-child(1){top:14px}
+.nav-burger span:nth-child(2){top:20px}
+.nav-burger span:nth-child(3){top:26px}
+.nav-burger.open span:nth-child(1){top:20px;transform:rotate(45deg)}
+.nav-burger.open span:nth-child(2){opacity:0}
+.nav-burger.open span:nth-child(3){top:20px;transform:rotate(-45deg)}
+
+.nav-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:var(--cream);z-index:105;padding:80px 24px 40px;flex-direction:column;justify-content:space-between}
+.nav-overlay.open{display:flex;animation:overlayIn .28s cubic-bezier(.2,.9,.3,1)}
+@keyframes overlayIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+
+.nav-overlay-links{list-style:none;display:flex;flex-direction:column;gap:0;padding:0;margin-top:20px}
+.nav-overlay-links li{border-top:1px solid var(--gray-200)}
+.nav-overlay-links li:last-child{border-bottom:1px solid var(--gray-200)}
+.nav-overlay-links a{display:flex;justify-content:space-between;align-items:center;padding:22px 4px;font-size:28px;font-weight:700;letter-spacing:-.02em;color:var(--black);text-decoration:none;font-family:var(--sans)}
+.nav-overlay-links a.active{color:var(--orange)}
+.nav-overlay-links a::after{content:'→';font-size:20px;color:var(--gray-400);font-weight:400}
+.nav-overlay-links a.active::after{color:var(--orange)}
+.nav-overlay-links .nav-num{font-family:var(--mono);font-size:11px;color:var(--gray-400);letter-spacing:1px;text-transform:uppercase;font-weight:500;margin-right:12px;display:inline-block;min-width:28px}
+
+.nav-overlay-footer{font-family:var(--mono);font-size:10px;color:var(--gray-400);letter-spacing:.5px;text-transform:uppercase;display:flex;justify-content:space-between;align-items:center}
+
+@media(max-width:768px){
+  .nav-links{display:none !important}
+  .nav-burger{display:block}
+  .nav-inner{padding:14px 20px}
+}
+</style>
+</head>
+<body>
+<!-- ATMOSPHERIC BACKGROUND -->
+<div class="aura" aria-hidden="true">
+  <div class="aura-glow aura-glow-1"></div>
+  <div class="aura-glow aura-glow-2"></div>
+  <div class="aura-glow aura-glow-3"></div>
+</div>
+
+<nav class="nav-top">
+  <div class="nav-inner">
+    <a href="index.html" class="logo"><span class="logo-dot"></span>Filosofia</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="timeline.html" class="active">Timeline</a></li>
+      <li><a href="concetti.html">Concetti</a></li>
+      <li><a href="domande.html">Domande</a></li>
+      <li><a href="dialoghi.html">Dialoghi</a></li>
+    </ul>
+  </div>
+</nav>
+<section class="hero">
+  <div class="hero-meta reveal"><span class="hero-meta-dot"></span><span>Capitolo 02</span><span>/</span><span>Timeline</span></div>
+  <h1 class="reveal">Duemilacinquecento anni<br>di <em>pensiero.</em></h1>
+  <p class="hero-desc reveal delay-1">Ventinove filosofi in ordine cronologico. Dai primi greci che cercavano il principio del cosmo, ai contemporanei che hanno smontato la ragione stessa. Scorri verso il basso per attraversare duemilacinquecento anni di conversazione.</p>
+</section>
+<section class="filters-section reveal delay-2"><div class="filters-row" id="ctrl"></div></section>
+<section class="timeline-section" id="main"></section>
+<div class="detail-overlay" id="overlay"><div class="detail-card" id="detail-card"></div></div>
+<section class="quotes-section">
+  <div class="quotes-header">
+    <span class="quotes-header-num">P02</span>
+    <span>Parole · citazioni celebri</span>
+  </div>
+  <div class="quotes-box" id="quotes-box-timeline">
+    <!-- populated by JS -->
+  </div>
+  <div class="quotes-hint">Le citazioni ruotano automaticamente · Clicca la card per cambiare</div>
+</section>
+
+<footer><div class="footer-inner"><div class="footer-logo"><span class="logo-dot"></span>Filosofia</div><div class="footer-text">Schema di apprendimento — in aggiornamento continuo</div></div></footer>
+
+<script>
+var DATA=[
+{id:0,name:'Talete',date:'~624–546 a.C.',school:'presocratica',era:'I. Antica',eraFull:'Antica — VII–V sec. a.C.',summary:'Il primo a chiedersi "di cosa è fatto il mondo?" senza rispondere con gli dèi.',concepts:[{t:'Arché',d:'Talete guarda intorno e si pone una domanda che nessun greco prima si era fatto seriamente: esiste qualcosa da cui tutto ha avuto origine? La sua risposta è l\'acqua. Sbagliata, certo, ma non è quello il punto. Il punto è che per la prima volta qualcuno cerca una spiegazione naturale invece di raccontare un mito. Per questo lo chiamano il primo filosofo.'},{t:'Monismo',d:'Dietro la varietà delle cose (piante, rocce, animali, nuvole) una sola sostanza di fondo. Un\'intuizione che oggi chiameremmo quasi chimica.'},{t:'"Il mondo è pieno di dèi"',d:'Frase enigmatica che sembra dire: la materia non è morta, contiene un principio di vita e movimento. Anche una calamita, che attira il ferro, sembra animata da qualcosa di invisibile.'}]},
+{id:1,name:'Eraclito',date:'~535–475 a.C.',school:'presocratica',era:'I. Antica',eraFull:'Antica — VII–V sec. a.C.',summary:'Per lui niente è fermo. L\'unica cosa stabile è il cambiamento stesso.',concepts:[{t:'Panta rei',d:'Nessuno può bagnarsi due volte nello stesso fiume: l\'acqua che tocchi ora è già diversa. Eraclito estende l\'immagine a tutto — il tuo corpo, i tuoi pensieri, l\'universo. La stabilità che percepiamo è un\'illusione. Sembra una banalità poetica, ma porta a una conseguenza enorme: se tutto scorre, cosa possiamo conoscere davvero?'},{t:'Logos',d:'Se tutto cambia il mondo sarebbe caos. Eraclito intuisce che dietro le trasformazioni c\'è una ragione nascosta, una logica che governa il divenire. La chiama logos: è il primo abbozzo dell\'idea che l\'universo abbia leggi proprie.'},{t:'Unità degli opposti',d:'Guerra e pace, vita e morte, salita e discesa non sono nemici: sono facce della stessa cosa. Senza inverno non riconosceresti l\'estate. Per Eraclito questa tensione tra opposti è il motore stesso della realtà.'}]},
+{id:2,name:'Parmenide',date:'~515–450 a.C.',school:'presocratica',era:'I. Antica',eraFull:'Antica — VII–V sec. a.C.',summary:'L\'esatto opposto di Eraclito. Il cambiamento non esiste, è solo un\'illusione dei sensi.',concepts:[{t:'L\'essere è, il non-essere non è',d:'Sembra una tautologia banale, ma è la prima volta nella storia che qualcuno prova a capire cos\'è la realtà usando solo la logica. Il ragionamento: se qualcosa cambia, vuol dire che "diventa" ciò che prima non era. Ma il non-essere non è — dal nulla non viene nulla. Quindi il cambiamento è impossibile. Per questa mossa lo chiamano il padre della metafisica.'},{t:'Verità contro apparenza',d:'Parmenide separa nettamente due modi di conoscere: con la ragione arrivi alla verità (un essere unico e immobile), con i sensi ti fermi all\'apparenza. Da qui in poi la filosofia occidentale si chiederà sempre: dei sensi o della logica, di chi fidarsi?'}]},
+{id:3,name:'Pitagora',date:'~570–495 a.C.',school:'presocratica',era:'I. Antica',eraFull:'Antica — VII–V sec. a.C.',summary:'Quello del teorema. Ma soprattutto: il primo a dire che la realtà, in fondo, è matematica.',concepts:[{t:'Il numero è l\'essenza delle cose',d:'Intuizione folle per l\'epoca: ciò che rende una cosa quella che è non è la sua materia, ma il suo rapporto numerico. Una nota musicale è una proporzione di corda. Un triangolo funziona per relazioni matematiche. L\'universo stesso ha una struttura geometrica. È l\'antenato del pensiero scientifico moderno, in cui scriviamo le leggi della natura in equazioni.'},{t:'L\'anima rinasce',d:'Per Pitagora l\'anima è immortale e, dopo la morte, trasmigra in un altro corpo — umano o animale. Una vita virtuosa ti fa reincarnare in meglio, una viziosa in peggio. Idea orientale che entra per la prima volta nel pensiero greco.'},{t:'La musica delle sfere',d:'Se tutto è numero, anche i pianeti nei loro movimenti producono rapporti matematici precisi — una musica cosmica che noi non sentiamo ma esiste. Immagine poetica che ha affascinato scienziati per 2000 anni, Keplero compreso.'}]},
+{id:4,name:'Socrate',date:'~470–399 a.C.',school:'classica',era:'II. Classica',eraFull:'Classica — V–IV sec. a.C.',summary:'Non ha scritto nulla. Faceva solo domande. Ha cambiato per sempre il modo in cui pensiamo.',concepts:[{t:'Maieutica',d:'Sua madre faceva la levatrice, e Socrate diceva di fare un mestiere simile: aiutare gli altri a partorire le idee che hanno già dentro senza saperlo. Il suo metodo non era insegnare, era fare domande. Attraverso il dialogo l\'interlocutore scopre da sé la verità — o si accorge di non sapere davvero quello che credeva di sapere.'},{t:'"So di non sapere"',d:'L\'oracolo di Delfi l\'aveva dichiarato l\'uomo più sapiente di Atene. Socrate, stupito, scopre poi il senso: è il più sapiente perché è l\'unico consapevole della propria ignoranza. Gli altri credono di sapere. Il vero sapere comincia quando accetti di non sapere.'},{t:'Cura dell\'anima',d:'Per Socrate il senso della vita non è accumulare ricchezze o potere, ma migliorare la propria anima — diventare persone più giuste, più consapevoli. Tutto il resto è secondario. Per questa convinzione accetterà di morire piuttosto che tradirla.'}]},
+{id:5,name:'Platone',date:'~428–348 a.C.',school:'classica',era:'II. Classica',eraFull:'Classica — V–IV sec. a.C.',summary:'Allievo di Socrate. Immagina un mondo perfetto che esiste davvero, oltre quello che vediamo.',concepts:[{t:'Le Idee',d:'Prova a disegnare un cerchio: ti verrà sempre un po\' storto. Eppure tutti sappiamo cos\'è un cerchio perfetto. Platone dice: quel cerchio perfetto esiste davvero, in un\'altra dimensione. Ogni cosa del nostro mondo — un cavallo, una sedia, la giustizia — è una copia imperfetta di un\'Idea eterna. Il mondo sensibile è ombra; il mondo delle Idee è realtà.'},{t:'Il mito della caverna',d:'La sua metafora più celebre. Immagina uomini incatenati in una grotta che da sempre vedono solo ombre proiettate sul muro: per loro le ombre sono la realtà. Se uno si liberasse e uscisse alla luce del sole, all\'inizio ne sarebbe accecato. Tornando a raccontarlo, non gli crederebbero. Siamo noi quei prigionieri, e la filosofia è la faticosa salita verso la luce.'},{t:'Dualismo anima-corpo',d:'L\'anima è immortale ed esisteva prima della nascita, quando vedeva direttamente le Idee. Nascendo, le ha dimenticate. Per questo imparare, dice Platone, non è acquisire ma ricordare. Il corpo è una prigione che offusca la memoria.'},{t:'La Repubblica',d:'Progetta uno Stato governato da filosofi-re: persone educate alla verità, distaccate dai beni materiali. Sotto di loro i guerrieri e i produttori. Controverso — alcuni lo accusano di autoritarismo — ma è il primo vero trattato di filosofia politica.'}]},
+{id:6,name:'Aristotele',date:'~384–322 a.C.',school:'classica',era:'II. Classica',eraFull:'Classica — V–IV sec. a.C.',summary:'Allievo di Platone. Rifiuta il suo maestro e riporta la filosofia sulla terra.',concepts:[{t:'Forma e materia insieme',d:'Studia con Platone per vent\'anni, poi lo contraddice. Non esiste nessun mondo separato di Idee perfette. La "forma" di un cavallo è dentro il cavallo, non fuori da lui. Ogni cosa reale è unione inseparabile di materia (di cosa è fatta) e forma (cosa la rende quella cosa). Molto più vicino al nostro modo di vedere le cose.'},{t:'Potenza e atto',d:'Una ghianda è un albero "in potenza": ha in sé la possibilità di diventarlo. Quando cresce realizza quella possibilità. Tutto in natura, per Aristotele, tende a diventare pienamente sé stesso. Anche noi: siamo fatti per realizzare la nostra natura, e questo processo è il senso della vita.'},{t:'Eudaimonia',d:'La parola si traduce male con "felicità". Non è un\'emozione fugace: è uno stato duraturo che nasce dal fare bene ciò per cui siamo fatti — pensare, scegliere, agire con virtù. Non sei felice quando ricevi, sei felice quando vivi bene. "Una rondine non fa primavera."'},{t:'La logica',d:'Aristotele inventa la logica formale. Il sillogismo (tutti gli uomini sono mortali; Socrate è un uomo; quindi Socrate è mortale) è suo. Il principio di non-contraddizione — una cosa non può essere e non essere vera allo stesso tempo — sarà il fondamento del pensiero razionale per duemila anni.'}]},
+{id:7,name:'Epicuro',date:'~341–270 a.C.',school:'ellenistica',era:'III. Ellenistica',eraFull:'Ellenistica — IV–I sec. a.C.',summary:'Il piacere come fine della vita — ma non quello che immagini. Una ricetta antica per non soffrire.',concepts:[{t:'Atarassia',d:'Il "piacere" di Epicuro non è l\'eccesso. È l\'assenza di dolore nel corpo e di turbamento nella mente. Si raggiunge con desideri semplici — pane, amicizia, una conversazione filosofica — e rinunciando a quelli che ti rendono schiavo: ricchezza, gloria, lussi. Una felicità sottrattiva: più togli bisogni inutili, più sei sereno.'},{t:'Il tetrafarmaco',d:'La sua ricetta in quattro punti per vivere senza paura: non temere gli dèi (esistono ma non si occupano di noi), non temere la morte (quando c\'è lei, noi non ci siamo più), il bene è facile da ottenere, il male è facile da sopportare. Sorprendentemente moderno come manuale di resilienza.'},{t:'Atomismo',d:'Il mondo è fatto di particelle invisibili che si muovono per caso nel vuoto. Niente disegno divino, niente destino scritto. Scandaloso all\'epoca, ma per Epicuro è liberatorio: se non c\'è un dio che ti punisce, non devi temere nulla. La vita è tua.'},{t:'L\'amicizia come bene supremo',d:'Fra tutte le cose, Epicuro mette al primo posto l\'amicizia. Non il successo, non l\'amore romantico, non la conoscenza. Vivere in una piccola comunità di amici fidati, condividendo pasti semplici e pensieri: per lui è la strada più concreta verso la felicità.'}]},
+{id:8,name:'Zenone di Cizio',date:'~334–262 a.C.',school:'ellenistica',era:'III. Ellenistica',eraFull:'Ellenistica — IV–I sec. a.C.',summary:'Fondatore dello Stoicismo. Vivi secondo ragione e accetta ciò che non puoi cambiare.',concepts:[{t:'Vivere secondo natura e ragione',d:'Per Zenone l\'universo è retto da un logos, una ragione cosmica. L\'uomo è parte di questo ordine, e vivere bene significa conformarsi ad esso. Non è lasciarsi andare: è usare la ragione — ciò che ci rende umani — per capire cosa dipende da noi e accettare con serenità ciò che non dipende.'},{t:'Apatheia',d:'Non significa essere insensibili. Significa non essere schiavi delle emozioni. La rabbia, la paura, la gelosia ci spingono a decisioni di cui ci pentiamo. L\'apatheia è la calma di chi riconosce le emozioni ma non si lascia travolgere. L\'antica arte dello "stare sul pezzo".'},{t:'Cittadini del mondo',d:'Intuizione rivoluzionaria: tutti gli esseri umani, ovunque nascano, condividono la stessa ragione e sono parte della stessa comunità universale. Greci e barbari, liberi e schiavi: davanti al logos sono uguali. Nasce qui l\'idea di umanità come famiglia unica.'},{t:'Gli indifferenti',d:'Per gli Stoici salute, ricchezza, fama non sono beni né mali: sono "indifferenti". Possono aiutare o no, ma la loro presenza non ti rende felice né la loro assenza ti rende infelice. Solo la virtù è un vero bene. Tesi radicale, che ha ispirato migliaia di persone a vivere con meno dipendenze.'}]},
+{id:9,name:'Sesto Empirico',date:'~160–210 d.C.',school:'ellenistica',era:'III. Ellenistica',eraFull:'Ellenistica — IV–I sec. a.C.',summary:'Il massimo teorico dello scetticismo antico. Dubita di tutto — sistematicamente.',concepts:[{t:'Epoché',d:'Per ogni affermazione ne esiste una contraria altrettanto convincente. Come decidere? Non si può. Quindi l\'atteggiamento giusto è l\'epoché: sospendere il giudizio. Né "Dio esiste" né "Dio non esiste". Né "il mondo è buono" né "è cattivo". Stare sospesi.'},{t:'La serenità del non-sapere',d:'Paradosso: questa sospensione porta pace. Chi pretende di sapere la verità si tormenta quando le cose vanno diversamente. Chi non pretende di sapere accetta tutto come possibile e resta sereno. Lo scetticismo antico era un percorso di saggezza, non freddezza intellettuale.'},{t:'Isostenia',d:'Il cuore del metodo: per qualunque tesi puoi costruire una contro-tesi di pari peso logico. Se due argomenti hanno forza uguale, nessuno vince. Ottima palestra mentale contro il dogmatismo — antico e moderno.'}]},
+{id:10,name:'Agostino',date:'354–430 d.C.',school:'medievale',era:'IV. Medievale',eraFull:'Medievale — I–XIV sec.',summary:'Primo grande filosofo cristiano. Cerca Dio dentro di sé e studia il tempo come nessuno prima.',concepts:[{t:'Guarda dentro di te',d:'"Rientra in te stesso: nell\'uomo interiore abita la verità." Con Agostino la filosofia scopre l\'interiorità: la coscienza, l\'autocoscienza, l\'esame di sé. Dio non si trova tanto nel cosmo quanto dentro l\'anima. Apre la strada a tutta la tradizione spirituale occidentale e, con le sue Confessioni, inventa di fatto l\'autobiografia filosofica.'},{t:'Cos\'è il tempo?',d:'Pagina celebre: "Se nessuno me lo chiede, lo so; ma se devo spiegarlo, non lo so più." Il passato non c\'è più, il futuro non c\'è ancora, il presente è un istante che sfugge. Eppure il tempo esiste. Soluzione di Agostino: il tempo vive nella mente — come memoria del passato, attenzione al presente, attesa del futuro. Intuizione che i fisici ancora studiano.'},{t:'Le due città',d:'La storia umana è attraversata da due comunità mescolate: la "città terrena" (amore di sé fino a disprezzare Dio) e la "città di Dio" (amore di Dio fino a dimenticare sé stessi). Non sono Stati fisici: sono due modi di vivere. Dove stai tu?'},{t:'Grazia e libertà',d:'Se siamo veramente liberi, perché abbiamo bisogno della grazia di Dio per salvarci? E se è la grazia che ci salva, siamo davvero liberi? Agostino non risolve la tensione, ma ne fa il centro della teologia cristiana per i secoli a venire.'}]},
+{id:11,name:'Tommaso d\'Aquino',date:'1225–1274',school:'medievale',era:'IV. Medievale',eraFull:'Medievale — I–XIV sec.',summary:'Il grande sistemizzatore medievale. Sposa Aristotele con il cristianesimo — e funziona.',concepts:[{t:'Fede e ragione, alleate',d:'Per Tommaso non si contraddicono mai. La ragione umana, usata bene, arriva molto lontano: può persino dimostrare l\'esistenza di Dio. Dove non arriva — il mistero della Trinità, l\'incarnazione — subentra la fede. Non si sostituiscono, si completano. Convinzione che ha segnato per secoli il cattolicesimo.'},{t:'Le cinque vie',d:'I cinque argomenti razionali più famosi per l\'esistenza di Dio: tutto ciò che si muove è mosso da altro (serve un primo motore); ogni effetto ha una causa (serve una prima causa); le cose possono esistere o no (serve un essere necessario); ci sono gradi di perfezione (serve una perfezione massima); le cose tendono a un fine (serve un\'intelligenza ordinatrice). Ancora oggi dibattute nei manuali di filosofia della religione.'},{t:'Analogia',d:'Quando diciamo "Dio è buono" e "l\'uomo è buono" usiamo la stessa parola, ma non nello stesso senso (sarebbe blasfemo) né in sensi opposti (sarebbe privo di significato). Soluzione di Tommaso: è un\'analogia. L\'essere di Dio e quello delle creature sono simili in modo proporzionale. Raffinata soluzione linguistica a un problema teologico enorme.'},{t:'Legge naturale',d:'Secondo Tommaso esiste una legge morale iscritta nella natura delle cose, accessibile alla ragione umana anche senza rivelazione. Alcune cose sono giuste oggettivamente (non uccidere, non rubare, rispettare i deboli). Base filosofica dei diritti umani moderni.'}]},
+{id:12,name:'Machiavelli',date:'1469–1527',school:'rinascimento',era:'V. Rinascimento',eraFull:'Rinascimento — XIV–XVII sec.',summary:'Il primo a dire: la politica ha regole sue, diverse dalla morale. Scandaloso allora, ovvio oggi.',concepts:[{t:'Virtù e fortuna',d:'Per Machiavelli la politica è una lotta tra due forze: la virtù (l\'abilità, l\'energia, l\'intuito del leader) e la fortuna (il caso, le circostanze imprevedibili). Il buon principe non subisce la fortuna: la doma. "Meglio essere impetuosi che troppo cauti" — dice — perché la fortuna preferisce gli audaci.'},{t:'La politica non è la morale',d:'Machiavelli separa per primo politica ed etica cristiana. Un principe che vuole governare bene deve talvolta fare cose "cattive" — mentire, tradire, essere spietato. Non è immoralismo: è realismo. Chi pretende di governare come un santo perderà lo Stato e farà male anche ai sudditi.'},{t:'Il fine giustifica i mezzi',d:'La frase esatta non è sua, ma riassume il suo pensiero: in politica contano i risultati. Un principe crudele che porta pace è preferibile a uno buono che lascia lo Stato nel caos. Tesi che cinquecento anni dopo fa ancora discutere.'}]},
+{id:13,name:'Descartes',date:'1596–1650',school:'razionalismo',era:'VI. Moderna',eraFull:'Moderna — XVII–XVIII sec.',summary:'Apre la filosofia moderna con una domanda semplice: di cosa posso essere assolutamente certo?',concepts:[{t:'Cogito ergo sum',d:'Posso dubitare di tutto: dei sensi, che mi ingannano; del mondo esterno, che potrebbe essere un sogno; persino della matematica, se un genio maligno mi ingannasse. Ma c\'è una cosa di cui non posso dubitare: mentre dubito, sto pensando. E se penso, esisto. "Penso, dunque sono" è la prima certezza su cui ricostruire tutto il sapere.'},{t:'Il dubbio come metodo',d:'Il dubbio cartesiano non è scetticismo fine a sé stesso: è uno strumento. Descartes non vuole rinunciare alla verità, vuole trovarne una solida. Dubita sistematicamente di ogni credenza e tiene solo ciò che resiste. Una sorta di reset mentale radicale per ripartire da basi affidabili.'},{t:'Mente e corpo',d:'Per Descartes sono due sostanze separate: una mente pensante (res cogitans) senza spazio né peso, e un corpo esteso (res extensa) che è materia come qualunque altra. La mente è ciò che sono davvero; il corpo è una macchina che la mente abita. Soluzione che ha aperto il "problema mente-corpo" — ancora oggi irrisolto nelle neuroscienze.'},{t:'Idee innate',d:'Non tutto lo conosciamo per esperienza. Alcune idee fondamentali — Dio, infinito, perfezione — sono già nella nostra mente dalla nascita. Come potremmo concepire l\'infinito, noi creature finite, se non fosse Dio stesso a metterlo in noi? Tesi che gli empiristi demoliranno cent\'anni dopo.'}]},
+{id:14,name:'Spinoza',date:'1632–1677',school:'razionalismo',era:'VI. Moderna',eraFull:'Moderna — XVII–XVIII sec.',summary:'Uno dei più radicali di sempre. Dio non è un signore barbuto: è la Natura stessa.',concepts:[{t:'Deus sive Natura',d:'Tesi per cui Spinoza fu scomunicato dalla sua comunità ebraica. Dio non è un creatore separato dal mondo: è la realtà stessa nella sua totalità. Tutto ciò che esiste è espressione di questa unica sostanza infinita. Ogni roccia, ogni albero, ogni tuo pensiero è un modo di essere di Dio-Natura. Panteismo radicale che spaventò tutti.'},{t:'Il libero arbitrio è un\'illusione',d:'Tutto avviene per necessità: ogni evento è causato da eventi precedenti, secondo leggi eterne. Quando crediamo di scegliere liberamente, in realtà ignoriamo le cause che ci spingono. La libertà vera non è poter scegliere a caso: è capire le cause che ci determinano. Più comprendi, più sei libero (nel senso che non sei più schiavo delle passioni inconsce).'},{t:'Conatus',d:'Ogni essere — un sasso, una pianta, un uomo — tende a perseverare nella propria esistenza. Questa spinta è l\'essenza di ogni cosa. Negli umani diventa desiderio, autoconservazione, volontà di vivere. Idea che anticipa di due secoli la "volontà di potenza" di Nietzsche.'},{t:'Sub specie aeternitatis',d:'La beatitudine non si trova nei piaceri o negli onori. Si trova nel capire: comprendere le leggi della natura "sotto l\'aspetto dell\'eternità" ci libera dalle passioni e ci connette al tutto. Una mistica della conoscenza.'}]},
+{id:15,name:'Leibniz',date:'1646–1716',school:'razionalismo',era:'VI. Moderna',eraFull:'Moderna — XVII–XVIII sec.',summary:'Genio multidisciplinare. Inventa il calcolo infinitesimale e immagina l\'universo fatto di monadi.',concepts:[{t:'Le monadi',d:'L\'universo, per Leibniz, non è fatto di materia ma di unità spirituali indivisibili, le monadi. Ogni monade è come un piccolo universo chiuso in sé stesso che rispecchia tutto il resto dal proprio punto di vista. Niente interazioni dirette — ognuna vive la sua vita, ma miracolosamente tutto si accorda.'},{t:'Armonia prestabilita',d:'Come fanno le monadi, che non comunicano, a essere in sintonia? Risposta: Dio le ha sincronizzate all\'inizio, come due orologi perfetti che segnano la stessa ora senza toccarsi. Quando decidi di muovere la mano e la mano si muove, non c\'è interazione mente-corpo: c\'è solo una coincidenza perfetta programmata da Dio.'},{t:'Il migliore dei mondi possibili',d:'Tesi famosa, presa in giro da Voltaire nel Candide. Dio, onnipotente e buono, tra gli infiniti mondi possibili ha scelto di creare il migliore. Se c\'è il male, è perché un mondo senza di esso sarebbe comunque peggiore. Ottimismo metafisico estremo da cui nasce il dibattito moderno sulla teodicea (il problema del male).'},{t:'Il calcolo infinitesimale',d:'Contemporaneamente a Newton, ma indipendentemente, Leibniz inventa il calcolo infinitesimale — lo strumento matematico con cui oggi facciamo fisica, ingegneria, economia. La notazione che usiamo a scuola (dx/dy, gli integrali) è la sua.'}]},
+{id:16,name:'Locke',date:'1632–1704',school:'empirismo',era:'VI. Moderna',eraFull:'Moderna — XVII–XVIII sec.',summary:'Padre dell\'empirismo: tutto viene dall\'esperienza. E padre del liberalismo politico.',concepts:[{t:'Tabula rasa',d:'Contro Descartes e le idee innate, Locke dichiara: la mente del neonato è una tavola bianca. Non sappiamo nulla alla nascita. Ogni conoscenza, senza eccezioni, viene dall\'esperienza attraverso i sensi. Tutto ciò che pensiamo — persino i concetti più astratti — deriva da percezioni concrete.'},{t:'Idee semplici e complesse',d:'Dai sensi arrivano idee semplici (il rosso, il dolce, il freddo). La mente poi le combina per formare idee complesse (la mela: rosso + dolce + rotondo). Tutto il pensiero, per Locke, è questo gioco di combinazione. Modello molto influente per la psicologia nascente.'},{t:'Stato e diritti naturali',d:'Locke fonda il liberalismo moderno. Gli uomini nascono con diritti naturali — vita, libertà, proprietà. Lo Stato nasce da un contratto: i cittadini rinunciano ad alcune libertà in cambio di protezione. Se lo Stato non rispetta i diritti, perde la legittimità. Base filosofica della Dichiarazione americana del 1776.'},{t:'La tolleranza religiosa',d:'Prima teorizzazione sistematica della tolleranza: lo Stato non ha il diritto di imporre una religione. La fede è questione personale, non politica. Ovvio oggi, rivoluzionario in un\'Europa appena uscita dalle guerre di religione.'}]},
+{id:17,name:'Hume',date:'1711–1776',school:'empirismo',era:'VI. Moderna',eraFull:'Moderna — XVII–XVIII sec.',summary:'Porta l\'empirismo alle estreme conseguenze. Risultato: quasi niente è davvero certo.',concepts:[{t:'La causa-effetto? Solo un\'abitudine',d:'Vedo il biliardo: una palla colpisce l\'altra, la seconda si muove. Diciamo che la prima ha "causato" il movimento della seconda. Ma cosa vediamo davvero? Solo due eventi in sequenza. La "causa" non la vediamo da nessuna parte. Per Hume, la nostra convinzione che ci siano cause ed effetti è un\'abitudine mentale, non una verità logica. Ha sconvolto la filosofia.'},{t:'L\'io non esiste',d:'Prova a introspettarti: cosa trovi? Un pensiero, un\'emozione, un ricordo — mai un "io" unitario. Il senso di essere una persona stabile, per Hume, è un\'illusione: siamo solo un flusso continuo di percezioni che ci raccontiamo come "io". Intuizione che anticipa la psicologia moderna e il buddhismo.'},{t:'Il problema dell\'induzione',d:'Perché crediamo che domani il sole sorgerà? Perché è sempre sorto. Ma è una garanzia? No, è solo abitudine. Non c\'è nessuna legge logica che ci permetta di estendere l\'esperienza passata al futuro. Hume scopre che la scienza si basa su un salto di fede — problema che i filosofi della scienza ancora non hanno risolto.'},{t:'La ragione è schiava delle passioni',d:'Controintuitivo: non è la ragione a guidare la nostra vita, sono le emozioni. La ragione calcola solo i mezzi migliori per raggiungere i fini che le passioni hanno già scelto. Quando compri qualcosa che ti piace, non ragioni: desideri. La ragione poi giustifica. Tesi ripresa dall\'economia comportamentale contemporanea.'}]},
+{id:18,name:'Kant',date:'1724–1804',school:'idealismo',era:'VI. Moderna',eraFull:'Moderna — XVII–XVIII sec.',summary:'La "rivoluzione copernicana" della filosofia. Non la mente si adatta al mondo, ma il mondo alla mente.',concepts:[{t:'La rivoluzione copernicana',d:'Kant rovescia il modo in cui pensiamo alla conoscenza. Finora si credeva: il mondo esiste là fuori, la mente lo riceve passivamente. Kant dice: sbagliato. È la mente che struttura la realtà attraverso le sue forme. Non vediamo il mondo "com\'è": lo vediamo attraverso i nostri "occhiali mentali" — spazio, tempo, causalità — che non possiamo togliere.'},{t:'Le categorie a priori',d:'Spazio e tempo non sono proprietà delle cose: sono il modo in cui la nostra mente organizza le percezioni. Stesso per concetti come sostanza, causalità, quantità: sono schemi mentali che applichiamo a ciò che percepiamo. Senza di essi il mondo sarebbe caos informe. Spiega perché la scienza funziona: studiamo la realtà come la nostra mente la costruisce.'},{t:'L\'imperativo categorico',d:'Come decidere se un\'azione è giusta? Kant propone un test universale: "agisci solo secondo quella regola che puoi volere diventi legge universale per tutti." Vuoi mentire? Prova a immaginare un mondo in cui tutti mentono sempre — la comunicazione crollerebbe, la tua bugia stessa sarebbe inutile. Contraddizione logica, quindi è sbagliato. La morale diventa razionale, non emotiva.'},{t:'La cosa in sé',d:'Se conosciamo solo i fenomeni (come le cose ci appaiono), allora la realtà in sé — il noumeno — ci resta preclusa per sempre. Non sapremo mai com\'è il mondo indipendentemente dai nostri strumenti mentali. Umiltà radicale: la ragione ha limiti invalicabili, riconoscerli è l\'inizio della saggezza.'}]},
+{id:19,name:'Hegel',date:'1770–1831',school:'idealismo',era:'VI. Moderna',eraFull:'Moderna — XVII–XVIII sec.',summary:'La storia non è caos: è lo Spirito che si realizza attraversando contraddizioni.',concepts:[{t:'La dialettica',d:'Per Hegel la realtà si muove in tre tempi. Una posizione (tesi), la sua opposizione (antitesi) — perché ogni affermazione porta con sé la sua negazione — e una sintesi più alta che conserva ciò che di valido c\'era in entrambe. Questo ritmo non è solo logico: è come funzionano la storia, il pensiero, la vita. Le contraddizioni non sono errori da eliminare: sono il motore del progresso.'},{t:'Lo Spirito assoluto',d:'La realtà intera è "Spirito" (Geist) che attraverso la storia prende coscienza di sé stesso. Individui, culture, Stati sono momenti in cui lo Spirito si manifesta e si conosce meglio. Un po\' come l\'universo che, negli esseri pensanti, impara a pensare sé stesso. Visione grandiosa e molto criticata.'},{t:'La fenomenologia dello spirito',d:'Il suo capolavoro descrive il cammino della coscienza umana dalla percezione immediata fino al sapere assoluto. Ogni tappa è un livello più alto di consapevolezza, raggiunto superando contraddizioni. Metafora potente per capire come cresciamo e come intere civiltà evolvono.'},{t:'Ciò che è razionale è reale',d:'Frase provocatoria spesso fraintesa. Non significa che tutto ciò che esiste è giusto. Significa: la storia segue una logica, non è casualità. Ogni epoca contiene contraddizioni che la fanno superare, portando a forme più razionali di società. Marx prenderà questa tesi e la capovolgerà.'}]},
+{id:20,name:'Marx',date:'1818–1883',school:'positivismo',era:'VII. Ottocento',eraFull:'Ottocento — XIX sec.',summary:'Hegel rovesciato. Non lo Spirito muove la storia, ma l\'economia. E il lavoro ci rende noi stessi.',concepts:[{t:'Materialismo storico',d:'Per Hegel la storia era lo Spirito che si realizza. Marx dice: sbagliato. Ciò che muove la storia non sono idee o spirito, ma le condizioni materiali — come produciamo il cibo, chi possiede la terra, come è organizzato il lavoro. Queste cose determinano la cultura, la politica, le religioni, non viceversa. Ribaltamento che ha cambiato le scienze sociali.'},{t:'Alienazione',d:'Nel capitalismo il lavoratore produce oggetti che non gli appartengono, usando strumenti che non sono suoi, secondo ritmi che non decide. Il lavoro — che dovrebbe realizzarlo come essere umano — lo svuota. Diventa estraneo a sé stesso, agli altri, al prodotto del proprio sforzo. Diagnosi che parla ancora oggi del lavoro precario.'},{t:'Lotta di classi',d:'"La storia di ogni società è storia di lotte di classe." Signori contro schiavi, nobili contro servi, borghesi contro proletari: ogni epoca ha i suoi conflitti economici che determinano tutto il resto. Il motore della storia non è la pace né la cooperazione: è lo scontro tra chi possiede e chi lavora.'},{t:'L\'ideologia',d:'Le idee dominanti di un\'epoca sono quasi sempre le idee della classe dominante. Quello che ci sembra "ovvio", "naturale", "buon senso" spesso è solo la visione del mondo utile a chi comanda. Marx insegna a guardare dietro le idee per vedere gli interessi. Strumento potente, anche per chi non è marxista.'}]},
+{id:21,name:'Comte',date:'1798–1857',school:'positivismo',era:'VII. Ottocento',eraFull:'Ottocento — XIX sec.',summary:'Fondatore del positivismo e della sociologia. La scienza è l\'unica conoscenza affidabile.',concepts:[{t:'Le tre età dell\'umanità',d:'Per Comte l\'umanità passa attraverso tre stadi. Teologico: spiega i fenomeni con gli dèi. Metafisico: li spiega con forze astratte (essenza, sostanza). Positivo: li spiega con leggi scientifiche basate sull\'osservazione. Siamo arrivati al terzo stadio e non si torna indietro. Schema ottimista del progresso, criticato come riduttivo.'},{t:'La sociologia come scienza',d:'Comte conia la parola "sociologia" e la progetta come scienza rigorosa della società, con lo stesso metodo della fisica: osservare, classificare, trovare leggi. Crede che comprendendo le leggi sociali si possa riformare la società razionalmente. Ambizione grandiosa, solo in parte realizzata.'},{t:'La gerarchia delle scienze',d:'Comte immagina le scienze come una piramide: matematica in basso (la più generale), poi astronomia, fisica, chimica, biologia, e in cima la sociologia (la più complessa). Ogni scienza si basa sulla precedente. Modello che ha influenzato per cent\'anni l\'organizzazione del sapere.'}]},
+{id:22,name:'Schopenhauer',date:'1788–1860',school:'esistenzialismo',era:'VII. Ottocento',eraFull:'Ottocento — XIX sec.',summary:'Il grande pessimista. Dietro il mondo c\'è una Volontà cieca che ci condanna al desiderio.',concepts:[{t:'Il mondo è Volontà',d:'Sotto la superficie di ogni cosa — piante che si contendono la luce, animali che si divorano, uomini che si affannano — Schopenhauer vede la stessa forza oscura: una Volontà cieca, insaziabile, senza scopo. Non è Dio: è un\'energia irrazionale che vuole solo perpetuarsi. Tesi lugubre, molto influenzata dal pensiero orientale che Schopenhauer fu tra i primi a studiare in Europa.'},{t:'Dolore o noia, nessuna via di mezzo',d:'Quando desideri qualcosa e non l\'hai, soffri. Quando finalmente ce l\'hai, dopo un momento ti annoi e desideri altro. Schopenhauer diagnostica questo pendolo come la struttura stessa dell\'esistenza. Non c\'è uscita stabile: la felicità continua è un\'illusione. Duro, ma per chi ha sofferto di desideri chiassosi suona familiare.'},{t:'L\'arte come tregua',d:'L\'unica pausa dalla Volontà è la contemplazione estetica. Davanti a un quadro bello, ascoltando una sinfonia, per un momento smettiamo di desiderare — guardiamo, basta. La musica in particolare, per Schopenhauer la più alta delle arti, ci libera temporaneamente dalla schiavitù del volere.'},{t:'Compassione e ascesi',d:'La via definitiva per liberarsi: riconoscere che l\'altro è sé stessi (compassione) e negare il desiderio stesso (ascesi). Schopenhauer ammira i santi cristiani e i monaci buddhisti — loro hanno capito. Primo pensatore occidentale a prendere sul serio il pensiero orientale.'}]},
+{id:23,name:'Kierkegaard',date:'1813–1855',school:'esistenzialismo',era:'VII. Ottocento',eraFull:'Ottocento — XIX sec.',summary:'L\'anti-Hegel. Il sistema è astratto, ma io — individuo concreto — devo scegliere qui e ora.',concepts:[{t:'Tre modi di esistere',d:'Kierkegaard identifica tre stadi dell\'esistenza. Estetico: vivi per il piacere, il bello, il nuovo, come un Don Giovanni. Etico: vivi per il dovere, la responsabilità, la famiglia. Religioso: vivi in rapporto diretto con Dio, che rompe persino i doveri etici. Non si sale gradualmente — si salta da uno all\'altro.'},{t:'L\'angoscia',d:'Davanti a ogni scelta si apre un abisso di possibilità. Potresti fare qualunque cosa: cambiare vita, lasciare tutto, ricominciare. Questa libertà totale produce vertigine. L\'angoscia, per Kierkegaard, non è una malattia: è il sentimento fondamentale dell\'esistenza umana, perché siamo radicalmente liberi.'},{t:'Il salto della fede',d:'La fede non è un calcolo razionale. È un salto nel paradosso. L\'esempio estremo: Abramo che, per obbedire a Dio, sta per sacrificare il figlio Isacco. Eticamente inaccettabile, religiosamente supremo. La fede autentica esige un atto che dalla morale comune appare folle. Tesi durissima.'},{t:'L\'individuo contro il sistema',d:'Contro Hegel e la sua filosofia astratta che dissolve tutto nello Spirito universale, Kierkegaard insiste: esisto io, qui, ora, con le mie scelte irripetibili. Nessun sistema filosofico può spiegarmi. La verità è soggettiva — non nel senso che "ognuno ha la sua", ma che esiste solo per chi la vive personalmente.'}]},
+{id:24,name:'Nietzsche',date:'1844–1900',school:'esistenzialismo',era:'VII. Ottocento',eraFull:'Ottocento — XIX sec.',summary:'Il più sovversivo di tutti. Smonta Dio, la morale, la verità stessa. E poi chiede: come si vive, dopo?',concepts:[{t:'"Dio è morto"',d:'Non è una dichiarazione atea banale. È una diagnosi culturale: nella nostra civiltà i valori assoluti che poggiavano su Dio — verità, bene, male — non reggono più. L\'abbiamo ucciso noi, con il pensiero moderno, con la scienza, con la critica. Ora siamo di fronte al vuoto. Possiamo sprofondare nel nichilismo o creare valori nuovi. Scegli.'},{t:'Volontà di potenza',d:'Non significa voglia di dominare gli altri (interpretazione sbagliata). Significa: l\'energia vitale fondamentale che spinge ogni essere a superarsi, crescere, creare. Un artista che dipinge, un atleta che si allena, uno scienziato che studia: esprimono volontà di potenza. È il motore creativo della vita, non del potere politico.'},{t:'L\'Oltreuomo',d:'Dopo la morte di Dio serve un nuovo tipo umano. Non il "superuomo" (traduzione sbagliata che ha fatto danni), ma l\'oltreuomo: chi ha superato l\'umanità tradizionale, debole, gregaria. Uno che crea valori propri invece di seguire quelli ereditati. Che dice sì alla vita anche nei suoi aspetti tragici. Figura spesso deformata — i nazisti la stravolsero — ma nell\'intenzione originale è un invito all\'autocreazione.'},{t:'L\'eterno ritorno',d:'Test supremo. E se la tua vita dovesse ripetersi identica, infinite volte, per sempre? Ogni gioia, ogni dolore, ogni scelta sciocca — tutto uguale? Ti sentiresti schiacciato o diresti "sì, ancora"? Per Nietzsche questa è la vera misura di come stai vivendo. Se la risposta è sì, stai vivendo una vita degna.'}]},
+{id:25,name:'Wittgenstein',date:'1889–1951',school:'contemporanea',era:'VIII. Novecento',eraFull:'Novecento — XX sec.',summary:'Ha scritto due libri che si contraddicono. Entrambi hanno cambiato la filosofia.',concepts:[{t:'I limiti del linguaggio sono i limiti del mondo',d:'Frase dal suo primo libro, il Tractatus: quello che non posso dire con il linguaggio, non posso nemmeno pensarlo chiaramente. Il linguaggio è uno specchio della realtà — descrive fatti del mondo. Su ciò che va oltre (Dio, valori, bellezza, senso della vita) bisogna tacere. Non perché non esistano, ma perché il linguaggio non può dirli.'},{t:'I giochi linguistici',d:'Nel secondo libro, le Ricerche filosofiche, Wittgenstein cambia idea. Il linguaggio non è uno specchio della realtà: è un\'attività pratica. Parliamo per ordinare, chiedere, scherzare, giocare, pregare. Ogni contesto ha le sue regole, come giochi diversi. Il significato di una parola non è una cosa fissa: è il modo in cui viene usata in un certo gioco linguistico.'},{t:'La filosofia non risolve, dissolve',d:'Molti problemi filosofici "profondi" sono in realtà pseudo-problemi: nascono quando usiamo il linguaggio fuori dal suo contesto normale. "Cos\'è il tempo?", "Dove va l\'io quando dormo?" — domande che sembrano profonde ma sono confusioni grammaticali. Il compito del filosofo non è rispondere, è mostrare che la domanda era mal posta.'},{t:'Terapia filosofica',d:'Coerenza del pensiero tardo: la filosofia è una terapia. Non ti insegna cose nuove, ti libera dagli inganni del linguaggio. Una specie di psicoanalisi concettuale. Dopo, vedi il mondo uguale ma con meno confusione.'}]},
+{id:26,name:'Heidegger',date:'1889–1976',school:'esistenzialismo',era:'VIII. Novecento',eraFull:'Novecento — XX sec.',summary:'La domanda più radicale: perché c\'è qualcosa invece del nulla? E cosa significa esistere davvero?',concepts:[{t:'L\'Esserci',d:'Heidegger usa la parola Dasein (letteralmente "esserci") per l\'essere umano. Noi non siamo oggetti tra oggetti: siamo l\'unico ente che si chiede cosa significhi esistere. Siamo sempre "gettati" nel mondo — nati in un\'epoca, una famiglia, una cultura che non abbiamo scelto. Ma è da questa situazione concreta che comincia ogni domanda filosofica. Non c\'è nessun "io" astratto alla Descartes: c\'è sempre un io situato.'},{t:'Essere-per-la-morte',d:'Siamo gli unici esseri che sanno di dover morire. La maggior parte del tempo lo rimuoviamo — ci distraiamo, seguiamo le opinioni comuni, viviamo in modo "anonimo". Ma quando guardiamo in faccia la nostra morte come possibilità più propria — qualcosa che nessuno può fare al posto nostro — cominciamo a vivere davvero. La consapevolezza della fine rende la vita autentica.'},{t:'La Cura',d:'L\'essenza dell\'Esserci, per Heidegger, è la Cura (Sorge): siamo sempre presi da qualcosa, preoccupati per qualcuno, impegnati con qualcosa. Non esiste un io neutro e distaccato. Esistere è già sempre aver a cuore cose, persone, progetti. La Cura non è un atteggiamento: è la struttura stessa dell\'essere umano.'},{t:'La tecnica come pericolo',d:'Per Heidegger la civiltà moderna ha dimenticato la domanda sull\'essere. La tecnica non è solo un insieme di strumenti: è un modo di vedere il mondo che riduce tutto a "risorsa" da sfruttare. Alberi diventano legname, fiumi diventano energia, umani diventano forza lavoro. Il pericolo non è la bomba atomica — è come pensiamo. Lucido già negli anni \'50, più urgente oggi.'}]},
+{id:27,name:'Sartre',date:'1905–1980',school:'esistenzialismo',era:'VIII. Novecento',eraFull:'Novecento — XX sec.',summary:'L\'esistenzialista per eccellenza. Non c\'è natura umana: ci sei tu che scegli chi diventare.',concepts:[{t:'L\'esistenza precede l\'essenza',d:'Un coltello è prima progettato (essenza: tagliare) e poi fabbricato (esistenza). Per Sartre con l\'uomo accade l\'opposto: prima esiste, poi si definisce con le sue scelte. Non nasci "generoso" o "vigliacco": lo diventi scegliendo, azione dopo azione. Nessuna natura umana ti predefinisce. Liberatorio e spaventoso.'},{t:'Siamo condannati a essere liberi',d:'Non possiamo non scegliere. Anche non decidere è una decisione. Anche seguire la massa è una scelta. Questa libertà radicale non è un dono gentile: è una condanna. Non possiamo scaricare la responsabilità su Dio, sulla natura, sulla società. Ogni mia azione è mia, fino in fondo. Per Sartre è il peso fondamentale dell\'essere umano.'},{t:'La malafede',d:'Il modo più comune di fuggire dalla libertà: raccontarsela. Il cameriere che si comporta come "IL" cameriere, completamente identificato nel ruolo, come se non potesse essere altro. La ragazza che si fa baciare dicendosi che "le sta succedendo", come se fosse passiva. Sartre smaschera queste menzogne quotidiane in cui fingiamo di non essere liberi per evitare la responsabilità.'},{t:'"L\'inferno sono gli altri"',d:'Frase spesso fraintesa. Non significa "gli altri sono cattivi". Significa: quando l\'altro mi guarda, mi trasforma in oggetto. Se sto facendo qualcosa di segreto e qualcuno entra, di colpo smetto di essere un soggetto libero e divento un oggetto nel suo sguardo. Le relazioni umane sono sempre questa tensione: riconoscersi senza oggettivarsi. Difficile.'}]},
+{id:28,name:'Foucault',date:'1926–1984',school:'contemporanea',era:'VIII. Novecento',eraFull:'Novecento — XX sec.',summary:'Svela come il potere agisce attraverso il sapere, le istituzioni, i nostri stessi corpi.',concepts:[{t:'Sapere e potere sono intrecciati',d:'Non esiste conoscenza neutrale, innocente, "pura". Ogni sapere è intrecciato con relazioni di potere: decide cosa è normale e cosa è anormale, chi è sano e chi è malato, cosa è vero e cosa è falso. Quando uno psichiatra definisce una "malattia mentale", non sta solo descrivendo: sta costruendo qualcosa che avrà effetti reali sulle persone. Il sapere è potente, letteralmente.'},{t:'La biopolitica',d:'Nei secoli passati il potere era "sovrano": il re decideva chi moriva. Nella modernità il potere cambia forma: gestisce la vita delle popolazioni. Statistiche, vaccinazioni, salute pubblica, natalità, educazione di massa. Non uccide — amministra la vita, la ottimizza, la regola. Intuizione che aiuta a capire la politica contemporanea, dalle assicurazioni al controllo dei corpi.'},{t:'Genealogia',d:'Molti concetti che ci sembrano eterni e naturali — follia, sessualità, criminalità, malattia — in realtà hanno una storia. Foucault la ricostruisce per mostrare come sono stati costruiti: chi li ha definiti, con che interessi, in quali istituzioni. Metodo potente per liberarsi dalle "ovvietà" culturali che ci schiacciano.'},{t:'Il soggetto è un prodotto',d:'Credi di essere un "io" che poi entra in società? Per Foucault è l\'opposto: è la società — attraverso scuole, ospedali, prigioni, discorsi scientifici — che ti forma come soggetto. Nasci bambino indifferenziato, diventi "studente", "paziente", "cittadino" attraverso pratiche che ti classificano. L\'individuo è un effetto, non una causa.'}]}
+];
+
+var cf=null,sel=null;
+function vis(){return cf?DATA.filter(function(d){return d.school===cf}):DATA}
+function render(){
+  var v=vis();
+  var main=document.getElementById('main');
+  main.innerHTML='';
+  var currentEra=null;
+  var relIdx=0;
+  v.forEach(function(p){
+    if(p.era!==currentEra){
+      currentEra=p.era;
+      relIdx=0;
+      var eraNum=p.era.split('.')[0];
+      var eraName=p.era.split('.')[1].trim();
+      var period=p.eraFull.split('—')[1]||'';
+      var divider=document.createElement('div');
+      divider.className='era-divider';
+      divider.innerHTML='<div class="era-divider-inner"><span class="era-num">Parte '+eraNum+'</span><span class="era-name">'+eraName+'</span><span class="era-period">'+period.trim()+'</span></div>';
+      main.appendChild(divider);
+    }
+    var side=relIdx%2===0?'left':'right';
+    relIdx++;
+    var entry=document.createElement('div');
+    entry.className='phil-entry '+side;
+    var num=String(p.id+1).padStart(3,'0');
+    entry.innerHTML=
+      '<div class="phil-content">'+
+        '<div class="phil-num">Filosofo · '+num+'</div>'+
+        '<div class="phil-date">'+p.date+'</div>'+
+        '<div class="phil-name" data-id="'+p.id+'">'+p.name+'</div>'+
+        '<div class="phil-school">'+p.school+'</div>'+
+        '<div class="phil-summary">'+p.summary+'</div>'+
+      '</div>'+
+      '<div class="phil-center">'+
+        '<div class="phil-dot-line"></div>'+
+        '<div class="phil-dot" data-id="'+p.id+'"></div>'+
+      '</div>';
+    main.appendChild(entry);
+  });
+  document.querySelectorAll('.phil-name, .phil-dot').forEach(function(el){
+    el.addEventListener('click',function(){
+      var id=+el.getAttribute('data-id');
+      openDetail(id);
+    });
+  });
+}
+function openDetail(id){
+  sel=id;
+  var p=DATA.find(function(d){return d.id===id});
+  var num=String(p.id+1).padStart(3,'0');
+  var items=p.concepts.map(function(c){return '<div class="concept-item"><div class="concept-title">'+c.t+'</div><div class="concept-desc">'+c.d+'</div></div>';}).join('');
+  var card=document.getElementById('detail-card');
+  card.innerHTML='<button class="detail-close" id="dp-close">✕</button><div class="detail-head"><div class="detail-num">Filosofo — '+num+'</div><div class="detail-name">'+p.name+'</div><div class="detail-meta"><span>'+p.school+'</span><span>'+p.date+'</span><span>'+p.eraFull+'</span></div></div><div class="detail-intro">'+p.summary+'</div><div class="detail-section-label">Concetti chiave</div><div>'+items+'</div>';
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+  setTimeout(function(){var cb=document.getElementById('dp-close');if(cb)cb.addEventListener('click',closeDetail);},10);
+}
+function closeDetail(){sel=null;document.getElementById('overlay').classList.remove('open');document.body.style.overflow='';}
+document.getElementById('overlay').addEventListener('click',function(e){if(e.target.id==='overlay')closeDetail()});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeDetail()});
+function buildControls(){
+  var schools=['presocratica','classica','ellenistica','medievale','rinascimento','razionalismo','empirismo','idealismo','positivismo','esistenzialismo','contemporanea'];
+  var ctrl=document.getElementById('ctrl');
+  ctrl.innerHTML='';
+  var allBtn=document.createElement('button');
+  allBtn.className='filter-chip'+(cf===null?' active':'');
+  allBtn.textContent='Tutte';
+  allBtn.addEventListener('click',function(){cf=null;sel=null;buildControls();render();});
+  ctrl.appendChild(allBtn);
+  schools.forEach(function(s){
+    var btn=document.createElement('button');
+    btn.className='filter-chip'+(cf===s?' active':'');
+    btn.innerHTML=s;
+    btn.addEventListener('click',function(){cf=cf===s?null:s;sel=null;buildControls();render();});
+    ctrl.appendChild(btn);
+  });
+}
+buildControls();
+render();
+</script>
+<script>
+(function() {
+  var QUOTES = [
+    {text:"Una vita senza ricerca non è degna di essere vissuta.", author:"Socrate", meta:"~470–399 a.C. · classica"},
+    {text:"So di non sapere.", author:"Socrate", meta:"~470–399 a.C. · classica"},
+    {text:"L'uomo è misura di tutte le cose.", author:"Protagora", meta:"V sec. a.C. · sofisti"},
+    {text:"Non si può scendere due volte nello stesso fiume.", author:"Eraclito", meta:"~535–475 a.C. · presocratica"},
+    {text:"Tutto scorre.", author:"Eraclito", meta:"~535–475 a.C. · presocratica"},
+    {text:"L'essere è, il non-essere non è.", author:"Parmenide", meta:"~515–450 a.C. · presocratica"},
+    {text:"La felicità è un'attività dell'anima secondo virtù.", author:"Aristotele", meta:"~384–322 a.C. · classica"},
+    {text:"L'uomo è per natura un animale politico.", author:"Aristotele", meta:"~384–322 a.C. · classica"},
+    {text:"Non temere gli dèi, non temere la morte: il bene è facile a trovarsi, il male facile a sopportarsi.", author:"Epicuro", meta:"~341–270 a.C. · ellenistica"},
+    {text:"Abbi il coraggio di servirti della tua propria intelligenza.", author:"Kant", meta:"1724–1804 · idealismo"},
+    {text:"Agisci solo secondo quella massima che puoi volere divenga legge universale.", author:"Kant", meta:"1724–1804 · idealismo"},
+    {text:"Penso, dunque sono.", author:"Descartes", meta:"1596–1650 · razionalismo"},
+    {text:"La filosofia è scritta in questo grandissimo libro, l'universo, in caratteri matematici.", author:"Galileo", meta:"1564–1642 · rivoluzione scientifica"},
+    {text:"Dio è morto. E noi l'abbiamo ucciso.", author:"Nietzsche", meta:"1844–1900 · esistenzialismo"},
+    {text:"Ciò che non mi uccide mi rende più forte.", author:"Nietzsche", meta:"1844–1900 · esistenzialismo"},
+    {text:"Diventa ciò che sei.", author:"Nietzsche", meta:"1844–1900 · esistenzialismo"},
+    {text:"Siamo condannati ad essere liberi.", author:"Sartre", meta:"1905–1980 · esistenzialismo"},
+    {text:"L'inferno sono gli altri.", author:"Sartre", meta:"1905–1980 · esistenzialismo"},
+    {text:"I limiti del mio linguaggio sono i limiti del mio mondo.", author:"Wittgenstein", meta:"1889–1951 · contemporanea"},
+    {text:"Di ciò di cui non si può parlare, si deve tacere.", author:"Wittgenstein", meta:"1889–1951 · contemporanea"},
+    {text:"La vita non esaminata non vale la pena di essere vissuta.", author:"Socrate", meta:"~470–399 a.C. · classica"},
+    {text:"L'angoscia è la vertigine della libertà.", author:"Kierkegaard", meta:"1813–1855 · esistenzialismo"},
+    {text:"Chi non ricorda il passato è condannato a ripeterlo.", author:"Santayana", meta:"1863–1952 · pragmatismo"},
+    {text:"Deus sive Natura.", author:"Spinoza", meta:"1632–1677 · razionalismo"},
+    {text:"Non è ciò che ti accade a disturbarti, ma il tuo giudizio su di esso.", author:"Epitteto", meta:"~50–135 d.C. · stoicismo"},
+  ];
+
+  // Shuffle for variety
+  function shuffle(arr){ var copy = arr.slice(); for(var i=copy.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=copy[i]; copy[i]=copy[j]; copy[j]=t; } return copy; }
+
+  var selected = shuffle(QUOTES).slice(0, 6); // show 6 random quotes per page load
+  var box = document.getElementById('quotes-box-timeline');
+  if (!box) return;
+
+  // Build slides
+  var slidesHtml = '';
+  var dotsHtml = '';
+  selected.forEach(function(q, i) {
+    slidesHtml += '<div class="quote-slide' + (i === 0 ? ' active' : '') + '" data-idx="' + i + '">' +
+      '<div class="quote-text">' + q.text + '</div>' +
+      '<div class="quote-attribution">' +
+        '<div class="quote-author">' +
+          '<div class="quote-author-name">' + q.author + '</div>' +
+          '<div class="quote-author-meta">' + q.meta + '</div>' +
+        '</div>' +
+        '<div class="quote-progress" data-progress>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  });
+
+  // Progress dots (same for every slide, but we'll update them)
+  function buildDots(currentIdx) {
+    var dots = '';
+    for (var i = 0; i < selected.length; i++) {
+      var cls = 'quote-dot';
+      if (i === currentIdx) cls += ' active';
+      else if (i < currentIdx) cls += ' past';
+      dots += '<div class="' + cls + '"></div>';
+    }
+    return dots;
+  }
+
+  box.innerHTML = slidesHtml;
+
+  var current = 0;
+  var interval;
+
+  function show(idx) {
+    var slides = box.querySelectorAll('.quote-slide');
+    slides.forEach(function(s, i) {
+      s.classList.toggle('active', i === idx);
+    });
+    // Update dots
+    var activeSlide = slides[idx];
+    var progressEl = activeSlide.querySelector('[data-progress]');
+    if (progressEl) progressEl.innerHTML = buildDots(idx);
+    current = idx;
+  }
+
+  function next() {
+    show((current + 1) % selected.length);
+  }
+
+  function startAutoplay() {
+    stopAutoplay();
+    interval = setInterval(next, 7000);
+  }
+  function stopAutoplay() {
+    if (interval) { clearInterval(interval); interval = null; }
+  }
+
+  box.addEventListener('click', function() {
+    next();
+    startAutoplay(); // reset timer
+  });
+  box.addEventListener('mouseenter', stopAutoplay);
+  box.addEventListener('mouseleave', startAutoplay);
+
+  // Init
+  show(0);
+  startAutoplay();
+})();
+</script>
+
+<script>
+(function(){
+  var burger = document.getElementById('nav-burger');
+  var overlay = document.getElementById('nav-overlay');
+  if (!burger || !overlay) return;
+  function toggle(){
+    var isOpen = overlay.classList.contains('open');
+    if(isOpen){
+      overlay.classList.remove('open');
+      burger.classList.remove('open');
+      document.body.style.overflow = '';
+    } else {
+      overlay.classList.add('open');
+      burger.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+  }
+  burger.addEventListener('click', toggle);
+  // Close on any link click
+  overlay.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', function(){
+      overlay.classList.remove('open');
+      burger.classList.remove('open');
+      document.body.style.overflow = '';
+    });
+  });
+})();
+</script>
+
+<script>
+// Scroll reveal animations
+(function(){
+  if (!('IntersectionObserver' in window)) {
+    document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in')});
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if (entry.isIntersecting){
+        entry.target.classList.add('in');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -50px 0px' });
+  document.querySelectorAll('.reveal').forEach(function(el){ observer.observe(el); });
+})();
+
+// Aura mouse follow (desktop only, subtle)
+(function(){
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (window.innerWidth < 900) return;
+  var g1 = document.querySelector('.aura-glow-1');
+  var g2 = document.querySelector('.aura-glow-2');
+  if (!g1 || !g2) return;
+  var mx=0,my=0,cx=0,cy=0;
+  document.addEventListener('mousemove', function(e){
+    mx = (e.clientX / window.innerWidth - 0.5) * 40;
+    my = (e.clientY / window.innerHeight - 0.5) * 40;
+  });
+  function anim(){
+    cx += (mx - cx) * 0.03;
+    cy += (my - cy) * 0.03;
+    g1.style.transform = 'translate(' + cx + 'px,' + cy + 'px)';
+    g2.style.transform = 'translate(' + (-cx*.7) + 'px,' + (-cy*.7) + 'px)';
+    requestAnimationFrame(anim);
+  }
+  anim();
+})();
+</script>
+
+</body>
+</html>
