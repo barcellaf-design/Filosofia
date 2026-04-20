@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Filosofia &mdash; Concetti</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --orange:#FF6B35;--black:#0A0A0A;--white:#FFFFFF;--cream:#FAF9F6;
+  --gray-100:#F4F3EF;--gray-200:#E8E7E1;--gray-400:#9A998F;--gray-600:#55544E;
+  --mono:'JetBrains Mono',monospace;--sans:'Inter',-apple-system,sans-serif;
+  --orange-soft:rgba(255,107,53,.15);
+  --orange-mist:rgba(255,107,53,.08);
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--cream);color:var(--black);font-weight:400;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+.nav-top{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(250,249,246,.88);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--gray-200)}
+.nav-inner{max-width:1400px;margin:0 auto;padding:18px 40px;display:flex;justify-content:space-between;align-items:center}
+.logo{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.5px;text-transform:uppercase;color:var(--black);text-decoration:none;transition:opacity .2s;cursor:pointer}
+.logo:hover{opacity:.6}
+.logo-dot{display:inline-block;width:7px;height:7px;background:var(--orange);border-radius:50%;margin-right:8px;vertical-align:middle}
+.nav-links{display:flex;gap:28px;list-style:none}
+.nav-links a{color:var(--gray-600);text-decoration:none;font-size:13px;font-weight:500;transition:color .2s;font-family:var(--mono);letter-spacing:.3px}
+.nav-links a:hover{color:var(--black)}
+.nav-links a.active{color:var(--black);position:relative}
+.nav-links a.active::after{content:'';position:absolute;bottom:-24px;left:0;right:0;height:2px;background:var(--orange)}
+
+.hero{padding:140px 40px 80px;max-width:1400px;margin:0 auto}
+.hero-meta{font-family:var(--mono);font-size:11px;color:var(--gray-400);letter-spacing:1px;text-transform:uppercase;margin-bottom:40px;display:flex;gap:24px;align-items:center}
+.hero-meta-dot{width:6px;height:6px;background:var(--orange);border-radius:50%}
+.hero h1{font-size:clamp(52px,9vw,128px);font-weight:800;line-height:.95;letter-spacing:-.04em;margin-bottom:40px;max-width:1200px}
+.hero h1 em{font-style:italic;font-weight:400;color:var(--orange)}
+.hero-desc{font-size:20px;line-height:1.5;max-width:640px;color:var(--gray-600);margin-bottom:40px}
+
+.status-bar{position:sticky;top:62px;z-index:50;background:rgba(250,249,246,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--gray-200);padding:16px 40px}
+.status-inner{max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.status-text{font-family:var(--mono);font-size:12px;color:var(--gray-600);letter-spacing:.3px}
+.status-text strong{color:var(--orange);font-weight:600}
+.reset-btn{font-family:var(--mono);font-size:11px;padding:8px 16px;border-radius:100px;border:1px solid var(--black);background:var(--black);color:var(--white);cursor:pointer;display:none;letter-spacing:.5px;text-transform:uppercase;font-weight:500}
+.reset-btn.visible{display:inline-block}
+.reset-btn:hover{background:var(--orange);border-color:var(--orange)}
+
+main{padding:60px 40px 120px;max-width:1400px;margin:0 auto}
+.galaxies{display:grid;grid-template-columns:1fr;gap:1px;background:var(--gray-200);border:1px solid var(--gray-200)}
+.galaxy{background:var(--cream);padding:40px;transition:opacity .3s}
+.galaxy.dimmed{opacity:.25}
+.galaxy-row{display:grid;grid-template-columns:200px 1fr;gap:40px;align-items:flex-start}
+.galaxy-num{font-family:var(--mono);font-size:13px;color:var(--orange);letter-spacing:1px;font-weight:500;padding-top:8px}
+.galaxy-title{font-size:44px;font-weight:700;letter-spacing:-.03em;line-height:1;margin-bottom:12px}
+.galaxy-subtitle{font-size:15px;color:var(--gray-600);margin-bottom:24px;max-width:560px;line-height:1.5}
+.galaxy-phils{display:flex;flex-wrap:wrap;gap:8px}
+
+.chip{font-family:var(--mono);font-size:12px;padding:10px 18px;border-radius:100px;border:1px solid var(--gray-200);background:var(--white);color:var(--black);cursor:pointer;transition:all .15s;font-weight:500;display:inline-flex;align-items:center;gap:7px;letter-spacing:.3px}
+.chip:hover{border-color:var(--black);transform:translateY(-1px)}
+.chip-dot{width:7px;height:7px;border-radius:50%;background:var(--black)}
+.chip.highlighted{background:var(--black);color:var(--white);border-color:var(--black)}
+.chip.highlighted .chip-dot{background:var(--orange)!important}
+.chip.faded{opacity:.2}
+
+.detail-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,10,10,.6);backdrop-filter:blur(8px);z-index:200;display:none}
+.detail-overlay.open{display:flex;justify-content:center;align-items:flex-start;padding:80px 20px 40px;overflow-y:auto}
+.detail-card{border-radius:16px;background:var(--cream);max-width:720px;width:100%;padding:56px 56px 48px;position:relative;animation:slideUp .3s cubic-bezier(.2,.9,.3,1)}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.detail-close{position:absolute;top:24px;right:24px;width:40px;height:40px;border-radius:50%;background:var(--gray-100);border:none;cursor:pointer;font-size:18px;color:var(--black);display:flex;align-items:center;justify-content:center;transition:all .15s}
+.detail-close:hover{background:var(--black);color:var(--white)}
+.detail-num{font-family:var(--mono);font-size:11px;color:var(--orange);letter-spacing:1.2px;margin-bottom:8px;text-transform:uppercase;font-weight:500}
+.detail-name{font-size:72px;font-weight:800;letter-spacing:-.04em;line-height:.95;margin-bottom:12px}
+.detail-meta{font-family:var(--mono);font-size:12px;color:var(--gray-400);letter-spacing:.5px;display:flex;gap:16px;flex-wrap:wrap;margin-bottom:32px;padding-bottom:28px;border-bottom:1px solid var(--gray-200)}
+.detail-intro{font-size:20px;line-height:1.5;color:var(--black);margin-bottom:32px}
+.detail-section-label{font-family:var(--mono);font-size:11px;color:var(--gray-400);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:16px;font-weight:500}
+.presence-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:32px}
+.presence-tag{font-family:var(--mono);font-size:11px;padding:6px 12px;border-radius:100px;background:var(--black);color:var(--white);letter-spacing:.3px;font-weight:500}
+.concept-item{padding:20px 0;border-top:1px solid var(--gray-200)}
+.concept-item:last-child{border-bottom:1px solid var(--gray-200)}
+.concept-title{font-size:20px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px}
+.concept-desc{font-size:14px;line-height:1.6;color:var(--gray-600)}
+
+footer{border-top:1px solid var(--gray-200);padding:60px 40px 40px;text-align:center}
+.footer-inner{max-width:1400px;margin:0 auto}
+.footer-logo{font-family:var(--mono);font-size:14px;font-weight:500;letter-spacing:.5px;text-transform:uppercase;margin-bottom:16px}
+.footer-text{font-size:12px;color:var(--gray-400);font-family:var(--mono);letter-spacing:.5px}
+
+@media(max-width:768px){
+  .nav-inner{padding:14px 20px}
+  .nav-links{gap:16px}
+  .hero{padding:100px 20px 50px}
+  .hero h1{font-size:44px}
+  .hero-desc{font-size:17px}
+  .status-bar{padding:12px 20px}
+  main{padding:40px 0 80px;max-width:none}
+  .galaxy{padding:28px 20px}
+  .galaxy-row{grid-template-columns:1fr;gap:20px}
+  .galaxy-num{padding-top:0}
+  .galaxy-title{font-size:32px}
+  .detail-card{padding:40px 28px 32px}
+  .detail-name{font-size:48px}
+  .detail-close{top:16px;right:16px}
+}
+
+/* ═══ ATMOSPHERIC GRADIENT LAYER (injected) ═══ */
+.aura{position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:0;overflow:hidden}
+.aura-glow{position:absolute;width:900px;height:900px;border-radius:50%;background:radial-gradient(circle at center,var(--orange-soft) 0%,var(--orange-mist) 30%,transparent 65%);filter:blur(40px);opacity:.85;transition:transform .6s cubic-bezier(.2,.9,.3,1);will-change:transform}
+.aura-glow-1{top:-200px;left:-200px;animation:auraFloat1 20s ease-in-out infinite}
+.aura-glow-2{top:30%;right:-300px;width:700px;height:700px;opacity:.6;animation:auraFloat2 25s ease-in-out infinite}
+.aura-glow-3{bottom:-200px;left:30%;width:800px;height:800px;opacity:.45;animation:auraFloat3 30s ease-in-out infinite}
+@keyframes auraFloat1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(80px,40px) scale(1.1)}}
+@keyframes auraFloat2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-60px,-30px) scale(.95)}}
+@keyframes auraFloat3{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-40px,-50px) scale(1.05)}}
+
+/* ═══ SCROLL REVEAL (injected) ═══ */
+.reveal{opacity:0;transform:translateY(40px);transition:opacity .9s cubic-bezier(.2,.9,.3,1),transform .9s cubic-bezier(.2,.9,.3,1)}
+.reveal.in{opacity:1;transform:translateY(0)}
+.reveal.delay-1{transition-delay:.1s}
+.reveal.delay-2{transition-delay:.2s}
+.reveal.delay-3{transition-delay:.3s}
+.reveal.delay-4{transition-delay:.4s}
+
+/* Ensure navigation stays above aura */
+.nav-top{z-index:100}
+main,section,article,footer,.nav-overlay{position:relative;z-index:2}
+
+@media(max-width:768px){
+  .aura-glow{filter:blur(60px);opacity:.5}
+}
+@media(prefers-reduced-motion:reduce){
+  .aura-glow{animation:none!important}
+  .reveal{opacity:1!important;transform:none!important}
+}
+
+
+/* ═══ SOFTENED CORNERS (injected) ═══ */
+.galaxy,.position,.rel-block,.q-btn,.card,.preview-card,.phil-card{border-radius:16px!important}
+.tag,.chip,.filter-chip,.tag-small{border-radius:100px!important}
+
+</style>
+<style>
+/* ═══ MOBILE NAV (HAMBURGER) ═══ */
+.nav-burger{display:none;width:40px;height:40px;border:none;background:transparent;cursor:pointer;padding:0;position:relative;z-index:110}
+.nav-burger span{display:block;width:22px;height:1.5px;background:var(--black);position:absolute;left:9px;transition:transform .3s ease,opacity .2s ease,top .3s ease}
+.nav-burger span:nth-child(1){top:14px}
+.nav-burger span:nth-child(2){top:20px}
+.nav-burger span:nth-child(3){top:26px}
+.nav-burger.open span:nth-child(1){top:20px;transform:rotate(45deg)}
+.nav-burger.open span:nth-child(2){opacity:0}
+.nav-burger.open span:nth-child(3){top:20px;transform:rotate(-45deg)}
+
+.nav-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:var(--cream);z-index:105;padding:80px 24px 40px;flex-direction:column;justify-content:space-between}
+.nav-overlay.open{display:flex;animation:overlayIn .28s cubic-bezier(.2,.9,.3,1)}
+@keyframes overlayIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+
+.nav-overlay-links{list-style:none;display:flex;flex-direction:column;gap:0;padding:0;margin-top:20px}
+.nav-overlay-links li{border-top:1px solid var(--gray-200)}
+.nav-overlay-links li:last-child{border-bottom:1px solid var(--gray-200)}
+.nav-overlay-links a{display:flex;justify-content:space-between;align-items:center;padding:22px 4px;font-size:28px;font-weight:700;letter-spacing:-.02em;color:var(--black);text-decoration:none;font-family:var(--sans)}
+.nav-overlay-links a.active{color:var(--orange)}
+.nav-overlay-links a::after{content:'→';font-size:20px;color:var(--gray-400);font-weight:400}
+.nav-overlay-links a.active::after{color:var(--orange)}
+.nav-overlay-links .nav-num{font-family:var(--mono);font-size:11px;color:var(--gray-400);letter-spacing:1px;text-transform:uppercase;font-weight:500;margin-right:12px;display:inline-block;min-width:28px}
+
+.nav-overlay-footer{font-family:var(--mono);font-size:10px;color:var(--gray-400);letter-spacing:.5px;text-transform:uppercase;display:flex;justify-content:space-between;align-items:center}
+
+@media(max-width:768px){
+  .nav-links{display:none !important}
+  .nav-burger{display:block}
+  .nav-inner{padding:14px 20px}
+}
+</style>
+</head>
+<body>
+<!-- ATMOSPHERIC BACKGROUND -->
+<div class="aura" aria-hidden="true">
+  <div class="aura-glow aura-glow-1"></div>
+  <div class="aura-glow aura-glow-2"></div>
+  <div class="aura-glow aura-glow-3"></div>
+</div>
+
+
+<nav class="nav-top">
+  <div class="nav-inner">
+    <a href="index.html" class="logo"><span class="logo-dot"></span>Filosofia</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="timeline.html">Timeline</a></li>
+      <li><a href="concetti.html" class="active">Concetti</a></li>
+      <li><a href="domande.html">Domande</a></li>
+      <li><a href="dialoghi.html">Dialoghi</a></li>
+    </ul>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-meta reveal">
+    <span class="hero-meta-dot"></span>
+    <span>Capitolo 02</span>
+    <span>/</span>
+    <span>Concetti</span>
+  </div>
+  <h1 class="reveal">Otto domande.<br>Molte <em>risposte.</em></h1>
+  <p class="hero-desc reveal delay-1">La filosofia non è un catalogo di autori, ma una conversazione attorno a poche grandi questioni. Ogni galassia raccoglie chi ha contribuito in modo decisivo. Un filosofo può comparire in più galassie.</p>
+</section>
+
+<div class="status-bar">
+  <div class="status-inner">
+    <div class="status-text" id="status-msg">Clicca un filosofo per evidenziare le sue presenze</div>
+    <button class="reset-btn" id="reset-btn">Reset</button>
+  </div>
+</div>
+
+<main>
+  <div class="galaxies" id="galaxies"></div>
+</main>
+
+<div class="detail-overlay" id="overlay">
+  <div class="detail-card" id="detail-card"></div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo"><span class="logo-dot"></span>Filosofia</div>
+    <div class="footer-text">Schema di apprendimento &mdash; in aggiornamento continuo</div>
+  </div>
+</footer>
+
+<script>
+var PHILS={
+  0:{name:'Talete',date:'~624–546 a.C.',school:'presocratica',summary:'L\'acqua come principio di tutte le cose.',era:'Antica'},
+  1:{name:'Eraclito',date:'~535–475 a.C.',school:'presocratica',summary:'Il divenire come unica realtà.',era:'Antica'},
+  2:{name:'Parmenide',date:'~515–450 a.C.',school:'presocratica',summary:'L\'essere è uno e immobile.',era:'Antica'},
+  3:{name:'Pitagora',date:'~570–495 a.C.',school:'presocratica',summary:'Il numero come struttura del reale.',era:'Antica'},
+  4:{name:'Socrate',date:'~470–399 a.C.',school:'classica',summary:'Maieutica e cura dell\'anima.',era:'Classica'},
+  5:{name:'Platone',date:'~428–348 a.C.',school:'classica',summary:'Il mondo delle Idee.',era:'Classica'},
+  6:{name:'Aristotele',date:'~384–322 a.C.',school:'classica',summary:'Realismo, logica, etica.',era:'Classica'},
+  7:{name:'Epicuro',date:'~341–270 a.C.',school:'ellenistica',summary:'L\'atarassia come fine.',era:'Ellenistica'},
+  8:{name:'Zenone',date:'~334–262 a.C.',school:'ellenistica',summary:'Stoicismo: vivere secondo natura.',era:'Ellenistica'},
+  9:{name:'Sesto Empirico',date:'~160–210 d.C.',school:'ellenistica',summary:'Scetticismo radicale.',era:'Ellenistica'},
+  10:{name:'Agostino',date:'354–430',school:'medievale',summary:'Fede, ragione, città di Dio.',era:'Medievale'},
+  11:{name:"Tommaso",date:'1225–1274',school:'medievale',summary:'Sintesi Aristotele–Cristianesimo.',era:'Medievale'},
+  12:{name:'Machiavelli',date:'1469–1527',school:'rinascimento',summary:'Politica separata dall\'etica.',era:'Rinascimento'},
+  13:{name:'Descartes',date:'1596–1650',school:'razionalismo',summary:'Cogito ergo sum.',era:'Moderna'},
+  14:{name:'Spinoza',date:'1632–1677',school:'razionalismo',summary:'Deus sive Natura.',era:'Moderna'},
+  15:{name:'Leibniz',date:'1646–1716',school:'razionalismo',summary:'Monadi, armonia prestabilita.',era:'Moderna'},
+  16:{name:'Locke',date:'1632–1704',school:'empirismo',summary:'Tabula rasa.',era:'Moderna'},
+  17:{name:'Hume',date:'1711–1776',school:'empirismo',summary:'Scetticismo empirista.',era:'Moderna'},
+  18:{name:'Kant',date:'1724–1804',school:'idealismo',summary:'Rivoluzione copernicana.',era:'Moderna'},
+  19:{name:'Hegel',date:'1770–1831',school:'idealismo',summary:'Dialettica e Spirito.',era:'Moderna'},
+  20:{name:'Marx',date:'1818–1883',school:'positivismo',summary:'Materialismo storico.',era:'Ottocento'},
+  21:{name:'Comte',date:'1798–1857',school:'positivismo',summary:'Positivismo e sociologia.',era:'Ottocento'},
+  22:{name:'Schopenhauer',date:'1788–1860',school:'esistenzialismo',summary:'Volontà e pessimismo.',era:'Ottocento'},
+  23:{name:'Kierkegaard',date:'1813–1855',school:'esistenzialismo',summary:'Angoscia e salto della fede.',era:'Ottocento'},
+  24:{name:'Nietzsche',date:'1844–1900',school:'esistenzialismo',summary:'Morte di Dio, volontà di potenza.',era:'Ottocento'},
+  25:{name:'Wittgenstein',date:'1889–1951',school:'contemporanea',summary:'Limiti del linguaggio.',era:'Novecento'},
+  26:{name:'Heidegger',date:'1889–1976',school:'esistenzialismo',summary:'Essere-nel-mondo, Dasein.',era:'Novecento'},
+  27:{name:'Sartre',date:'1905–1980',school:'esistenzialismo',summary:'Esistenza precede essenza.',era:'Novecento'},
+  28:{name:'Foucault',date:'1926–1984',school:'contemporanea',summary:'Potere/sapere, biopolitica.',era:'Novecento'}
+};
+var DETAILS={
+  0:[{t:'Arché',d:'L\'acqua come principio originario del cosmo.'},{t:'Monismo naturalistico',d:'Tutto deriva da un\'unica sostanza materiale.'}],
+  1:[{t:'Panta rei',d:'Tutto scorre, nulla è stabile.'},{t:'Logos',d:'Ragione cosmica che governa il divenire.'},{t:'Unità degli opposti',d:'Gli opposti si implicano reciprocamente.'}],
+  2:[{t:'Essere e non-essere',d:'"L\'essere è, il non-essere non è."'},{t:'Verità vs opinione',d:'La ragione rivela l\'essere; i sensi ingannano.'}],
+  3:[{t:'Numero come arché',d:'I numeri sono l\'essenza delle cose.'},{t:'Metempsicosi',d:'Trasmigrazione dell\'anima tra corpi diversi.'}],
+  4:[{t:'Maieutica',d:'Far "partorire" la verità già presente nell\'interlocutore.'},{t:'Sapere di non sapere',d:'Il dubbio come punto di partenza.'},{t:'Cura dell\'anima',d:'Migliorare sé stessi come fine della vita.'}],
+  5:[{t:'Teoria delle Idee',d:'Le Forme eterne; il mondo sensibile è copia imperfetta.'},{t:'Caverna',d:'Gli uomini scambiano ombre per realtà.'},{t:'Dualismo anima/corpo',d:'L\'anima immortale prigioniera del corpo.'},{t:'Repubblica ideale',d:'Governo dei filosofi-re.'}],
+  6:[{t:'Sostanza e forma',d:'Forma e materia inscindibili.'},{t:'Potenza e atto',d:'Ogni cosa tende alla propria realizzazione.'},{t:'Eudaimonia',d:'Felicità come vita secondo virtù e ragione.'},{t:'Logica formale',d:'Sillogismo, categorie, non-contraddizione.'}],
+  7:[{t:'Atarassia',d:'Serenità dell\'anima come fine supremo.'},{t:'Tetrafarmaco',d:'Rimedio in 4 punti contro la paura.'},{t:'Atomismo',d:'Atomi in moto — nessun destino.'}],
+  8:[{t:'Logos universale',d:'Ragione cosmica a cui conformarsi.'},{t:'Apatheia',d:'Libertà dalle passioni come dominio di sé.'},{t:'Cosmopolitismo',d:'Tutti gli uomini cittadini del mondo.'}],
+  9:[{t:'Epoché',d:'Sospensione del giudizio come via alla pace.'},{t:'Isostenia',d:'Ogni argomento ha un contrario di pari forza.'}],
+  10:[{t:'Interiorità',d:'"Nell\'uomo interiore abita la verità."'},{t:'Tempo e memoria',d:'Il tempo esiste nella mente.'},{t:'Città di Dio',d:'Dualismo storia umana / città divina.'}],
+  11:[{t:'Fede e ragione',d:'Non si contraddicono: due vie verso la stessa verità.'},{t:'Cinque vie',d:'Prove dell\'esistenza di Dio.'},{t:'Legge naturale',d:'La ragione umana partecipa della legge eterna.'}],
+  12:[{t:'Virtù e fortuna',d:'Il principe domina la fortuna con ingegno e forza.'},{t:'Realismo politico',d:'La politica ha leggi proprie.'}],
+  13:[{t:'Cogito ergo sum',d:'L\'unica certezza indubbitabile.'},{t:'Dubbio metodico',d:'Dubitare di tutto per trovare una verità assoluta.'},{t:'Dualismo mente/corpo',d:'Res cogitans e res extensa distinte.'}],
+  14:[{t:'Panteismo',d:'"Dio ossia Natura."'},{t:'Determinismo',d:'Tutto avviene per necessità.'},{t:'Conatus',d:'Ogni cosa tende a perseverare nel proprio essere.'}],
+  15:[{t:'Monadi',d:'Sostanze semplici che rispecchiano l\'universo.'},{t:'Armonia prestabilita',d:'Dio ha sincronizzato le monadi ab initio.'},{t:'Miglior mondo possibile',d:'Ottimismo metafisico.'}],
+  16:[{t:'Tabula rasa',d:'La mente alla nascita è foglio bianco.'},{t:'Liberalismo',d:'Contratto sociale, diritti naturali.'},{t:'Tolleranza',d:'Lo Stato non impone credenze religiose.'}],
+  17:[{t:'Causalità',d:'Abitudine mentale, non necessità logica.'},{t:'Bundle theory',d:'Il sé è un fascio di percezioni.'},{t:'Emotivismo etico',d:'La ragione è schiava delle passioni.'}],
+  18:[{t:'Rivoluzione copernicana',d:'Il mondo si adatta alle forme della mente.'},{t:'Categorie a priori',d:'Spazio, tempo, causalità strutturano l\'esperienza.'},{t:'Imperativo categorico',d:'Agisci secondo una massima universalizzabile.'},{t:'Cosa in sé',d:'La realtà noumenica è inconoscibile.'}],
+  19:[{t:'Dialettica',d:'Tesi, antitesi, sintesi.'},{t:'Spirito assoluto',d:'La realtà si auto-realizza nella storia.'},{t:'Razionale = reale',d:'La storia ha una logica necessaria.'}],
+  20:[{t:'Materialismo storico',d:'Le forze produttive determinano la coscienza.'},{t:'Alienazione',d:'Il lavoratore estraniato dal prodotto.'},{t:'Lotta di classe',d:'Il motore della storia.'}],
+  21:[{t:'Tre stadi',d:'Teologico → Metafisico → Positivo.'},{t:'Sociologia',d:'La società come scienza positiva.'}],
+  22:[{t:'Volontà cieca',d:'Sotto i fenomeni una Volontà irrazionale.'},{t:'Pessimismo',d:'La vita oscilla tra dolore e noia.'},{t:'Arte come liberazione',d:'La contemplazione estetica libera dalla Volontà.'}],
+  23:[{t:'Tre stadi',d:'Estetico, Etico, Religioso.'},{t:'Angoscia',d:'"La vertigine della libertà."'},{t:'Salto della fede',d:'La fede è paradosso che sfida la ragione.'}],
+  24:[{t:'Morte di Dio',d:'Crisi dei valori assoluti.'},{t:'Volontà di potenza',d:'Autoaffermazione creativa come principio vitale.'},{t:'Oltreuomo',d:'Creatore di nuovi valori oltre bene e male.'},{t:'Eterno ritorno',d:'Test esistenziale di affermazione della vita.'}],
+  25:[{t:'Limiti del linguaggio',d:'I limiti del linguaggio sono i limiti del mondo.'},{t:'Giochi linguistici',d:'Il significato è l\'uso in un contesto.'},{t:'Critica alla metafisica',d:'I problemi filosofici nascono da fraintendimenti.'}],
+  26:[{t:'Esserci (Dasein)',d:'L\'ente che si interroga sul proprio essere.'},{t:'Essere-per-la-morte',d:'La morte come fonte di autenticità.'},{t:'Critica della tecnica',d:'La modernità dimentica l\'essere.'}],
+  27:[{t:'Esistenza precede essenza',d:'Siamo ciò che scegliamo di essere.'},{t:'Libertà radicale',d:'"Siamo condannati ad essere liberi."'},{t:'Malafede',d:'Negare la propria libertà in un ruolo.'}],
+  28:[{t:'Potere/sapere',d:'Conoscenza e potere intrecciati.'},{t:'Biopolitica',d:'Il potere gestisce la vita biologica.'},{t:'Genealogia',d:'Smontare l\'universalità dei concetti.'}]
+};
+
+var GALAXIES=[
+  {id:'essere',num:'01',title:'L\'Essere',subtitle:'Cos\'è che esiste veramente? Qual è la natura ultima della realtà sotto le apparenze?',phils:[2,3,5,6,10,11,13,14,15,19,26]},
+  {id:'divenire',num:'02',title:'Il Divenire',subtitle:'Il cambiamento è reale o illusione? Il tempo è oggettivo o vive nella mente?',phils:[0,1,10,19,22,24,26]},
+  {id:'conoscenza',num:'03',title:'La Conoscenza',subtitle:'Come possiamo sapere qualcosa? Esistono verità assolute, o tutto è interpretazione?',phils:[4,5,6,9,13,16,17,18,25]},
+  {id:'liberta',num:'04',title:'La Libertà',subtitle:'Siamo liberi di scegliere o determinati? Cos\'è la volontà, e da cosa dipende?',phils:[10,14,17,18,22,23,24,27]},
+  {id:'etica',num:'05',title:'L\'Etica',subtitle:'Come si deve vivere? Cos\'è il bene, la virtù, la felicità umana?',phils:[4,6,7,8,9,11,17,18,22,23,24,27]},
+  {id:'potere',num:'06',title:'Il Potere',subtitle:'Come si giustifica l\'autorità? Chi governa chi, e perché?',phils:[5,8,10,12,16,20,21,24,28]},
+  {id:'dio',num:'07',title:'Dio',subtitle:'Il divino esiste? E se è morto, come continua a pesare sulla nostra vita?',phils:[3,7,10,11,13,14,15,23,24]},
+  {id:'linguaggio',num:'08',title:'Il Linguaggio',subtitle:'Come funziona il linguaggio? Chi è l\'io che parla e pensa?',phils:[13,17,25,26,27,28]}
+];
+
+var sel=null;
+function getPresence(pid){return GALAXIES.filter(function(g){return g.phils.indexOf(pid)>-1})}
+function render(){
+  var status=document.getElementById('status-msg');
+  var resetBtn=document.getElementById('reset-btn');
+  if(sel!==null){
+    var p=PHILS[sel];
+    var pres=getPresence(sel);
+    status.innerHTML='<strong>'+p.name+'</strong> presente in '+pres.length+' concetti';
+    resetBtn.classList.add('visible');
+  } else {
+    status.textContent='Clicca un filosofo per evidenziare le sue presenze';
+    resetBtn.classList.remove('visible');
+  }
+  var activeGalaxies={};
+  if(sel!==null)GALAXIES.forEach(function(g){if(g.phils.indexOf(sel)>-1)activeGalaxies[g.id]=true});
+
+  var container=document.getElementById('galaxies');
+  container.innerHTML='';
+  GALAXIES.forEach(function(g){
+    var gEl=document.createElement('div');
+    gEl.className='galaxy';
+    if(sel!==null && !activeGalaxies[g.id])gEl.classList.add('dimmed');
+    var html='<div class="galaxy-row"><div class="galaxy-num">Concetto / '+g.num+'</div><div><div class="galaxy-title">'+g.title+'</div><div class="galaxy-subtitle">'+g.subtitle+'</div><div class="galaxy-phils"></div></div></div>';
+    gEl.innerHTML=html;
+    var chipsEl=gEl.querySelector('.galaxy-phils');
+    g.phils.forEach(function(pid){
+      var p=PHILS[pid];
+      var chip=document.createElement('span');
+      chip.className='chip';
+      if(sel===pid)chip.classList.add('highlighted');
+      else if(sel!==null)chip.classList.add('faded');
+      chip.innerHTML='<span class="chip-dot"></span>'+p.name;
+      chip.addEventListener('click',function(e){e.stopPropagation();openDetail(pid);});
+      chipsEl.appendChild(chip);
+    });
+    container.appendChild(gEl);
+  });
+}
+
+function openDetail(pid){
+  sel=pid;
+  var p=PHILS[pid];
+  var pres=getPresence(pid);
+  var details=DETAILS[pid]||[];
+  var num=String(pid+1).padStart(3,'0');
+  var tags=pres.map(function(g){return '<span class="presence-tag">'+g.title+'</span>';}).join('');
+  var items=details.map(function(c){return '<div class="concept-item"><div class="concept-title">'+c.t+'</div><div class="concept-desc">'+c.d+'</div></div>';}).join('');
+  var card=document.getElementById('detail-card');
+  card.innerHTML='<button class="detail-close" id="dp-close">&#x2715;</button><div class="detail-num">Filosofo — '+num+'</div><div class="detail-name">'+p.name+'</div><div class="detail-meta"><span>'+p.school+'</span><span>'+p.date+'</span><span>'+p.era+'</span></div><div class="detail-intro">'+p.summary+'</div><div class="detail-section-label">Presente in '+pres.length+' concetti</div><div class="presence-tags">'+tags+'</div><div class="detail-section-label">Concetti chiave</div><div>'+items+'</div>';
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+  setTimeout(function(){
+    var cb=document.getElementById('dp-close');
+    if(cb)cb.addEventListener('click',closeDetail);
+  },10);
+  render();
+}
+function closeDetail(){
+  sel=null;
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow='';
+  render();
+}
+document.getElementById('overlay').addEventListener('click',function(e){if(e.target.id==='overlay')closeDetail()});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeDetail()});
+document.getElementById('reset-btn').addEventListener('click',function(){sel=null;render();});
+render();
+</script>
+
+<script>
+(function(){
+  var burger = document.getElementById('nav-burger');
+  var overlay = document.getElementById('nav-overlay');
+  if (!burger || !overlay) return;
+  function toggle(){
+    var isOpen = overlay.classList.contains('open');
+    if(isOpen){
+      overlay.classList.remove('open');
+      burger.classList.remove('open');
+      document.body.style.overflow = '';
+    } else {
+      overlay.classList.add('open');
+      burger.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+  }
+  burger.addEventListener('click', toggle);
+  // Close on any link click
+  overlay.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', function(){
+      overlay.classList.remove('open');
+      burger.classList.remove('open');
+      document.body.style.overflow = '';
+    });
+  });
+})();
+</script>
+
+<script>
+// Scroll reveal animations
+(function(){
+  if (!('IntersectionObserver' in window)) {
+    document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in')});
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if (entry.isIntersecting){
+        entry.target.classList.add('in');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -50px 0px' });
+  document.querySelectorAll('.reveal').forEach(function(el){ observer.observe(el); });
+})();
+
+// Aura mouse follow (desktop only, subtle)
+(function(){
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (window.innerWidth < 900) return;
+  var g1 = document.querySelector('.aura-glow-1');
+  var g2 = document.querySelector('.aura-glow-2');
+  if (!g1 || !g2) return;
+  var mx=0,my=0,cx=0,cy=0;
+  document.addEventListener('mousemove', function(e){
+    mx = (e.clientX / window.innerWidth - 0.5) * 40;
+    my = (e.clientY / window.innerHeight - 0.5) * 40;
+  });
+  function anim(){
+    cx += (mx - cx) * 0.03;
+    cy += (my - cy) * 0.03;
+    g1.style.transform = 'translate(' + cx + 'px,' + cy + 'px)';
+    g2.style.transform = 'translate(' + (-cx*.7) + 'px,' + (-cy*.7) + 'px)';
+    requestAnimationFrame(anim);
+  }
+  anim();
+})();
+</script>
+
+</body>
+</html>
