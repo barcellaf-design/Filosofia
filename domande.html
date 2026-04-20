@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Filosofia &mdash; Domande</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --orange:#FF6B35;
+  --orange-soft:rgba(255,107,53,.15);
+  --orange-mist:rgba(255,107,53,.08);
+  --black:#0A0A0A;
+  --white:#FFFFFF;
+  --cream:#FAF7F0;
+  --cream-warm:#F2EEDF;
+  --cream-deeper:#E8E3D0;
+  --gray-100:#F0EDE5;
+  --gray-200:#E0DDD0;
+  --gray-300:#C9C6B8;
+  --gray-400:#8F8E82;
+  --gray-600:#55544A;
+  --mono:'JetBrains Mono',monospace;
+  --sans:'Inter',-apple-system,sans-serif;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--cream);color:var(--black);font-weight:400;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden;position:relative}
+
+.nav-top{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(250,249,246,.88);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--gray-200)}
+.nav-inner{max-width:1400px;margin:0 auto;padding:18px 40px;display:flex;justify-content:space-between;align-items:center}
+.logo{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.5px;text-transform:uppercase;color:var(--black);text-decoration:none;transition:opacity .2s;cursor:pointer}
+.logo:hover{opacity:.6}
+.logo-dot{display:inline-block;width:7px;height:7px;background:var(--orange);border-radius:50%;margin-right:8px;vertical-align:middle}
+.nav-links{display:flex;gap:28px;list-style:none}
+.nav-links a{color:var(--gray-600);text-decoration:none;font-size:13px;font-weight:500;transition:color .2s;font-family:var(--mono);letter-spacing:.3px}
+.nav-links a:hover{color:var(--black)}
+.nav-links a.active{color:var(--black);position:relative}
+.nav-links a.active::after{content:'';position:absolute;bottom:-24px;left:0;right:0;height:2px;background:var(--orange)}
+
+.hero{padding:140px 40px 80px;max-width:1400px;margin:0 auto}
+.hero-meta{font-family:var(--mono);font-size:11px;color:var(--gray-400);letter-spacing:1px;text-transform:uppercase;margin-bottom:40px;display:flex;gap:24px;align-items:center}
+.hero-meta-dot{width:6px;height:6px;background:var(--orange);border-radius:50%}
+.hero h1{font-size:clamp(52px,9vw,128px);font-weight:800;line-height:.95;letter-spacing:-.04em;margin-bottom:40px;max-width:1200px}
+.hero h1 em{font-style:italic;font-weight:400;color:var(--orange)}
+.hero-desc{font-size:20px;line-height:1.5;max-width:640px;color:var(--gray-600);margin-bottom:40px}
+
+/* Question selector */
+.q-selector{padding:40px 40px 60px;max-width:1400px;margin:0 auto}
+.section-label{font-family:var(--mono);font-size:11px;color:var(--gray-400);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:24px;display:flex;align-items:center;gap:12px}
+.section-num{color:var(--orange);font-weight:500}
+.q-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1px;background:var(--gray-200);border:1px solid var(--gray-200)}
+.q-btn{background:var(--cream);padding:28px 24px 24px;text-align:left;border:none;cursor:pointer;transition:background .2s;font-family:var(--sans);display:flex;flex-direction:column;gap:16px;min-height:140px}
+.q-btn:hover{background:var(--white)}
+.q-btn.active{background:var(--black);color:var(--white)}
+.q-btn.active .q-num{color:var(--orange)}
+.q-btn.active .q-meta{color:var(--gray-400)}
+.q-num{font-family:var(--mono);font-size:11px;color:var(--orange);letter-spacing:1px;font-weight:500}
+.q-label{font-size:24px;font-weight:700;letter-spacing:-.02em;line-height:1.1}
+.q-meta{font-family:var(--mono);font-size:11px;color:var(--gray-400);margin-top:auto;letter-spacing:.3px}
+
+/* Answers section */
+.answers{padding:80px 40px 120px;max-width:1400px;margin:0 auto}
+.answer-header{margin-bottom:60px;padding-bottom:40px;border-bottom:1px solid var(--gray-200)}
+.answer-label{font-family:var(--mono);font-size:11px;color:var(--orange);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:16px;font-weight:500}
+.answer-q{font-size:clamp(40px,6vw,72px);font-weight:800;letter-spacing:-.03em;line-height:1;margin-bottom:24px}
+.answer-q em{font-style:italic;font-weight:400;color:var(--orange)}
+.answer-intro{font-size:18px;line-height:1.5;color:var(--gray-600);max-width:720px}
+
+.positions{display:grid;grid-template-columns:1fr;gap:1px;background:var(--gray-200);border:1px solid var(--gray-200)}
+.position{background:var(--cream);padding:48px 40px;display:grid;grid-template-columns:220px 1fr;gap:40px;align-items:flex-start}
+.position-side{display:flex;flex-direction:column;gap:8px}
+.position-num{font-family:var(--mono);font-size:13px;color:var(--orange);letter-spacing:1px;font-weight:500}
+.position-label{font-size:18px;font-weight:700;letter-spacing:-.01em;line-height:1.2;margin-bottom:8px}
+.position-phil{font-family:var(--mono);font-size:12px;color:var(--gray-600);letter-spacing:.3px;line-height:1.6}
+.position-content{font-size:17px;line-height:1.6;color:var(--black)}
+.position-content p{margin-bottom:16px}
+.position-content p:last-child{margin-bottom:0}
+.position-quote{font-size:22px;font-weight:500;font-style:italic;color:var(--orange);padding:20px 0;line-height:1.4;border-left:3px solid var(--orange);padding-left:24px;margin:20px 0}
+
+footer{border-top:1px solid var(--gray-200);padding:60px 40px 40px;text-align:center}
+.footer-inner{max-width:1400px;margin:0 auto}
+.footer-logo{font-family:var(--mono);font-size:14px;font-weight:500;letter-spacing:.5px;text-transform:uppercase;margin-bottom:16px}
+.footer-text{font-size:12px;color:var(--gray-400);font-family:var(--mono);letter-spacing:.5px}
+
+@media(max-width:768px){
+  .nav-inner{padding:14px 20px}
+  .nav-links{gap:16px}
+  .hero{padding:100px 20px 50px}
+  .hero h1{font-size:44px}
+  .hero-desc{font-size:17px}
+  .q-selector{padding:30px 20px 40px}
+  .q-grid{grid-template-columns:1fr}
+  .answers{padding:50px 20px 80px}
+  .position{grid-template-columns:1fr;gap:20px;padding:32px 24px}
+}
+
+/* ═══ ATMOSPHERIC GRADIENT LAYER (injected) ═══ */
+.aura{position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:0;overflow:hidden}
+.aura-glow{position:absolute;width:900px;height:900px;border-radius:50%;background:radial-gradient(circle at center,var(--orange-soft) 0%,var(--orange-mist) 30%,transparent 65%);filter:blur(40px);opacity:.85;transition:transform .6s cubic-bezier(.2,.9,.3,1);will-change:transform}
+.aura-glow-1{top:-200px;left:-200px;animation:auraFloat1 20s ease-in-out infinite}
+.aura-glow-2{top:30%;right:-300px;width:700px;height:700px;opacity:.6;animation:auraFloat2 25s ease-in-out infinite}
+.aura-glow-3{bottom:-200px;left:30%;width:800px;height:800px;opacity:.45;animation:auraFloat3 30s ease-in-out infinite}
+@keyframes auraFloat1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(80px,40px) scale(1.1)}}
+@keyframes auraFloat2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-60px,-30px) scale(.95)}}
+@keyframes auraFloat3{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-40px,-50px) scale(1.05)}}
+
+/* ═══ SCROLL REVEAL (injected) ═══ */
+.reveal{opacity:0;transform:translateY(40px);transition:opacity .9s cubic-bezier(.2,.9,.3,1),transform .9s cubic-bezier(.2,.9,.3,1)}
+.reveal.in{opacity:1;transform:translateY(0)}
+.reveal.delay-1{transition-delay:.1s}
+.reveal.delay-2{transition-delay:.2s}
+.reveal.delay-3{transition-delay:.3s}
+.reveal.delay-4{transition-delay:.4s}
+
+/* Ensure navigation stays above aura */
+.nav-top{z-index:100}
+main,section,article,footer,.nav-overlay{position:relative;z-index:2}
+
+@media(max-width:768px){
+  .aura-glow{filter:blur(60px);opacity:.5}
+}
+@media(prefers-reduced-motion:reduce){
+  .aura-glow{animation:none!important}
+  .reveal{opacity:1!important;transform:none!important}
+}
+
+
+/* ═══ SOFTENED CORNERS (injected) ═══ */
+.galaxy,.position,.rel-block,.q-btn,.card,.preview-card,.phil-card{border-radius:16px!important}
+.tag,.chip,.filter-chip,.tag-small{border-radius:100px!important}
+
+
+/* ═══ PROTECTION TOAST ═══ */
+.protect-toast{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.9);background:var(--black);color:var(--cream);padding:24px 32px;border-radius:16px;font-family:var(--sans);font-size:15px;font-weight:500;letter-spacing:-.01em;box-shadow:0 20px 60px -20px rgba(10,10,10,.4);z-index:9999;opacity:0;pointer-events:none;transition:opacity .25s ease,transform .25s cubic-bezier(.2,.9,.3,1);display:flex;align-items:center;gap:14px}
+.protect-toast.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.protect-toast-icon{width:24px;height:24px;background:var(--orange);border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--black);font-weight:700}
+.protect-toast-text{line-height:1.3}
+.protect-toast-sub{font-family:var(--mono);font-size:10px;color:var(--gray-400);letter-spacing:.5px;text-transform:uppercase;margin-top:4px}
+
+</style>
+<style>
+/* Font serif per le citazioni - caricato insieme a Inter ma usato solo qui */
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;1,400;1,500&display=swap');
+
+.quotes-section{padding:70px 40px;max-width:1400px;margin:0 auto;position:relative}
+.quotes-header{font-family:var(--mono);font-size:11px;color:var(--gray-400);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:32px;display:flex;align-items:center;gap:12px}
+.quotes-header-num{color:var(--orange);font-weight:500}
+
+.quotes-box{background:var(--black);color:var(--white);border-radius:20px;padding:56px 72px 40px;position:relative;overflow:hidden;cursor:pointer;border:1px solid var(--black)}
+.quotes-box::before{content:'"';position:absolute;top:-20px;left:48px;font-family:'Fraunces',serif;font-size:160px;line-height:1;color:var(--orange);opacity:.95;font-style:italic;font-weight:400;pointer-events:none}
+
+/* Slides stacked - height auto - only the active one takes height */
+.quote-slide{display:none;position:relative;z-index:2;padding-top:48px}
+.quote-slide.active{display:block;animation:quoteFade .5s ease}
+@keyframes quoteFade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+.quote-text{font-family:'Fraunces',serif;font-style:italic;font-weight:400;font-size:clamp(26px,3.4vw,40px);line-height:1.25;letter-spacing:-.015em;color:var(--white);max-width:900px;margin-bottom:32px}
+.quote-attribution{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap}
+.quote-author{display:flex;flex-direction:column;gap:4px}
+.quote-author-name{font-family:var(--sans);font-size:16px;font-weight:600;color:var(--white);letter-spacing:-.01em}
+.quote-author-meta{font-family:var(--mono);font-size:11px;color:var(--gray-400);letter-spacing:.5px}
+.quote-progress{display:flex;gap:6px;align-items:center}
+.quote-dot{width:24px;height:3px;background:rgba(255,255,255,.25);transition:background .3s}
+.quote-dot.active{background:var(--orange)}
+.quote-dot.past{background:rgba(255,255,255,.5)}
+
+.quotes-hint{font-family:var(--mono);font-size:10px;color:var(--gray-400);letter-spacing:.5px;margin-top:16px;text-align:center;opacity:.7}
+
+@media(max-width:768px){
+  .quotes-section{padding:40px 20px}
+  .quotes-box{padding:36px 28px 28px}
+  .quotes-box::before{font-size:100px;top:-10px;left:20px}
+  .quote-slide{padding-top:32px}
+  .quote-text{font-size:20px;margin-bottom:24px}
+  .quote-attribution{flex-direction:column;align-items:flex-start;gap:14px}
+}
+</style>
+<style>
+/* ═══ MOBILE NAV (HAMBURGER) ═══ */
+.nav-burger{display:none;width:40px;height:40px;border:none;background:transparent;cursor:pointer;padding:0;position:relative;z-index:110}
+.nav-burger span{display:block;width:22px;height:1.5px;background:var(--black);position:absolute;left:9px;transition:transform .3s ease,opacity .2s ease,top .3s ease}
+.nav-burger span:nth-child(1){top:14px}
+.nav-burger span:nth-child(2){top:20px}
+.nav-burger span:nth-child(3){top:26px}
+.nav-burger.open span:nth-child(1){top:20px;transform:rotate(45deg)}
+.nav-burger.open span:nth-child(2){opacity:0}
+.nav-burger.open span:nth-child(3){top:20px;transform:rotate(-45deg)}
+
+.nav-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:var(--cream);z-index:105;padding:80px 24px 40px;flex-direction:column;justify-content:space-between}
+.nav-overlay.open{display:flex;animation:overlayIn .28s cubic-bezier(.2,.9,.3,1)}
+@keyframes overlayIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+
+.nav-overlay-links{list-style:none;display:flex;flex-direction:column;gap:0;padding:0;margin-top:20px}
+.nav-overlay-links li{border-top:1px solid var(--gray-200)}
+.nav-overlay-links li:last-child{border-bottom:1px solid var(--gray-200)}
+.nav-overlay-links a{display:flex;justify-content:space-between;align-items:center;padding:22px 4px;font-size:28px;font-weight:700;letter-spacing:-.02em;color:var(--black);text-decoration:none;font-family:var(--sans)}
+.nav-overlay-links a.active{color:var(--orange)}
+.nav-overlay-links a::after{content:'→';font-size:20px;color:var(--gray-400);font-weight:400}
+.nav-overlay-links a.active::after{color:var(--orange)}
+.nav-overlay-links .nav-num{font-family:var(--mono);font-size:11px;color:var(--gray-400);letter-spacing:1px;text-transform:uppercase;font-weight:500;margin-right:12px;display:inline-block;min-width:28px}
+
+.nav-overlay-footer{font-family:var(--mono);font-size:10px;color:var(--gray-400);letter-spacing:.5px;text-transform:uppercase;display:flex;justify-content:space-between;align-items:center}
+
+@media(max-width:768px){
+  .nav-links{display:none !important}
+  .nav-burger{display:block}
+  .nav-inner{padding:14px 20px}
+}
+</style>
+</head>
+<body>
+<!-- PROTECTION TOAST -->
+<div class="protect-toast" id="protect-toast" role="alert" aria-live="polite">
+  <div class="protect-toast-icon">!</div>
+  <div>
+    <div class="protect-toast-text">Vietato sbirciare</div>
+    <div class="protect-toast-sub">© Federico Barcella</div>
+  </div>
+</div>
+
+<!-- ATMOSPHERIC BACKGROUND -->
+<div class="aura" aria-hidden="true">
+  <div class="aura-glow aura-glow-1"></div>
+  <div class="aura-glow aura-glow-2"></div>
+  <div class="aura-glow aura-glow-3"></div>
+</div>
+
+
+<nav class="nav-top">
+  <div class="nav-inner">
+    <a href="index.html" class="logo"><span class="logo-dot"></span>Filosofia</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="timeline.html">Timeline</a></li>
+      <li><a href="concetti.html">Concetti</a></li>
+      <li><a href="domande.html" class="active">Domande</a></li>
+      <li><a href="dialoghi.html">Dialoghi</a></li>
+    </ul>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-meta reveal">
+    <span class="hero-meta-dot"></span>
+    <span>Capitolo 03</span>
+    <span>/</span>
+    <span>Domande</span>
+  </div>
+  <h1 class="reveal">Una domanda.<br>Più <em>filosofi.</em></h1>
+  <p class="hero-desc reveal delay-1">Scegli una grande questione e confronta direttamente le risposte dei pensatori che se ne sono occupati. Non un catalogo, ma un dibattito. Ogni posizione è sintetica, leggibile, diretta.</p>
+</section>
+
+<section class="q-selector">
+  <div class="section-label"><span class="section-num">01</span> Scegli una domanda</div>
+  <div class="q-grid" id="q-grid"></div>
+</section>
+
+<section class="answers" id="answers"></section>
+
+<section class="quotes-section">
+  <div class="quotes-header">
+    <span class="quotes-header-num">P03</span>
+    <span>Parole · citazioni celebri</span>
+  </div>
+  <div class="quotes-box" id="quotes-box-domande">
+    <!-- populated by JS -->
+  </div>
+  <div class="quotes-hint">Le citazioni ruotano automaticamente · Clicca la card per cambiare</div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo"><span class="logo-dot"></span>Filosofia</div>
+    <div class="footer-text">Schema di apprendimento &mdash; in aggiornamento continuo</div>
+  </div>
+</footer>
+
+<script>
+var QUESTIONS=[
+  {
+    id:'felicita',
+    label:'Cos\'è la felicità?',
+    meta:'4 posizioni',
+    intro:'Gli antichi concordano che la felicità è il fine dell\'uomo. Ma cosa sia, nessuno lo dice allo stesso modo. È quiete? È dovere? È virtù attiva? È un\'illusione da superare?',
+    positions:[
+      {label:'Felicità come virtù attiva',phil:'Aristotele — ~384–322 a.C.',quote:'"La felicità è un\'attività dell\'anima secondo virtù."',content:'La felicità (eudaimonia) non è uno stato emotivo né un piacere: è l\'attività eccellente dell\'anima razionale, esercitata nel corso di una vita intera. Chi è felice fa bene ciò che l\'uomo è chiamato a fare: ragionare, scegliere, vivere in comunità. Non basta sentirsi bene un giorno — una rondine non fa primavera.'},
+      {label:'Felicità come quiete',phil:'Epicuro — ~341–270 a.C.',quote:'"Il piacere è principio e fine della vita beata."',content:'Ma attenzione a cosa Epicuro chiama "piacere": non l\'eccesso né la ricerca di stimoli, bensì l\'assenza di dolore nel corpo (aponia) e di turbamento nell\'anima (atarassia). Desideri pochi e naturali, amicizia, filosofia. Più togli, più sei libero dalla paura degli dèi e della morte.'},
+      {label:'Felicità come apatheia',phil:'Zenone, Stoici — ~334–262 a.C.',quote:'"Solo la virtù è bene."',content:'Salute, ricchezza, fama non sono beni: sono indifferenti. Ciò che conta è vivere secondo ragione e natura, padroni dei propri giudizi. La felicità non dipende da ciò che ci capita, ma da come lo interpretiamo. Distingui ciò che è in tuo potere da ciò che non lo è.'},
+      {label:'Felicità è un\'illusione',phil:'Schopenhauer — 1788–1860',content:'La vita oscilla tra il dolore del desiderio insoddisfatto e la noia quando è soddisfatto. Non c\'è via d\'uscita stabile: chi crede alla felicità non ha capito la struttura della vita. Al massimo, brevi liberazioni: l\'arte (soprattutto la musica), la compassione, l\'ascesi. Ma la felicità come stato continuo è un inganno.'}
+    ]
+  },
+  {
+    id:'liberta',
+    label:'Siamo liberi di scegliere?',
+    meta:'4 posizioni',
+    intro:'Nessuna domanda divide più radicalmente i filosofi. Per alcuni la libertà è illusione dovuta alla nostra ignoranza delle cause. Per altri è il fatto più fondamentale dell\'esistenza umana.',
+    positions:[
+      {label:'La libertà è illusione',phil:'Spinoza — 1632–1677',quote:'"Gli uomini si credono liberi perché ignorano le cause che li determinano."',content:'Tutto avviene secondo leggi necessarie della Natura (che è Dio). Il libero arbitrio è un\'illusione: sentiamo di scegliere ma siamo spinti da cause di cui non siamo consapevoli. La vera libertà non è scegliere, ma comprendere questa necessità — e questo aumenta la nostra potenza d\'agire.'},
+      {label:'Libertà come autonomia razionale',phil:'Kant — 1724–1804',content:'Siamo liberi non nel senso di agire contro le leggi della natura, ma di darci da soli la legge morale. Quando agisco per dovere razionale — non per impulso né per vantaggio — sono autonomo, autore di me stesso. La libertà è l\'autonomia della ragione pratica.'},
+      {label:'Libertà radicale',phil:'Sartre — 1905–1980',quote:'"Siamo condannati ad essere liberi."',content:'Non c\'è natura umana che ci preceda, nessun Dio che ci dia uno scopo. Siamo gettati nel mondo e costretti a scegliere chi essere, continuamente. Questa libertà è insopportabile: per fuggirla ci identifichiamo con ruoli fissi (il cameriere, il padre, l\'italiano). Sartre chiama questo "malafede" — la menzogna fondamentale.'},
+      {label:'Libertà come angoscia',phil:'Kierkegaard — 1813–1855',quote:'"L\'angoscia è la vertigine della libertà."',content:'Guardare l\'infinità delle possibilità davanti a sé produce un\'angoscia abissale. Scegliere chiude porte per sempre. La libertà non è leggera: è il peso più grande. Solo il salto della fede può riscattarla — ma è un paradosso irrazionale.'}
+    ]
+  },
+  {
+    id:'dio',
+    label:'Dio esiste?',
+    meta:'4 posizioni',
+    intro:'Dalle cinque vie tomiste alle provocazioni di Nietzsche, passando per il panteismo di Spinoza. La domanda non è solo teologica — è la domanda sul senso, sul fondamento, sull\'assoluto.',
+    positions:[
+      {label:'Dio si dimostra con la ragione',phil:"Tommaso d'Aquino — 1225–1274",content:'Cinque vie razionali conducono all\'esistenza di Dio: il motore immobile (qualcosa deve muovere il tutto), la causa prima (non si può risalire all\'infinito), l\'essere necessario (da qualcosa di contingente non viene nulla), la perfezione massima (i gradi di bontà implicano un vertice), la finalità cosmica (l\'ordine implica un ordinatore). Fede e ragione si confermano a vicenda.'},
+      {label:'Dio è la Natura stessa',phil:'Spinoza — 1632–1677',quote:'"Deus sive Natura."',content:'Dio non è un creatore personale separato dal mondo: Dio è la sostanza unica e infinita, identica alla Natura. Tutto ciò che esiste è modo di Dio, espressione necessaria del suo essere. Un panteismo rigoroso che scandalizzò sia cristiani che ebrei — Spinoza fu scomunicato.'},
+      {label:'Dio è morto',phil:'Nietzsche — 1844–1900',quote:'"Dio è morto. E noi l\'abbiamo ucciso."',content:'Non un\'affermazione atea banale: una diagnosi storica. I valori assoluti che reggevano la cultura occidentale — verità, bene, bellezza — si fondavano su Dio. Ora che Dio non è più credibile, quei valori franano con lui. La scelta: sprofondare nel nichilismo o creare valori nuovi. L\'Oltreuomo è chi sceglie la seconda via.'},
+      {label:'Il salto irrazionale',phil:'Kierkegaard — 1813–1855',content:'Dio non si dimostra: si incontra nel paradosso. La fede non è continuazione della ragione ma sua rottura. Abramo che alza il coltello su Isacco è l\'archetipo: eticamente inaccettabile, religiosamente supremo. La fede esige il salto nel non-senso — non è ragionevole, e proprio per questo è vera.'}
+    ]
+  },
+  {
+    id:'conoscenza',
+    label:'Come conosciamo?',
+    meta:'4 posizioni',
+    intro:'I razionalisti partono dalla mente, gli empiristi dai sensi. Kant risolve la disputa spostando il problema: la conoscenza nasce dall\'incontro tra ciò che ci arriva e le strutture che abbiamo.',
+    positions:[
+      {label:'Dalla ragione pura',phil:'Descartes — 1596–1650',quote:'"Cogito ergo sum."',content:'I sensi ingannano, il mondo potrebbe essere un sogno, un genio maligno potrebbe ingannarmi su tutto. Ma non può ingannarmi sul fatto che sto pensando. Il cogito è il punto zero della conoscenza: da qui, con la sola ragione, ricostruisco tutto il resto. Alcune idee (Dio, estensione) sono innate, non vengono dall\'esperienza.'},
+      {label:'Solo dall\'esperienza',phil:'Locke, Hume — XVII-XVIII sec.',content:'La mente alla nascita è tabula rasa. Tutto ciò che sappiamo viene dai sensi — nulla è nell\'intelletto che non sia prima stato nei sensi. Hume porta l\'empirismo alle estreme conseguenze: anche la causalità non si vede, è solo un\'abitudine mentale. E il sé? Nemmeno quello esiste come sostanza: è un fascio di percezioni.'},
+      {label:'Dall\'incontro tra mente e mondo',phil:'Kant — 1724–1804',content:'Gli empiristi hanno ragione: senza esperienza non c\'è conoscenza. I razionalisti hanno ragione: senza strutture mentali l\'esperienza è caos. La soluzione: conosciamo i fenomeni — le cose come appaiono a una mente strutturata con spazio, tempo e categorie. La "cosa in sé" ci resta inaccessibile per sempre.'},
+      {label:'Il linguaggio come limite',phil:'Wittgenstein — 1889–1951',quote:'"I limiti del mio linguaggio sono i limiti del mio mondo."',content:'Non possiamo pensare fuori dal linguaggio. Molti problemi filosofici tradizionali (Dio, l\'essere, l\'anima) nascono da usi scorretti del linguaggio: sembrano domande, sono fraintendimenti. La filosofia non risolve, dissolve: mostra come il linguaggio ci confonde.'}
+    ]
+  },
+  {
+    id:'vivere',
+    label:'Come si deve vivere?',
+    meta:'4 posizioni',
+    intro:'La domanda più pratica della filosofia. Ogni scuola offre una risposta diversa — ma tutte partono dal riconoscere che la vita umana richiede una direzione scelta consapevolmente.',
+    positions:[
+      {label:'Con virtù e ragione',phil:'Socrate, Aristotele — IV sec. a.C.',content:'Socrate: chi conosce il bene non può fare il male. Vivere bene significa conoscere sé stessi e curare la propria anima, non il corpo o le ricchezze. Aristotele aggiunge: la virtù non è solo conoscenza, è abito acquisito con la pratica. Il giusto mezzo tra eccessi. Una vita buona è un esercizio quotidiano.'},
+      {label:'Dominando le passioni',phil:'Stoici — III sec. a.C.',quote:'"Non è ciò che ti accade che ti disturba, ma il tuo giudizio su di esso."',content:'Distingui rigorosamente tra ciò che dipende da te (giudizi, scelte, desideri) e ciò che non dipende da te (salute, ricchezza, fama, morte). Preoccupati solo del primo gruppo. Accogli ciò che accade come parte del logos cosmico. Libertà interiore anche in catene.'},
+      {label:'Scegliendo autenticamente',phil:'Kierkegaard, Heidegger — XIX-XX sec.',content:'La maggior parte degli uomini vive in modo inautentico: nei ruoli, nelle opinioni del "si dice", evitando di guardare in faccia la propria finitezza. Vivere bene significa assumere la propria morte, scegliere davvero, uscire dall\'anonimato. Non c\'è ricetta: c\'è solo la decisione personale, ripetuta.'},
+      {label:'Creando valori nuovi',phil:'Nietzsche — 1844–1900',quote:'"Diventa ciò che sei."',content:'Il cristianesimo e la morale comune sono morali del gregge: difendono i deboli castrando i forti. Chi vive davvero rovescia le tavole, crea valori propri, dice sì alla vita anche nei suoi aspetti tragici. Test decisivo: vorresti rivivere la tua vita infinite volte, esattamente così? Se sì, stai vivendo bene.'}
+    ]
+  },
+  {
+    id:'realta',
+    label:'Cos\'è reale?',
+    meta:'4 posizioni',
+    intro:'La domanda metafisica per eccellenza. Esiste una realtà oltre le apparenze? È mentale o materiale? Una sostanza o molte? Fissa o in divenire?',
+    positions:[
+      {label:'L\'Essere immobile',phil:'Parmenide — ~515–450 a.C.',quote:'"L\'essere è, il non-essere non è."',content:'Il cambiamento che vediamo è illusione dei sensi. Logicamente, solo l\'essere esiste, ed è uno, eterno, immobile. Il divenire implicherebbe che qualcosa passi dal non-essere all\'essere, ma il non-essere non è — quindi è impossibile. La ragione contraddice radicalmente l\'esperienza.'},
+      {label:'Il puro divenire',phil:'Eraclito — ~535–475 a.C.',quote:'"Non si può scendere due volte nello stesso fiume."',content:'Esattamente l\'opposto. Niente è permanente: tutto scorre continuamente. Ciò che chiamiamo "cose" sono solo momenti fugaci in un flusso perenne. Ma questo flusso non è caos: è governato dal Logos, ragione cosmica nascosta. Gli opposti si trasformano l\'uno nell\'altro.'},
+      {label:'Le Idee eterne',phil:'Platone — ~428–348 a.C.',content:'Il mondo sensibile (mutevole, corruttibile, imperfetto) non è davvero reale. Esiste solo come copia imperfetta delle Idee: Forme eterne, immutabili, perfette. Esiste l\'Idea di cavallo, non i cavalli singoli che invecchiano e muoiono. La conoscenza non è percezione ma reminiscenza dell\'anima che ha già visto le Idee.'},
+      {label:'La sostanza concreta',phil:'Aristotele — ~384–322 a.C.',content:'Rifiuta il suo maestro: le Idee non esistono separate dalle cose. Reale è la sostanza concreta — questo cavallo qui, questo uomo qui — fatta di materia e forma inseparabili. La realtà non è statica: è potenza che si attualizza, tendenza di ogni essere verso la propria piena realizzazione.'}
+    ]
+  }
+];
+
+var currentQ=QUESTIONS[0].id;
+
+function buildQuestions(){
+  var grid=document.getElementById('q-grid');
+  grid.innerHTML='';
+  QUESTIONS.forEach(function(q,idx){
+    var btn=document.createElement('button');
+    btn.className='q-btn'+(currentQ===q.id?' active':'');
+    var num=String(idx+1).padStart(2,'0');
+    btn.innerHTML='<div class="q-num">Domanda — '+num+'</div><div class="q-label">'+q.label+'</div><div class="q-meta">'+q.meta+'</div>';
+    btn.addEventListener('click',function(){
+      currentQ=q.id;
+      buildQuestions();
+      renderAnswers();
+      document.getElementById('answers').scrollIntoView({behavior:'smooth',block:'start'});
+    });
+    grid.appendChild(btn);
+  });
+}
+
+function renderAnswers(){
+  var q=QUESTIONS.find(function(x){return x.id===currentQ});
+  var qIdx=QUESTIONS.findIndex(function(x){return x.id===currentQ});
+  var num=String(qIdx+1).padStart(2,'0');
+  var answers=document.getElementById('answers');
+  var positions=q.positions.map(function(p,idx){
+    var pNum=String(idx+1).padStart(2,'0');
+    var quoteHtml=p.quote?'<div class="position-quote">'+p.quote+'</div>':'';
+    return '<div class="position"><div class="position-side"><div class="position-num">Posizione '+pNum+'</div><div class="position-label">'+p.label+'</div><div class="position-phil">'+p.phil+'</div></div><div class="position-content">'+quoteHtml+'<p>'+p.content+'</p></div></div>';
+  }).join('');
+  answers.innerHTML='<div class="answer-header"><div class="answer-label">Domanda — '+num+'</div><h2 class="answer-q">'+q.label.replace('?','<em>?</em>')+'</h2><p class="answer-intro">'+q.intro+'</p></div><div class="positions">'+positions+'</div>';
+}
+
+buildQuestions();
+renderAnswers();
+</script>
+<script>
+(function() {
+  var QUOTES = [
+    {text:"Una vita senza ricerca non è degna di essere vissuta.", author:"Socrate", meta:"~470–399 a.C. · classica"},
+    {text:"So di non sapere.", author:"Socrate", meta:"~470–399 a.C. · classica"},
+    {text:"L'uomo è misura di tutte le cose.", author:"Protagora", meta:"V sec. a.C. · sofisti"},
+    {text:"Non si può scendere due volte nello stesso fiume.", author:"Eraclito", meta:"~535–475 a.C. · presocratica"},
+    {text:"Tutto scorre.", author:"Eraclito", meta:"~535–475 a.C. · presocratica"},
+    {text:"L'essere è, il non-essere non è.", author:"Parmenide", meta:"~515–450 a.C. · presocratica"},
+    {text:"La felicità è un'attività dell'anima secondo virtù.", author:"Aristotele", meta:"~384–322 a.C. · classica"},
+    {text:"L'uomo è per natura un animale politico.", author:"Aristotele", meta:"~384–322 a.C. · classica"},
+    {text:"Non temere gli dèi, non temere la morte: il bene è facile a trovarsi, il male facile a sopportarsi.", author:"Epicuro", meta:"~341–270 a.C. · ellenistica"},
+    {text:"Abbi il coraggio di servirti della tua propria intelligenza.", author:"Kant", meta:"1724–1804 · idealismo"},
+    {text:"Agisci solo secondo quella massima che puoi volere divenga legge universale.", author:"Kant", meta:"1724–1804 · idealismo"},
+    {text:"Penso, dunque sono.", author:"Descartes", meta:"1596–1650 · razionalismo"},
+    {text:"La filosofia è scritta in questo grandissimo libro, l'universo, in caratteri matematici.", author:"Galileo", meta:"1564–1642 · rivoluzione scientifica"},
+    {text:"Dio è morto. E noi l'abbiamo ucciso.", author:"Nietzsche", meta:"1844–1900 · esistenzialismo"},
+    {text:"Ciò che non mi uccide mi rende più forte.", author:"Nietzsche", meta:"1844–1900 · esistenzialismo"},
+    {text:"Diventa ciò che sei.", author:"Nietzsche", meta:"1844–1900 · esistenzialismo"},
+    {text:"Siamo condannati ad essere liberi.", author:"Sartre", meta:"1905–1980 · esistenzialismo"},
+    {text:"L'inferno sono gli altri.", author:"Sartre", meta:"1905–1980 · esistenzialismo"},
+    {text:"I limiti del mio linguaggio sono i limiti del mio mondo.", author:"Wittgenstein", meta:"1889–1951 · contemporanea"},
+    {text:"Di ciò di cui non si può parlare, si deve tacere.", author:"Wittgenstein", meta:"1889–1951 · contemporanea"},
+    {text:"La vita non esaminata non vale la pena di essere vissuta.", author:"Socrate", meta:"~470–399 a.C. · classica"},
+    {text:"L'angoscia è la vertigine della libertà.", author:"Kierkegaard", meta:"1813–1855 · esistenzialismo"},
+    {text:"Chi non ricorda il passato è condannato a ripeterlo.", author:"Santayana", meta:"1863–1952 · pragmatismo"},
+    {text:"Deus sive Natura.", author:"Spinoza", meta:"1632–1677 · razionalismo"},
+    {text:"Non è ciò che ti accade a disturbarti, ma il tuo giudizio su di esso.", author:"Epitteto", meta:"~50–135 d.C. · stoicismo"},
+  ];
+
+  // Shuffle for variety
+  function shuffle(arr){ var copy = arr.slice(); for(var i=copy.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=copy[i]; copy[i]=copy[j]; copy[j]=t; } return copy; }
+
+  var selected = shuffle(QUOTES).slice(0, 6); // show 6 random quotes per page load
+  var box = document.getElementById('quotes-box-domande');
+  if (!box) return;
+
+  // Build slides
+  var slidesHtml = '';
+  var dotsHtml = '';
+  selected.forEach(function(q, i) {
+    slidesHtml += '<div class="quote-slide' + (i === 0 ? ' active' : '') + '" data-idx="' + i + '">' +
+      '<div class="quote-text">' + q.text + '</div>' +
+      '<div class="quote-attribution">' +
+        '<div class="quote-author">' +
+          '<div class="quote-author-name">' + q.author + '</div>' +
+          '<div class="quote-author-meta">' + q.meta + '</div>' +
+        '</div>' +
+        '<div class="quote-progress" data-progress>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  });
+
+  // Progress dots (same for every slide, but we'll update them)
+  function buildDots(currentIdx) {
+    var dots = '';
+    for (var i = 0; i < selected.length; i++) {
+      var cls = 'quote-dot';
+      if (i === currentIdx) cls += ' active';
+      else if (i < currentIdx) cls += ' past';
+      dots += '<div class="' + cls + '"></div>';
+    }
+    return dots;
+  }
+
+  box.innerHTML = slidesHtml;
+
+  var current = 0;
+  var interval;
+
+  function show(idx) {
+    var slides = box.querySelectorAll('.quote-slide');
+    slides.forEach(function(s, i) {
+      s.classList.toggle('active', i === idx);
+    });
+    // Update dots
+    var activeSlide = slides[idx];
+    var progressEl = activeSlide.querySelector('[data-progress]');
+    if (progressEl) progressEl.innerHTML = buildDots(idx);
+    current = idx;
+  }
+
+  function next() {
+    show((current + 1) % selected.length);
+  }
+
+  function startAutoplay() {
+    stopAutoplay();
+    interval = setInterval(next, 7000);
+  }
+  function stopAutoplay() {
+    if (interval) { clearInterval(interval); interval = null; }
+  }
+
+  box.addEventListener('click', function() {
+    next();
+    startAutoplay(); // reset timer
+  });
+  box.addEventListener('mouseenter', stopAutoplay);
+  box.addEventListener('mouseleave', startAutoplay);
+
+  // Init
+  show(0);
+  startAutoplay();
+})();
+</script>
+
+<script>
+(function(){
+  var burger = document.getElementById('nav-burger');
+  var overlay = document.getElementById('nav-overlay');
+  if (!burger || !overlay) return;
+  function toggle(){
+    var isOpen = overlay.classList.contains('open');
+    if(isOpen){
+      overlay.classList.remove('open');
+      burger.classList.remove('open');
+      document.body.style.overflow = '';
+    } else {
+      overlay.classList.add('open');
+      burger.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+  }
+  burger.addEventListener('click', toggle);
+  // Close on any link click
+  overlay.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', function(){
+      overlay.classList.remove('open');
+      burger.classList.remove('open');
+      document.body.style.overflow = '';
+    });
+  });
+})();
+</script>
+
+<script>
+// Scroll reveal animations
+(function(){
+  if (!('IntersectionObserver' in window)) {
+    document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in')});
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if (entry.isIntersecting){
+        entry.target.classList.add('in');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -50px 0px' });
+  document.querySelectorAll('.reveal').forEach(function(el){ observer.observe(el); });
+})();
+
+// Aura mouse follow (desktop only, subtle)
+(function(){
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (window.innerWidth < 900) return;
+  var g1 = document.querySelector('.aura-glow-1');
+  var g2 = document.querySelector('.aura-glow-2');
+  if (!g1 || !g2) return;
+  var mx=0,my=0,cx=0,cy=0;
+  document.addEventListener('mousemove', function(e){
+    mx = (e.clientX / window.innerWidth - 0.5) * 40;
+    my = (e.clientY / window.innerHeight - 0.5) * 40;
+  });
+  function anim(){
+    cx += (mx - cx) * 0.03;
+    cy += (my - cy) * 0.03;
+    g1.style.transform = 'translate(' + cx + 'px,' + cy + 'px)';
+    g2.style.transform = 'translate(' + (-cx*.7) + 'px,' + (-cy*.7) + 'px)';
+    requestAnimationFrame(anim);
+  }
+  anim();
+})();
+</script>
+
+
+<script>
+// ═══ PROTECTION LAYER ═══
+(function(){
+  var toast = document.getElementById('protect-toast');
+  var timer = null;
+  function showToast(){
+    if (!toast) return;
+    toast.classList.add('show');
+    clearTimeout(timer);
+    timer = setTimeout(function(){ toast.classList.remove('show'); }, 1800);
+  }
+
+  // Block right click
+  document.addEventListener('contextmenu', function(e){
+    e.preventDefault();
+    showToast();
+  });
+
+  // Block F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C, Ctrl+U
+  document.addEventListener('keydown', function(e){
+    var key = e.key || '';
+    var blocked = false;
+    if (key === 'F12') blocked = true;
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey && (key === 'I' || key === 'i' || key === 'J' || key === 'j' || key === 'C' || key === 'c')) blocked = true;
+    if ((e.ctrlKey || e.metaKey) && (key === 'U' || key === 'u' || key === 'S' || key === 's')) blocked = true;
+    if (blocked) {
+      e.preventDefault();
+      showToast();
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

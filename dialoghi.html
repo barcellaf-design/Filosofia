@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Filosofia — Dialoghi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --orange:#FF6B35;
+  --orange-soft:rgba(255,107,53,.15);
+  --orange-mist:rgba(255,107,53,.08);
+  --black:#0A0A0A;
+  --white:#FFFFFF;
+  --cream:#FAF7F0;
+  --cream-warm:#F2EEDF;
+  --cream-deeper:#E8E3D0;
+  --gray-100:#F0EDE5;
+  --gray-200:#E0DDD0;
+  --gray-300:#C9C6B8;
+  --gray-400:#8F8E82;
+  --gray-600:#55544A;
+  --mono:'JetBrains Mono',monospace;
+  --sans:'Inter',-apple-system,sans-serif;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--cream);color:var(--black);font-weight:400;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden;position:relative}
+
+.nav-top{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(250,249,246,.88);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--gray-200)}
+.nav-inner{max-width:1400px;margin:0 auto;padding:18px 40px;display:flex;justify-content:space-between;align-items:center}
+.logo{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.5px;text-transform:uppercase;color:var(--black);text-decoration:none;transition:opacity .2s;cursor:pointer}
+.logo:hover{opacity:.6}
+.logo-dot{display:inline-block;width:7px;height:7px;background:var(--orange);border-radius:50%;margin-right:8px;vertical-align:middle}
+.nav-links{display:flex;gap:28px;list-style:none}
+.nav-links a{color:var(--gray-600);text-decoration:none;font-size:13px;font-weight:500;transition:color .2s;font-family:var(--mono);letter-spacing:.3px}
+.nav-links a:hover{color:var(--black)}
+.nav-links a.active{color:var(--black);position:relative}
+.nav-links a.active::after{content:'';position:absolute;bottom:-24px;left:0;right:0;height:2px;background:var(--orange)}
+
+.hero{padding:140px 40px 60px;max-width:1400px;margin:0 auto}
+.hero-meta{font-family:var(--mono);font-size:11px;color:var(--gray-400);letter-spacing:1px;text-transform:uppercase;margin-bottom:40px;display:flex;gap:24px;align-items:center}
+.hero-meta-dot{width:6px;height:6px;background:var(--orange);border-radius:50%}
+.hero h1{font-size:clamp(52px,9vw,128px);font-weight:800;line-height:.95;letter-spacing:-.04em;margin-bottom:40px;max-width:1200px}
+.hero h1 em{font-style:italic;font-weight:400;color:var(--orange)}
+.hero-desc{font-size:20px;line-height:1.5;max-width:680px;color:var(--gray-600);margin-bottom:40px}
+
+/* LEGENDA */
+.legend-section{padding:20px 40px 40px;max-width:1400px;margin:0 auto}
+.legend-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1px;background:var(--gray-200);border:1px solid var(--gray-200)}
+.legend-item{background:var(--cream);padding:20px 22px;display:flex;flex-direction:column;gap:8px}
+.legend-line-preview{height:3px;width:60px;margin-bottom:4px;position:relative}
+.legend-label{font-size:14px;font-weight:600;letter-spacing:-.01em}
+.legend-desc{font-size:12px;color:var(--gray-600);line-height:1.4;font-family:var(--mono)}
+
+/* MAPPA */
+.map-section{padding:40px 40px 60px;max-width:1400px;margin:0 auto}
+.section-label{font-family:var(--mono);font-size:11px;color:var(--gray-400);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:12px}
+.section-num{color:var(--orange);font-weight:500}
+.map-title{font-size:40px;font-weight:700;letter-spacing:-.02em;margin-bottom:12px}
+.map-subtitle{font-size:15px;color:var(--gray-600);margin-bottom:32px;max-width:640px}
+.map-hint{font-family:var(--mono);font-size:11px;color:var(--gray-400);letter-spacing:.5px;margin-bottom:16px;display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+.map-hint strong{color:var(--black);font-weight:500}
+
+.map-container{background:var(--white);border:1px solid var(--gray-200);overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;position:relative}
+.map-scroll-indicator{position:absolute;top:12px;right:12px;font-family:var(--mono);font-size:10px;color:var(--gray-400);background:var(--cream);padding:4px 10px;border-radius:100px;letter-spacing:.5px;z-index:5;pointer-events:none}
+
+svg.map-svg{display:block;min-width:1400px}
+
+.node-group{cursor:pointer;transition:opacity .25s}
+.node-group.dimmed{opacity:.15}
+.node-circle{fill:var(--white);stroke:var(--black);stroke-width:1.5;transition:fill .2s,stroke .2s,r .2s}
+.node-group:hover .node-circle{fill:var(--black);stroke:var(--black);r:12}
+.node-group.selected .node-circle{fill:var(--orange);stroke:var(--orange);r:13}
+.node-label{font-family:var(--sans);font-size:12px;font-weight:600;fill:var(--black);letter-spacing:-.01em;pointer-events:none;transition:fill .2s}
+.node-group.selected .node-label{fill:var(--orange)}
+.node-date{font-family:var(--mono);font-size:9px;fill:var(--gray-400);letter-spacing:.3px;pointer-events:none}
+
+.edge{fill:none;stroke:var(--gray-400);stroke-width:1.25;opacity:.35;transition:opacity .25s,stroke-width .2s}
+.edge.active{opacity:1;stroke-width:2}
+.edge.dimmed{opacity:.05}
+.edge.inherit{stroke:var(--black)}
+.edge.critic{stroke:var(--orange);stroke-dasharray:6 4}
+.edge.reply{stroke:var(--black);stroke-dasharray:2 3}
+.edge.influence{stroke:var(--gray-600);stroke-dasharray:1 5}
+
+.era-band{fill:var(--gray-100);opacity:.4}
+.era-label{font-family:var(--mono);font-size:10px;fill:var(--gray-400);letter-spacing:1.2px;text-transform:uppercase;font-weight:500}
+.era-divider{stroke:var(--gray-200);stroke-width:1;stroke-dasharray:2 4}
+
+/* STORIA SELEZIONATA */
+.story-section{padding:60px 40px 100px;max-width:1400px;margin:0 auto;min-height:400px}
+.story-empty{text-align:center;padding:80px 20px;color:var(--gray-400);font-family:var(--mono);font-size:13px;letter-spacing:.5px}
+.story-empty-arrow{font-size:24px;margin-bottom:16px;color:var(--orange)}
+
+.story-head{margin-bottom:48px;padding-bottom:32px;border-bottom:1px solid var(--gray-200)}
+.story-num{font-family:var(--mono);font-size:11px;color:var(--orange);letter-spacing:1.2px;margin-bottom:12px;text-transform:uppercase;font-weight:500}
+.story-name{font-size:clamp(48px,7vw,88px);font-weight:800;letter-spacing:-.04em;line-height:.95;margin-bottom:16px}
+.story-meta{font-family:var(--mono);font-size:12px;color:var(--gray-400);letter-spacing:.5px;display:flex;gap:16px;flex-wrap:wrap}
+.story-meta-dot{width:8px;height:8px;background:var(--orange);border-radius:50%;display:inline-block;margin-right:6px;vertical-align:middle}
+
+.relations-grid{display:grid;grid-template-columns:1fr;gap:1px;background:var(--gray-200);border:1px solid var(--gray-200)}
+.rel-block{background:var(--cream);padding:32px 36px;display:grid;grid-template-columns:180px 1fr;gap:40px;align-items:flex-start}
+.rel-side{display:flex;flex-direction:column;gap:6px}
+.rel-type-label{font-family:var(--mono);font-size:11px;letter-spacing:1px;text-transform:uppercase;font-weight:500;margin-bottom:4px}
+.rel-type-label.inherit{color:var(--black)}
+.rel-type-label.critic{color:var(--orange)}
+.rel-type-label.reply{color:var(--gray-600)}
+.rel-type-label.influence{color:var(--gray-400)}
+.rel-count{font-family:var(--mono);font-size:11px;color:var(--gray-400);letter-spacing:.3px}
+.rel-list{display:flex;flex-direction:column;gap:20px}
+.rel-item{padding-bottom:20px;border-bottom:1px solid var(--gray-200)}
+.rel-item:last-child{border-bottom:none;padding-bottom:0}
+.rel-phil-line{display:flex;align-items:baseline;gap:12px;margin-bottom:8px;flex-wrap:wrap}
+.rel-phil-name{font-size:20px;font-weight:700;letter-spacing:-.01em;cursor:pointer}
+.rel-phil-name:hover{color:var(--orange)}
+.rel-phil-date{font-family:var(--mono);font-size:11px;color:var(--gray-400)}
+.rel-desc{font-size:15px;line-height:1.6;color:var(--gray-600)}
+
+footer{border-top:1px solid var(--gray-200);padding:60px 40px 40px;text-align:center}
+.footer-inner{max-width:1400px;margin:0 auto}
+.footer-logo{font-family:var(--mono);font-size:14px;font-weight:500;letter-spacing:.5px;text-transform:uppercase;margin-bottom:16px}
+.footer-text{font-size:12px;color:var(--gray-400);font-family:var(--mono);letter-spacing:.5px}
+
+@media(max-width:768px){
+  .nav-inner{padding:14px 20px}
+  .nav-links{gap:14px;font-size:11px}
+  .hero{padding:100px 20px 40px}
+  .hero h1{font-size:44px}
+  .hero-desc{font-size:17px}
+  .legend-section,.map-section,.story-section{padding:30px 20px}
+  .rel-block{grid-template-columns:1fr;gap:16px;padding:24px}
+  .legend-grid{grid-template-columns:1fr 1fr}
+}
+
+/* ═══ ATMOSPHERIC GRADIENT LAYER (injected) ═══ */
+.aura{position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:0;overflow:hidden}
+.aura-glow{position:absolute;width:900px;height:900px;border-radius:50%;background:radial-gradient(circle at center,var(--orange-soft) 0%,var(--orange-mist) 30%,transparent 65%);filter:blur(40px);opacity:.85;transition:transform .6s cubic-bezier(.2,.9,.3,1);will-change:transform}
+.aura-glow-1{top:-200px;left:-200px;animation:auraFloat1 20s ease-in-out infinite}
+.aura-glow-2{top:30%;right:-300px;width:700px;height:700px;opacity:.6;animation:auraFloat2 25s ease-in-out infinite}
+.aura-glow-3{bottom:-200px;left:30%;width:800px;height:800px;opacity:.45;animation:auraFloat3 30s ease-in-out infinite}
+@keyframes auraFloat1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(80px,40px) scale(1.1)}}
+@keyframes auraFloat2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-60px,-30px) scale(.95)}}
+@keyframes auraFloat3{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-40px,-50px) scale(1.05)}}
+
+/* ═══ SCROLL REVEAL (injected) ═══ */
+.reveal{opacity:0;transform:translateY(40px);transition:opacity .9s cubic-bezier(.2,.9,.3,1),transform .9s cubic-bezier(.2,.9,.3,1)}
+.reveal.in{opacity:1;transform:translateY(0)}
+.reveal.delay-1{transition-delay:.1s}
+.reveal.delay-2{transition-delay:.2s}
+.reveal.delay-3{transition-delay:.3s}
+.reveal.delay-4{transition-delay:.4s}
+
+/* Ensure navigation stays above aura */
+.nav-top{z-index:100}
+main,section,article,footer,.nav-overlay{position:relative;z-index:2}
+
+@media(max-width:768px){
+  .aura-glow{filter:blur(60px);opacity:.5}
+}
+@media(prefers-reduced-motion:reduce){
+  .aura-glow{animation:none!important}
+  .reveal{opacity:1!important;transform:none!important}
+}
+
+
+/* ═══ SOFTENED CORNERS (injected) ═══ */
+.galaxy,.position,.rel-block,.q-btn,.card,.preview-card,.phil-card{border-radius:16px!important}
+.tag,.chip,.filter-chip,.tag-small{border-radius:100px!important}
+
+
+/* ═══ PROTECTION TOAST ═══ */
+.protect-toast{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.9);background:var(--black);color:var(--cream);padding:24px 32px;border-radius:16px;font-family:var(--sans);font-size:15px;font-weight:500;letter-spacing:-.01em;box-shadow:0 20px 60px -20px rgba(10,10,10,.4);z-index:9999;opacity:0;pointer-events:none;transition:opacity .25s ease,transform .25s cubic-bezier(.2,.9,.3,1);display:flex;align-items:center;gap:14px}
+.protect-toast.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.protect-toast-icon{width:24px;height:24px;background:var(--orange);border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--black);font-weight:700}
+.protect-toast-text{line-height:1.3}
+.protect-toast-sub{font-family:var(--mono);font-size:10px;color:var(--gray-400);letter-spacing:.5px;text-transform:uppercase;margin-top:4px}
+
+</style>
+<style>
+/* ═══ MOBILE NAV (HAMBURGER) ═══ */
+.nav-burger{display:none;width:40px;height:40px;border:none;background:transparent;cursor:pointer;padding:0;position:relative;z-index:110}
+.nav-burger span{display:block;width:22px;height:1.5px;background:var(--black);position:absolute;left:9px;transition:transform .3s ease,opacity .2s ease,top .3s ease}
+.nav-burger span:nth-child(1){top:14px}
+.nav-burger span:nth-child(2){top:20px}
+.nav-burger span:nth-child(3){top:26px}
+.nav-burger.open span:nth-child(1){top:20px;transform:rotate(45deg)}
+.nav-burger.open span:nth-child(2){opacity:0}
+.nav-burger.open span:nth-child(3){top:20px;transform:rotate(-45deg)}
+
+.nav-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:var(--cream);z-index:105;padding:80px 24px 40px;flex-direction:column;justify-content:space-between}
+.nav-overlay.open{display:flex;animation:overlayIn .28s cubic-bezier(.2,.9,.3,1)}
+@keyframes overlayIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+
+.nav-overlay-links{list-style:none;display:flex;flex-direction:column;gap:0;padding:0;margin-top:20px}
+.nav-overlay-links li{border-top:1px solid var(--gray-200)}
+.nav-overlay-links li:last-child{border-bottom:1px solid var(--gray-200)}
+.nav-overlay-links a{display:flex;justify-content:space-between;align-items:center;padding:22px 4px;font-size:28px;font-weight:700;letter-spacing:-.02em;color:var(--black);text-decoration:none;font-family:var(--sans)}
+.nav-overlay-links a.active{color:var(--orange)}
+.nav-overlay-links a::after{content:'→';font-size:20px;color:var(--gray-400);font-weight:400}
+.nav-overlay-links a.active::after{color:var(--orange)}
+.nav-overlay-links .nav-num{font-family:var(--mono);font-size:11px;color:var(--gray-400);letter-spacing:1px;text-transform:uppercase;font-weight:500;margin-right:12px;display:inline-block;min-width:28px}
+
+.nav-overlay-footer{font-family:var(--mono);font-size:10px;color:var(--gray-400);letter-spacing:.5px;text-transform:uppercase;display:flex;justify-content:space-between;align-items:center}
+
+@media(max-width:768px){
+  .nav-links{display:none !important}
+  .nav-burger{display:block}
+  .nav-inner{padding:14px 20px}
+}
+</style>
+</head>
+<body>
+<!-- PROTECTION TOAST -->
+<div class="protect-toast" id="protect-toast" role="alert" aria-live="polite">
+  <div class="protect-toast-icon">!</div>
+  <div>
+    <div class="protect-toast-text">Vietato sbirciare</div>
+    <div class="protect-toast-sub">© Federico Barcella</div>
+  </div>
+</div>
+
+<!-- ATMOSPHERIC BACKGROUND -->
+<div class="aura" aria-hidden="true">
+  <div class="aura-glow aura-glow-1"></div>
+  <div class="aura-glow aura-glow-2"></div>
+  <div class="aura-glow aura-glow-3"></div>
+</div>
+
+
+<nav class="nav-top">
+  <div class="nav-inner">
+    <a href="index.html" class="logo"><span class="logo-dot"></span>Filosofia</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="timeline.html">Timeline</a></li>
+      <li><a href="concetti.html">Concetti</a></li>
+      <li><a href="domande.html">Domande</a></li>
+      <li><a href="dialoghi.html" class="active">Dialoghi</a></li>
+    </ul>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-meta reveal">
+    <span class="hero-meta-dot"></span>
+    <span>Capitolo 04</span>
+    <span>/</span>
+    <span>Dialoghi</span>
+  </div>
+  <h1 class="reveal">La filosofia è una<br><em>conversazione.</em></h1>
+  <p class="hero-desc reveal delay-1">Nessun filosofo pensa da solo. Ciascuno eredita, critica, risponde a chi è venuto prima. Questa mappa mostra i legami più importanti. Clicca un nome per seguire la sua trama.</p>
+</section>
+
+<!-- LEGENDA -->
+<section class="legend-section">
+  <div class="section-label"><span class="section-num">01</span> Tipi di relazione</div>
+  <div class="legend-grid">
+    <div class="legend-item">
+      <svg width="60" height="12" viewBox="0 0 60 12"><line x1="0" y1="6" x2="60" y2="6" stroke="#0A0A0A" stroke-width="2"/></svg>
+      <div class="legend-label">Eredita</div>
+      <div class="legend-desc">Continua la linea del maestro</div>
+    </div>
+    <div class="legend-item">
+      <svg width="60" height="12" viewBox="0 0 60 12"><line x1="0" y1="6" x2="60" y2="6" stroke="#FF6B35" stroke-width="2" stroke-dasharray="6 4"/></svg>
+      <div class="legend-label">Critica</div>
+      <div class="legend-desc">Rifiuta, si oppone, rovescia</div>
+    </div>
+    <div class="legend-item">
+      <svg width="60" height="12" viewBox="0 0 60 12"><line x1="0" y1="6" x2="60" y2="6" stroke="#0A0A0A" stroke-width="2" stroke-dasharray="2 3"/></svg>
+      <div class="legend-label">Risponde</div>
+      <div class="legend-desc">Reagisce a un problema posto</div>
+    </div>
+    <div class="legend-item">
+      <svg width="60" height="12" viewBox="0 0 60 12"><line x1="0" y1="6" x2="60" y2="6" stroke="#55544E" stroke-width="2" stroke-dasharray="1 5"/></svg>
+      <div class="legend-label">Si ispira</div>
+      <div class="legend-desc">Influenza lontana, riscoperta</div>
+    </div>
+  </div>
+</section>
+
+<!-- MAPPA -->
+<section class="map-section">
+  <div class="section-label"><span class="section-num">02</span> La mappa</div>
+  <h2 class="map-title">2500 anni di conversazione.</h2>
+  <p class="map-subtitle">I filosofi sono disposti cronologicamente da sinistra (più antichi) a destra (più recenti). Le linee curve collegano chi parla con chi. Scorri la mappa orizzontalmente per esplorare.</p>
+  <div class="map-hint">
+    <span><strong>Click</strong> su un nome per seguirlo</span>
+    <span>·</span>
+    <span><strong>Scroll orizzontale</strong> per esplorare</span>
+  </div>
+  <div class="map-container" id="map-container">
+    <div class="map-scroll-indicator" id="scroll-hint">← scorri →</div>
+    <svg class="map-svg" id="map-svg"></svg>
+  </div>
+</section>
+
+<!-- STORIA DEL FILOSOFO SELEZIONATO -->
+<section class="story-section" id="story">
+  <div class="story-empty">
+    <div class="story-empty-arrow">↑</div>
+    <div>Clicca un filosofo sulla mappa per vedere<br>con chi dialoga, chi eredita, chi critica.</div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo"><span class="logo-dot"></span>Filosofia</div>
+    <div class="footer-text">Schema di apprendimento — in aggiornamento continuo</div>
+  </div>
+</footer>
+
+<script>
+// ═══ FILOSOFI (id, nome, anno centrale per layout, data visualizzata, era) ═══
+var PHILS = {
+  0:  {name:'Talete',        year:-585, date:'~580 a.C.', era:'Antica'},
+  1:  {name:'Pitagora',      year:-530, date:'~530 a.C.', era:'Antica'},
+  2:  {name:'Eraclito',      year:-500, date:'~500 a.C.', era:'Antica'},
+  3:  {name:'Parmenide',     year:-480, date:'~480 a.C.', era:'Antica'},
+  4:  {name:'Socrate',       year:-430, date:'~430 a.C.', era:'Classica'},
+  5:  {name:'Platone',       year:-380, date:'~380 a.C.', era:'Classica'},
+  6:  {name:'Aristotele',    year:-350, date:'~350 a.C.', era:'Classica'},
+  7:  {name:'Epicuro',       year:-300, date:'~300 a.C.', era:'Ellenistica'},
+  8:  {name:'Zenone di Cizio',year:-290,date:'~290 a.C.', era:'Ellenistica'},
+  9:  {name:'Sesto Empirico',year:180,  date:'~180 d.C.', era:'Ellenistica'},
+  10: {name:'Agostino',      year:400,  date:'400 d.C.',  era:'Medievale'},
+  11: {name:"Tommaso d'Aquino",year:1260,date:'1260',     era:'Medievale'},
+  12: {name:'Machiavelli',   year:1500, date:'1500',      era:'Rinascimento'},
+  13: {name:'Descartes',     year:1630, date:'1630',      era:'Moderna'},
+  14: {name:'Spinoza',       year:1660, date:'1660',      era:'Moderna'},
+  15: {name:'Locke',         year:1680, date:'1680',      era:'Moderna'},
+  16: {name:'Leibniz',       year:1690, date:'1690',      era:'Moderna'},
+  17: {name:'Hume',          year:1745, date:'1745',      era:'Moderna'},
+  18: {name:'Kant',          year:1785, date:'1785',      era:'Moderna'},
+  19: {name:'Hegel',         year:1815, date:'1815',      era:'Moderna'},
+  20: {name:'Schopenhauer',  year:1830, date:'1830',      era:'Ottocento'},
+  21: {name:'Comte',         year:1840, date:'1840',      era:'Ottocento'},
+  22: {name:'Kierkegaard',   year:1845, date:'1845',      era:'Ottocento'},
+  23: {name:'Marx',          year:1860, date:'1860',      era:'Ottocento'},
+  24: {name:'Nietzsche',     year:1885, date:'1885',      era:'Ottocento'},
+  25: {name:'Wittgenstein',  year:1930, date:'1930',      era:'Novecento'},
+  26: {name:'Heidegger',     year:1935, date:'1935',      era:'Novecento'},
+  27: {name:'Sartre',        year:1945, date:'1945',      era:'Novecento'},
+  28: {name:'Foucault',      year:1975, date:'1975',      era:'Novecento'}
+};
+
+// ═══ RELAZIONI ═══
+// type: 'inherit' (eredita da), 'critic' (critica), 'reply' (risponde a), 'influence' (si ispira)
+// Il filosofo A ha una relazione di tipo T con B (B = target, più antico nella maggior parte dei casi)
+var EDGES = [
+  // Socrate è maestro di Platone (eredita)
+  {from:5, to:4, type:'inherit', desc:'Platone scrive i dialoghi ispirandosi al maestro Socrate, di cui eredita il metodo dialogico e la ricerca etica.'},
+  // Aristotele allievo di Platone ma lo critica
+  {from:6, to:5, type:'critic', desc:'Aristotele studia per 20 anni all\'Accademia ma rifiuta la teoria delle Idee separate: forma e materia sono inscindibili nella sostanza concreta.'},
+  // Epicuro si ispira a Democrito (atomismo) - qui lo rappresentiamo come influence verso i presocratici
+  {from:7, to:0, type:'influence', desc:'L\'atomismo epicureo riprende la tradizione fisica presocratica: il mondo è materia in movimento, senza dèi né destino.'},
+  // Zenone si forma nella scia cinica ma dialoga con Platone/Aristotele
+  {from:8, to:6, type:'inherit', desc:'Lo stoicismo eredita da Aristotele la centralità della ragione e della virtù come fine.'},
+  // Sesto Empirico critica tutto il dogmatismo precedente
+  {from:9, to:5, type:'critic', desc:'Lo scetticismo rifiuta ogni certezza dogmatica: contro Platone e tutti i dogmatici, sospensione del giudizio.'},
+  // Agostino platonico cristianizzato
+  {from:10, to:5, type:'inherit', desc:'Agostino legge Platone attraverso il neoplatonismo e lo integra con il Cristianesimo: le Idee diventano pensieri di Dio.'},
+  // Tommaso: Aristotele cristianizzato
+  {from:11, to:6, type:'inherit', desc:'Tommaso compie la grande sintesi: la metafisica di Aristotele diventa il quadro razionale della teologia cattolica.'},
+  {from:11, to:10, type:'inherit', desc:'Eredita da Agostino il primato della grazia, ma corregge il platonismo agostiniano con la lezione aristotelica.'},
+  // Machiavelli rompe con la tradizione etico-politica
+  {from:12, to:5, type:'critic', desc:'Machiavelli rifiuta la Repubblica ideale di Platone e tutta la tradizione etica: la politica ha leggi proprie, separate dalla morale.'},
+  // Descartes vuole rifondare: risponde all\'incertezza scettica
+  {from:13, to:9, type:'reply', desc:'Il dubbio metodico cartesiano nasce come risposta allo scetticismo: dubito di tutto proprio per trovare almeno una certezza indubbitabile.'},
+  // Spinoza parte da Cartesio ma lo supera radicalmente
+  {from:14, to:13, type:'critic', desc:'Spinoza parte da Cartesio ma supera il dualismo: esiste una sola sostanza, Dio-Natura, di cui mente e corpo sono due attributi.'},
+  // Leibniz risponde a Cartesio e Spinoza
+  {from:16, to:13, type:'reply', desc:'Le monadi leibniziane risolvono il problema dell\'interazione mente-corpo cartesiana con l\'armonia prestabilita.'},
+  {from:16, to:14, type:'critic', desc:'Contro il panteismo di Spinoza: Dio è persona, il mondo è il migliore dei possibili, le sostanze sono infinite (le monadi).'},
+  // Locke contro l'innatismo cartesiano
+  {from:15, to:13, type:'critic', desc:'Locke rigetta le idee innate cartesiane: la mente alla nascita è tabula rasa, tutta la conoscenza viene dai sensi.'},
+  // Hume eredita e radicalizza Locke
+  {from:17, to:15, type:'inherit', desc:'Hume porta alle estreme conseguenze l\'empirismo di Locke: se tutto viene dai sensi, anche causalità e identità del sé sono abitudini.'},
+  // Kant risponde a Hume (il famoso risveglio dal sonno dogmatico)
+  {from:18, to:17, type:'reply', desc:'"Hume mi ha svegliato dal sonno dogmatico." La Critica della Ragion Pura è la grande risposta allo scetticismo humeano.'},
+  {from:18, to:16, type:'critic', desc:'Contro la metafisica razionalista (Leibniz): non possiamo conoscere la cosa in sé, solo i fenomeni strutturati dalle categorie a priori.'},
+  // Hegel eredita Kant ma lo supera
+  {from:19, to:18, type:'critic', desc:'Contro il limite kantiano alla cosa in sé: lo Spirito può raggiungere l\'assoluto attraverso il movimento dialettico della storia.'},
+  // Schopenhauer eredita Kant ma aggiunge la Volontà
+  {from:20, to:18, type:'inherit', desc:'Eredita da Kant la distinzione fenomeno/noumeno, ma identifica la cosa in sé con la Volontà cieca e irrazionale.'},
+  {from:20, to:19, type:'critic', desc:'Odia Hegel visceralmente: lo accusa di cialtroneria filosofica e di aver travestito il cristianesimo in linguaggio accademico.'},
+  {from:20, to:5, type:'influence', desc:'Platonismo radicale: le Idee come gradi di oggettivazione della Volontà. Prima lettura occidentale seria dei Veda e del buddhismo.'},
+  // Marx rovescia Hegel
+  {from:23, to:19, type:'critic', desc:'Marx "rimette in piedi la dialettica hegeliana": non è lo Spirito che muove la storia ma la materia, le forze produttive, la lotta di classe.'},
+  // Kierkegaard contro Hegel
+  {from:22, to:19, type:'critic', desc:'Contro il sistema hegeliano che dissolve l\'individuo nel tutto: la verità è soggettività, il singolo davanti a Dio, non l\'assoluto.'},
+  // Nietzsche eredita Schopenhauer ma lo ribalta
+  {from:24, to:20, type:'critic', desc:'Parte da Schopenhauer ma rovescia il pessimismo: la Volontà di potenza è affermazione gioiosa della vita, non negazione.'},
+  {from:24, to:2, type:'influence', desc:'Riscopre Eraclito: il divenire è la realtà, l\'essere immobile di Parmenide è un inganno della grammatica.'},
+  // Comte risponde all'idealismo con positivismo scientifico
+  {from:21, to:19, type:'critic', desc:'Il positivismo rigetta la metafisica idealista: solo la conoscenza scientifica dei fatti è valida.'},
+  // Wittgenstein critica la tradizione metafisica intera
+  {from:25, to:24, type:'influence', desc:'Condivide con Nietzsche il sospetto verso il linguaggio: molti problemi "profondi" sono fraintendimenti grammaticali.'},
+  // Heidegger torna ai greci contro la tradizione
+  {from:26, to:24, type:'inherit', desc:'Eredita da Nietzsche la diagnosi del nichilismo e la critica della metafisica occidentale come oblio dell\'essere.'},
+  {from:26, to:3, type:'influence', desc:'Ritorno originario ai presocratici: Parmenide ed Eraclito pensarono l\'essere prima che la filosofia lo dimenticasse.'},
+  // Sartre eredita Heidegger
+  {from:27, to:26, type:'inherit', desc:'L\'Essere e il nulla riprende e trasforma Essere e tempo: l\'Esserci diventa coscienza radicalmente libera.'},
+  {from:27, to:13, type:'influence', desc:'Sartre riprende il cogito cartesiano ma lo capovolge: la coscienza non è sostanza, è nulla, libertà pura.'},
+  // Foucault eredita Nietzsche
+  {from:28, to:24, type:'inherit', desc:'La genealogia foucaultiana è nietzscheana: smontare le pretese di universalità di concetti come follia, sessualità, normalità.'},
+  {from:28, to:23, type:'reply', desc:'Contro il marxismo classico: il potere non è solo economico, è una rete diffusa che produce i soggetti stessi.'}
+];
+
+// ═══ LAYOUT DEL GRAFO ═══
+var yearMin = -600, yearMax = 2000;
+var leftPad = 80, rightPad = 80;
+var svgWidth = 2800; // larghezza interna scrollabile
+var svgHeight = 560;
+var graphTop = 80, graphBottom = 480;
+
+// Trova posizione X dato un anno (logaritmicamente ammorbidito per non schiacciare l'antichità)
+function yearToX(year) {
+  // Uso uno scaling non lineare per dare più respiro alle ere dense
+  // Mappo [yearMin..yearMax] su [leftPad..svgWidth-rightPad]
+  var t = (year - yearMin) / (yearMax - yearMin);
+  // Ammorbidisce la parte recente (che sarebbe troppo densa)
+  // Non uso log puro: uso una curva dolce
+  t = Math.pow(t, 0.85);
+  return leftPad + t * (svgWidth - leftPad - rightPad);
+}
+
+// Distribuzione Y: alterno in fasce per evitare sovrapposizioni
+// Anti-collisione: gruppi per vicinanza temporale
+function computeLayout() {
+  var nodes = [];
+  var ids = Object.keys(PHILS).sort(function(a,b){return PHILS[a].year - PHILS[b].year});
+
+  var lanes = [graphTop + 80, graphTop + 170, graphTop + 260, graphTop + 350]; // 4 corsie verticali
+  var lastInLane = [null, null, null, null];
+  var minSpacing = 110; // distanza X minima tra due nodi nella stessa corsia
+
+  ids.forEach(function(id) {
+    var p = PHILS[id];
+    var x = yearToX(p.year);
+    // Trova la prima corsia libera
+    var chosenLane = 0;
+    for (var l = 0; l < lanes.length; l++) {
+      if (lastInLane[l] === null || (x - lastInLane[l]) >= minSpacing) {
+        chosenLane = l;
+        break;
+      }
+      // Se nessuna è libera abbastanza, scelgo quella con l'ultimo nodo più lontano
+      if (l === lanes.length - 1) {
+        var best = 0, bestDist = -Infinity;
+        for (var k = 0; k < lanes.length; k++) {
+          var d = x - (lastInLane[k] || 0);
+          if (d > bestDist) { bestDist = d; best = k; }
+        }
+        chosenLane = best;
+      }
+    }
+    lastInLane[chosenLane] = x;
+    nodes.push({id: +id, x: x, y: lanes[chosenLane], data: p});
+  });
+
+  return nodes;
+}
+
+var NODES = computeLayout();
+var NODE_BY_ID = {};
+NODES.forEach(function(n){ NODE_BY_ID[n.id] = n; });
+
+// ═══ RENDER SVG ═══
+function renderMap() {
+  var svg = document.getElementById('map-svg');
+  svg.setAttribute('viewBox', '0 0 ' + svgWidth + ' ' + svgHeight);
+  svg.setAttribute('width', svgWidth);
+  svg.setAttribute('height', svgHeight);
+
+  var html = '';
+
+  // ERA BANDS (label in alto) - disegna divisori verticali
+  var eraBounds = [
+    {label:'I · Antica',        from:-600, to:-400},
+    {label:'II · Classica',     from:-470, to:-320},
+    {label:'III · Ellenistica', from:-340, to:250},
+    {label:'IV · Medievale',    from:300,  to:1400},
+    {label:'V · Rinascimento',  from:1450, to:1600},
+    {label:'VI · Moderna',      from:1600, to:1800},
+    {label:'VII · Ottocento',   from:1800, to:1900},
+    {label:'VIII · Novecento',  from:1900, to:2000}
+  ];
+  eraBounds.forEach(function(e, idx) {
+    var x1 = yearToX(e.from);
+    var x2 = yearToX(e.to);
+    var midX = (x1 + x2) / 2;
+    // Label in alto
+    html += '<text class="era-label" x="' + midX + '" y="28" text-anchor="middle">' + e.label + '</text>';
+    // Divisore verticale tra ere (tranne il primo)
+    if (idx > 0) {
+      var prevTo = eraBounds[idx-1].to;
+      var divX = (yearToX(prevTo) + x1) / 2;
+      html += '<line class="era-divider" x1="' + divX + '" y1="45" x2="' + divX + '" y2="' + (svgHeight - 40) + '"/>';
+    }
+  });
+
+  // EDGES (archi curvi) - disegna prima così stanno sotto i nodi
+  EDGES.forEach(function(e, idx) {
+    var a = NODE_BY_ID[e.from];
+    var b = NODE_BY_ID[e.to];
+    if (!a || !b) return;
+    // Arco curvo: controllo intermedio che curva in alto o in basso a seconda
+    var dx = a.x - b.x;
+    var dy = a.y - b.y;
+    var mx = (a.x + b.x) / 2;
+    var my = (a.y + b.y) / 2;
+    // Controllo dell'altezza della curva in base alla distanza
+    var distance = Math.sqrt(dx*dx + dy*dy);
+    var arcHeight = Math.min(distance * 0.18, 120);
+    // Decido se curvare sopra o sotto: sopra se entrambi nella metà alta
+    var avgY = my;
+    var cy = avgY < (graphTop + graphBottom)/2 ? avgY - arcHeight : avgY + arcHeight;
+    var cx = mx;
+    var d = 'M ' + a.x + ' ' + a.y + ' Q ' + cx + ' ' + cy + ' ' + b.x + ' ' + b.y;
+    html += '<path class="edge ' + e.type + '" data-from="' + e.from + '" data-to="' + e.to + '" data-edge-idx="' + idx + '" d="' + d + '"/>';
+  });
+
+  // NODES (cerchi + label)
+  NODES.forEach(function(n) {
+    html += '<g class="node-group" data-id="' + n.id + '">';
+    html += '  <circle class="node-circle" cx="' + n.x + '" cy="' + n.y + '" r="10"/>';
+    html += '  <text class="node-label" x="' + n.x + '" y="' + (n.y + 28) + '" text-anchor="middle">' + n.data.name + '</text>';
+    html += '  <text class="node-date" x="' + n.x + '" y="' + (n.y + 44) + '" text-anchor="middle">' + n.data.date + '</text>';
+    html += '</g>';
+  });
+
+  svg.innerHTML = html;
+
+  // Bind events
+  document.querySelectorAll('.node-group').forEach(function(g) {
+    g.addEventListener('click', function() {
+      var id = +g.getAttribute('data-id');
+      selectNode(id);
+    });
+  });
+
+  // Centra la mappa sulla parte centrale (moderna) al primo caricamento
+  var container = document.getElementById('map-container');
+  container.scrollLeft = svgWidth * 0.45;
+}
+
+var selectedId = null;
+
+function selectNode(id) {
+  if (selectedId === id) {
+    selectedId = null;
+    clearSelection();
+    renderStory(null);
+    return;
+  }
+  selectedId = id;
+
+  // Aggiorna classi
+  document.querySelectorAll('.node-group').forEach(function(g){g.classList.remove('selected'); g.classList.remove('dimmed')});
+  document.querySelectorAll('.edge').forEach(function(e){e.classList.remove('active'); e.classList.remove('dimmed')});
+
+  var connectedIds = {};
+  connectedIds[id] = true;
+  var activeEdgeIndexes = [];
+
+  EDGES.forEach(function(e, idx) {
+    if (e.from === id || e.to === id) {
+      connectedIds[e.from] = true;
+      connectedIds[e.to] = true;
+      activeEdgeIndexes.push(idx);
+    }
+  });
+
+  document.querySelectorAll('.node-group').forEach(function(g) {
+    var nid = +g.getAttribute('data-id');
+    if (nid === id) g.classList.add('selected');
+    else if (!connectedIds[nid]) g.classList.add('dimmed');
+  });
+
+  document.querySelectorAll('.edge').forEach(function(e) {
+    var idx = +e.getAttribute('data-edge-idx');
+    if (activeEdgeIndexes.indexOf(idx) > -1) e.classList.add('active');
+    else e.classList.add('dimmed');
+  });
+
+  renderStory(id);
+
+  // Scroll alla sezione story
+  setTimeout(function(){
+    document.getElementById('story').scrollIntoView({behavior:'smooth', block:'start'});
+  }, 100);
+}
+
+function clearSelection() {
+  document.querySelectorAll('.node-group').forEach(function(g){g.classList.remove('selected'); g.classList.remove('dimmed')});
+  document.querySelectorAll('.edge').forEach(function(e){e.classList.remove('active'); e.classList.remove('dimmed')});
+}
+
+// ═══ STORIA / RELAZIONI ═══
+function renderStory(id) {
+  var section = document.getElementById('story');
+  if (id === null) {
+    section.innerHTML = '<div class="story-empty"><div class="story-empty-arrow">↑</div><div>Clicca un filosofo sulla mappa per vedere<br>con chi dialoga, chi eredita, chi critica.</div></div>';
+    return;
+  }
+  var p = PHILS[id];
+  var num = String(id + 1).padStart(3, '0');
+
+  // Raccogli relazioni per tipo
+  var inheritsFrom = [], criticizes = [], repliesTo = [], inspiredBy = [];
+  var inheritedBy = [], criticizedBy = [], repliedBy = [], inspiring = [];
+
+  EDGES.forEach(function(e) {
+    if (e.from === id) {
+      // Questo filosofo fa qualcosa verso un altro
+      var target = {philId: e.to, desc: e.desc};
+      if (e.type === 'inherit') inheritsFrom.push(target);
+      else if (e.type === 'critic') criticizes.push(target);
+      else if (e.type === 'reply') repliesTo.push(target);
+      else if (e.type === 'influence') inspiredBy.push(target);
+    } else if (e.to === id) {
+      // Un altro filosofo fa qualcosa verso questo
+      var source = {philId: e.from, desc: e.desc};
+      if (e.type === 'inherit') inheritedBy.push(source);
+      else if (e.type === 'critic') criticizedBy.push(source);
+      else if (e.type === 'reply') repliedBy.push(source);
+      else if (e.type === 'influence') inspiring.push(source);
+    }
+  });
+
+  var blocks = '';
+
+  function buildBlock(title, typeClass, items, prefix) {
+    if (!items.length) return '';
+    var itemsHtml = items.map(function(it) {
+      var other = PHILS[it.philId];
+      return '<div class="rel-item">' +
+        '<div class="rel-phil-line">' +
+          '<span class="rel-phil-name" data-id="' + it.philId + '">' + other.name + '</span>' +
+          '<span class="rel-phil-date">' + other.date + '</span>' +
+        '</div>' +
+        '<div class="rel-desc">' + it.desc + '</div>' +
+      '</div>';
+    }).join('');
+    return '<div class="rel-block">' +
+      '<div class="rel-side">' +
+        '<div class="rel-type-label ' + typeClass + '">' + title + '</div>' +
+        '<div class="rel-count">' + items.length + (items.length === 1 ? ' filosofo' : ' filosofi') + '</div>' +
+      '</div>' +
+      '<div class="rel-list">' + itemsHtml + '</div>' +
+    '</div>';
+  }
+
+  blocks += buildBlock('Eredita da',    'inherit',   inheritsFrom, '');
+  blocks += buildBlock('Critica',       'critic',    criticizes,   '');
+  blocks += buildBlock('Risponde a',    'reply',     repliesTo,    '');
+  blocks += buildBlock('Si ispira a',   'influence', inspiredBy,   '');
+  blocks += buildBlock('È ereditato da','inherit',   inheritedBy,  '');
+  blocks += buildBlock('È criticato da','critic',    criticizedBy, '');
+  blocks += buildBlock('Riceve risposte da','reply', repliedBy,    '');
+  blocks += buildBlock('Ispira',        'influence', inspiring,    '');
+
+  if (!blocks) {
+    blocks = '<div class="rel-block"><div class="rel-side"><div class="rel-type-label">Nessuna relazione mappata</div></div><div class="rel-list"><div class="rel-desc">Questo filosofo non ha ancora relazioni tracciate nella mappa. Verranno aggiunte negli aggiornamenti futuri.</div></div></div>';
+  }
+
+  section.innerHTML =
+    '<div class="story-head">' +
+      '<div class="story-num">Filosofo · ' + num + '</div>' +
+      '<div class="story-name">' + p.name + '</div>' +
+      '<div class="story-meta">' +
+        '<span><span class="story-meta-dot"></span>' + p.era + '</span>' +
+        '<span>' + p.date + '</span>' +
+      '</div>' +
+    '</div>' +
+    '<div class="relations-grid reveal delay-2">' + blocks + '</div>';
+
+  // Bind click sui nomi dei filosofi correlati per navigare
+  section.querySelectorAll('.rel-phil-name').forEach(function(el) {
+    el.addEventListener('click', function() {
+      var otherId = +el.getAttribute('data-id');
+      selectNode(otherId);
+      document.getElementById('map-container').scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  });
+}
+
+// ═══ SCROLL INDICATOR ═══
+var container = document.getElementById('map-container');
+var hint = document.getElementById('scroll-hint');
+var hintTimer;
+container.addEventListener('scroll', function() {
+  hint.style.opacity = '0';
+  clearTimeout(hintTimer);
+  hintTimer = setTimeout(function(){ hint.style.opacity = '1'; }, 1500);
+});
+
+renderMap();
+</script>
+
+<script>
+(function(){
+  var burger = document.getElementById('nav-burger');
+  var overlay = document.getElementById('nav-overlay');
+  if (!burger || !overlay) return;
+  function toggle(){
+    var isOpen = overlay.classList.contains('open');
+    if(isOpen){
+      overlay.classList.remove('open');
+      burger.classList.remove('open');
+      document.body.style.overflow = '';
+    } else {
+      overlay.classList.add('open');
+      burger.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+  }
+  burger.addEventListener('click', toggle);
+  // Close on any link click
+  overlay.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', function(){
+      overlay.classList.remove('open');
+      burger.classList.remove('open');
+      document.body.style.overflow = '';
+    });
+  });
+})();
+</script>
+
+<script>
+// Scroll reveal animations
+(function(){
+  if (!('IntersectionObserver' in window)) {
+    document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in')});
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if (entry.isIntersecting){
+        entry.target.classList.add('in');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -50px 0px' });
+  document.querySelectorAll('.reveal').forEach(function(el){ observer.observe(el); });
+})();
+
+// Aura mouse follow (desktop only, subtle)
+(function(){
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (window.innerWidth < 900) return;
+  var g1 = document.querySelector('.aura-glow-1');
+  var g2 = document.querySelector('.aura-glow-2');
+  if (!g1 || !g2) return;
+  var mx=0,my=0,cx=0,cy=0;
+  document.addEventListener('mousemove', function(e){
+    mx = (e.clientX / window.innerWidth - 0.5) * 40;
+    my = (e.clientY / window.innerHeight - 0.5) * 40;
+  });
+  function anim(){
+    cx += (mx - cx) * 0.03;
+    cy += (my - cy) * 0.03;
+    g1.style.transform = 'translate(' + cx + 'px,' + cy + 'px)';
+    g2.style.transform = 'translate(' + (-cx*.7) + 'px,' + (-cy*.7) + 'px)';
+    requestAnimationFrame(anim);
+  }
+  anim();
+})();
+</script>
+
+
+<script>
+// ═══ PROTECTION LAYER ═══
+(function(){
+  var toast = document.getElementById('protect-toast');
+  var timer = null;
+  function showToast(){
+    if (!toast) return;
+    toast.classList.add('show');
+    clearTimeout(timer);
+    timer = setTimeout(function(){ toast.classList.remove('show'); }, 1800);
+  }
+
+  // Block right click
+  document.addEventListener('contextmenu', function(e){
+    e.preventDefault();
+    showToast();
+  });
+
+  // Block F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C, Ctrl+U
+  document.addEventListener('keydown', function(e){
+    var key = e.key || '';
+    var blocked = false;
+    if (key === 'F12') blocked = true;
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey && (key === 'I' || key === 'i' || key === 'J' || key === 'j' || key === 'C' || key === 'c')) blocked = true;
+    if ((e.ctrlKey || e.metaKey) && (key === 'U' || key === 'u' || key === 'S' || key === 's')) blocked = true;
+    if (blocked) {
+      e.preventDefault();
+      showToast();
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
