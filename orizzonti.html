@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Filosofia — Orizzonti</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Shippori+Mincho:wght@400;500;600;700&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --orange:#FF6B35;
+  --orange-soft:rgba(255,107,53,.15);
+  --orange-mist:rgba(255,107,53,.08);
+  --black:#0A0A0A;
+  --white:#FFFFFF;
+  --cream:#FAF7F0;
+  --cream-warm:#F2EEDF;
+  --cream-deeper:#E8E3D0;
+  --gray-100:#F0EDE5;
+  --gray-200:#E0DDD0;
+  --gray-300:#C9C6B8;
+  --gray-400:#8F8E82;
+  --gray-600:#55544A;
+  --mono:'JetBrains Mono',monospace;
+  --sans:'Inter',-apple-system,sans-serif;
+
+  /* ─── TINTE TEMATICHE ─── */
+  --asia-tint:#EDF0EC;        /* verde salvia tenue */
+  --asia-tint-deep:#DDE4DB;
+  --asia-accent:#5C7F6A;       /* verde bambù scuro */
+  --islam-tint:#F2EBDE;       /* sabbia chiara */
+  --islam-tint-deep:#E4D9C0;
+  --islam-accent:#8B6F3F;       /* oro scuro */
+
+  --serif-asia:'Shippori Mincho',Georgia,serif;
+  --serif-islam:'Amiri',Georgia,serif;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--cream);color:var(--black);font-weight:400;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden;position:relative}
+
+/* ═══ AURA (same as other pages) ═══ */
+.aura{position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:0;overflow:hidden}
+.aura-glow{position:absolute;width:900px;height:900px;border-radius:50%;background:radial-gradient(circle at center,var(--orange-soft) 0%,var(--orange-mist) 30%,transparent 65%);filter:blur(40px);opacity:.85;transition:transform .6s cubic-bezier(.2,.9,.3,1);will-change:transform}
+.aura-glow-1{top:-200px;left:-200px;animation:auraFloat1 20s ease-in-out infinite}
+.aura-glow-2{top:30%;right:-300px;width:700px;height:700px;opacity:.6;animation:auraFloat2 25s ease-in-out infinite}
+.aura-glow-3{bottom:-200px;left:30%;width:800px;height:800px;opacity:.45;animation:auraFloat3 30s ease-in-out infinite}
+@keyframes auraFloat1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(80px,40px) scale(1.1)}}
+@keyframes auraFloat2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-60px,-30px) scale(.95)}}
+@keyframes auraFloat3{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-40px,-50px) scale(1.05)}}
+
+/* ═══ NAV ═══ */
+.nav-top{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(250,247,240,.72);backdrop-filter:blur(24px) saturate(1.4);-webkit-backdrop-filter:blur(24px) saturate(1.4);border-bottom:1px solid rgba(224,221,208,.6)}
+.nav-inner{max-width:1400px;margin:0 auto;padding:18px 40px;display:flex;justify-content:space-between;align-items:center}
+.logo{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.5px;text-transform:uppercase;color:var(--black);text-decoration:none;transition:opacity .2s;cursor:pointer}
+.logo:hover{opacity:.6}
+.logo-dot{display:inline-block;width:7px;height:7px;background:var(--orange);border-radius:50%;margin-right:8px;vertical-align:middle}
+.nav-links{display:flex;gap:28px;list-style:none}
+.nav-links a{color:var(--gray-600);text-decoration:none;font-size:13px;font-weight:500;transition:color .2s;font-family:var(--mono);letter-spacing:.3px}
+.nav-links a:hover{color:var(--black)}
+.nav-links a.active{color:var(--black);position:relative}
+.nav-links a.active::after{content:'';position:absolute;bottom:-24px;left:0;right:0;height:2px;background:var(--orange)}
+
+.nav-burger{display:none;width:44px;height:44px;border:none;background:transparent;cursor:pointer;padding:0;position:relative;z-index:120}
+.nav-burger span{display:block;width:24px;height:2px;background:var(--black);position:absolute;left:10px;transition:transform .3s ease,opacity .2s ease,top .3s ease;border-radius:2px}
+.nav-burger span:nth-child(1){top:15px}
+.nav-burger span:nth-child(2){top:21px}
+.nav-burger span:nth-child(3){top:27px}
+.nav-burger.open span:nth-child(1){top:21px;transform:rotate(45deg)}
+.nav-burger.open span:nth-child(2){opacity:0}
+.nav-burger.open span:nth-child(3){top:21px;transform:rotate(-45deg)}
+.nav-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(250,247,240,.92);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);z-index:115;padding:80px 24px 32px;flex-direction:column;justify-content:space-between;overflow-y:auto}
+.nav-overlay.open{display:flex;animation:overlayIn .28s cubic-bezier(.2,.9,.3,1)}
+@keyframes overlayIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.nav-overlay-links{list-style:none;display:flex;flex-direction:column;padding:0;margin-top:20px}
+.nav-overlay-links li{border-top:1px solid var(--gray-200)}
+.nav-overlay-links li:last-child{border-bottom:1px solid var(--gray-200)}
+.nav-overlay-links a{display:flex;justify-content:space-between;align-items:center;padding:22px 4px;font-size:28px;font-weight:700;letter-spacing:-.02em;color:var(--black);text-decoration:none;font-family:var(--sans)}
+.nav-overlay-links a.active{color:var(--orange)}
+.nav-overlay-links a::after{content:'→';font-size:20px;color:var(--gray-400);font-weight:400}
+.nav-overlay-links a.active::after{color:var(--orange)}
+.nav-overlay-links .nav-num{font-family:var(--mono);font-size:11px;color:var(--gray-400);letter-spacing:1px;text-transform:uppercase;font-weight:500;margin-right:14px;display:inline-block;min-width:28px}
+.nav-overlay-footer{font-family:var(--mono);font-size:10px;color:var(--gray-400);letter-spacing:.5px;text-transform:uppercase;display:flex;justify-content:space-between;align-items:center;padding-top:24px}
+
+/* ═══ REVEAL ═══ */
+.reveal{opacity:0;transform:translateY(40px);transition:opacity .9s cubic-bezier(.2,.9,.3,1),transform .9s cubic-bezier(.2,.9,.3,1)}
+.reveal.in{opacity:1;transform:translateY(0)}
+.reveal.delay-1{transition-delay:.1s}
+.reveal.delay-2{transition-delay:.2s}
+.reveal.delay-3{transition-delay:.3s}
+
+main,section,article,footer,.nav-overlay{position:relative;z-index:2}
+
+/* ═══ HERO ═══ */
+.hero{padding:140px 40px 60px;max-width:1400px;margin:0 auto}
+.hero-meta{font-family:var(--mono);font-size:11px;color:var(--gray-400);letter-spacing:1px;text-transform:uppercase;margin-bottom:40px;display:flex;gap:24px;align-items:center}
+.hero-meta-dot{width:6px;height:6px;background:var(--orange);border-radius:50%}
+.hero h1{font-size:clamp(52px,9vw,128px);font-weight:800;line-height:.95;letter-spacing:-.04em;margin-bottom:40px;max-width:1200px}
+.hero h1 em{font-style:italic;font-weight:400;color:var(--orange)}
+.hero-desc{font-size:20px;line-height:1.5;max-width:680px;color:var(--gray-600);margin-bottom:40px}
+
+/* ═══ PARTE DIVIDER ═══ */
+.parte-divider{max-width:1400px;margin:80px auto 40px;padding:0 40px}
+.parte-divider-inner{display:flex;align-items:baseline;gap:24px;padding-bottom:16px;border-bottom:1px solid var(--gray-200)}
+.parte-num{font-family:var(--mono);font-size:11px;color:var(--gray-400);letter-spacing:1.2px;text-transform:uppercase;font-weight:500;white-space:nowrap}
+.parte-title{font-size:clamp(32px,4vw,56px);font-weight:700;letter-spacing:-.03em;line-height:1}
+.parte-title em{font-style:italic;font-weight:400;color:var(--orange)}
+.parte-desc{font-family:var(--mono);font-size:12px;color:var(--gray-400);letter-spacing:.3px;max-width:400px;margin-left:auto;line-height:1.5;text-align:right}
+
+/* ═══ TEMA CARD (base) ═══ */
+.themes-grid{max-width:1400px;margin:0 auto;padding:0 40px 60px;display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.theme{padding:40px 40px 32px;border-radius:16px;transition:transform .25s ease,box-shadow .25s ease;display:flex;flex-direction:column;gap:20px;position:relative;overflow:hidden}
+.theme:hover{transform:translateY(-2px);box-shadow:0 12px 40px -12px rgba(10,10,10,.1)}
+.theme-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;border-bottom:1px solid var(--gray-200);padding-bottom:16px}
+.theme-num{font-family:var(--mono);font-size:11px;letter-spacing:1px;font-weight:500}
+.theme-marker{font-size:10px;font-family:var(--mono);letter-spacing:1px;text-transform:uppercase;font-weight:500;padding:4px 10px;border-radius:100px}
+.theme-title{font-size:clamp(28px,3vw,40px);font-weight:700;letter-spacing:-.02em;line-height:1}
+.theme-subtitle{font-size:14px;color:var(--gray-600);line-height:1.55;font-style:italic}
+.theme-body{font-size:15px;line-height:1.6;color:var(--black)}
+.theme-phils{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.theme-phil{font-family:var(--mono);font-size:11px;padding:5px 11px;border-radius:100px;background:rgba(255,255,255,.5);color:var(--gray-600);letter-spacing:.3px}
+
+/* Confronto box - comune ma con accento tematico */
+.theme-vs{margin-top:8px;padding:20px 22px;border-radius:12px;background:rgba(255,255,255,.55);border-left:3px solid var(--orange);position:relative}
+.theme-vs-label{font-family:var(--mono);font-size:10px;letter-spacing:1.2px;text-transform:uppercase;color:var(--orange);font-weight:500;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.theme-vs-label::before{content:'↔';font-size:14px}
+.theme-vs-text{font-size:13.5px;line-height:1.55;color:var(--gray-600)}
+
+/* ═══ VARIANTE ASIA ═══ */
+.theme.theme-asia{background:var(--asia-tint)}
+.theme.theme-asia .theme-num{color:var(--asia-accent)}
+.theme.theme-asia .theme-marker{color:var(--asia-accent);border:1px solid var(--asia-accent);background:rgba(255,255,255,.35)}
+.theme.theme-asia .theme-title{font-family:var(--serif-asia);font-weight:500;letter-spacing:-.01em}
+.theme.theme-asia .theme-head{border-bottom-color:var(--asia-tint-deep)}
+
+/* ═══ VARIANTE ISLAM ═══ */
+.theme.theme-islam{background:var(--islam-tint)}
+.theme.theme-islam .theme-num{color:var(--islam-accent)}
+.theme.theme-islam .theme-marker{color:var(--islam-accent);border:1px solid var(--islam-accent);background:rgba(255,255,255,.35)}
+.theme.theme-islam .theme-title{font-family:var(--serif-islam);font-weight:700;letter-spacing:-.01em}
+.theme.theme-islam .theme-head{border-bottom-color:var(--islam-tint-deep)}
+
+/* Light decorative overlay - very subtle */
+.theme::after{content:'';position:absolute;width:160px;height:160px;border-radius:50%;filter:blur(40px);opacity:.18;top:-40px;right:-40px;pointer-events:none;z-index:0}
+.theme.theme-asia::after{background:var(--asia-accent)}
+.theme.theme-islam::after{background:var(--islam-accent)}
+.theme > *{position:relative;z-index:1}
+
+/* ═══ FOOTER ═══ */
+footer{border-top:1px solid var(--gray-200);padding:80px 40px 40px;margin-top:80px;position:relative;z-index:2;background:rgba(250,247,240,.6);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+.footer-inner{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:end}
+.footer-logo-big{font-size:clamp(40px,6vw,80px);font-weight:800;letter-spacing:-.03em;line-height:1}
+.footer-logo-big em{color:var(--orange);font-style:italic;font-weight:400}
+.footer-meta{font-family:var(--mono);font-size:10px;color:var(--gray-400);letter-spacing:.5px;text-align:right}
+.footer-meta div{margin-bottom:6px}
+.footer-meta strong{color:var(--black);font-weight:500}
+
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:900px){
+  .themes-grid{grid-template-columns:1fr}
+}
+@media(max-width:768px){
+  .nav-links{display:none}
+  .nav-burger{display:block}
+  .nav-inner{padding:14px 20px}
+  .hero{padding:110px 20px 40px}
+  .hero h1{font-size:52px}
+  .hero-desc{font-size:16px}
+  .parte-divider{padding:0 20px;margin:60px auto 24px}
+  .parte-divider-inner{flex-direction:column;align-items:flex-start;gap:8px}
+  .parte-desc{text-align:left;margin-left:0;font-size:11px}
+  .themes-grid{padding:0 20px 40px;gap:14px}
+  .theme{padding:28px 24px 24px}
+  .theme-title{font-size:26px}
+  footer{padding:50px 20px 28px}
+  .footer-inner{grid-template-columns:1fr;gap:20px}
+  .footer-meta{text-align:left}
+}
+@media(prefers-reduced-motion:reduce){
+  .aura-glow{animation:none!important}
+  .reveal{opacity:1!important;transform:none!important}
+}
+
+/* ═══ PROTECTION TOAST ═══ */
+.protect-toast{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.9);background:var(--black);color:var(--cream);padding:24px 32px;border-radius:16px;font-family:var(--sans);font-size:15px;font-weight:500;letter-spacing:-.01em;box-shadow:0 20px 60px -20px rgba(10,10,10,.4);z-index:9999;opacity:0;pointer-events:none;transition:opacity .25s ease,transform .25s cubic-bezier(.2,.9,.3,1);display:flex;align-items:center;gap:14px}
+.protect-toast.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.protect-toast-icon{width:24px;height:24px;background:var(--orange);border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--black);font-weight:700}
+.protect-toast-text{line-height:1.3}
+.protect-toast-sub{font-family:var(--mono);font-size:10px;color:var(--gray-400);letter-spacing:.5px;text-transform:uppercase;margin-top:4px}
+
+/* ═══ FILTERS ═══ */
+.filters-section{max-width:1400px;margin:0 auto;padding:0 40px 40px;position:relative;z-index:2}
+.filters-wrap{padding:24px 28px;background:rgba(255,255,255,.4);border-radius:20px;backdrop-filter:blur(10px);border:1px solid rgba(224,221,208,.5)}
+.filters-label{font-family:var(--mono);font-size:11px;color:var(--gray-400);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:16px}
+.filters-row{display:flex;gap:8px;flex-wrap:wrap}
+.theme-filter{display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:100px;border:1px solid var(--gray-200);background:transparent;color:var(--gray-600);cursor:pointer;transition:all .2s ease;font-family:var(--sans);font-size:13px;font-weight:500;letter-spacing:-.01em}
+.theme-filter:hover{border-color:var(--black);color:var(--black)}
+.theme-filter.active{background:var(--black);color:var(--cream);border-color:var(--black)}
+.theme-filter-num{font-family:var(--mono);font-size:10px;color:var(--orange);letter-spacing:.5px;font-weight:500}
+.theme-filter.active .theme-filter-num{color:var(--orange)}
+.theme-filter-label{font-size:13px}
+
+/* Hidden state when filtering */
+.theme.filter-hidden{display:none}
+.parte-divider.filter-hidden{display:none}
+
+@media(max-width:768px){
+  .filters-section{padding:0 20px 28px}
+  .filters-wrap{padding:18px 20px}
+  .theme-filter{font-size:12px;padding:7px 12px}
+  .theme-filter-label{font-size:12px}
+}
+
+</style>
+</head>
+<body>
+
+<!-- PROTECTION TOAST -->
+<div class="protect-toast" id="protect-toast" role="alert" aria-live="polite">
+  <div class="protect-toast-icon">!</div>
+  <div>
+    <div class="protect-toast-text">Vietato sbirciare</div>
+    <div class="protect-toast-sub">© Federico Barcella</div>
+  </div>
+</div>
+
+<!-- AURA BACKGROUND -->
+<div class="aura" aria-hidden="true">
+  <div class="aura-glow aura-glow-1"></div>
+  <div class="aura-glow aura-glow-2"></div>
+  <div class="aura-glow aura-glow-3"></div>
+</div>
+
+<nav class="nav-top">
+  <div class="nav-inner">
+    <a href="index.html" class="logo"><span class="logo-dot"></span>Filosofia</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="timeline.html">Timeline</a></li>
+      <li><a href="concetti.html">Concetti</a></li>
+      <li><a href="domande.html">Domande</a></li>
+      <li><a href="dialoghi.html">Dialoghi</a></li>
+      <li><a href="orizzonti.html" class="active">Orizzonti</a></li>
+    </ul>
+    <button class="nav-burger" id="nav-burger" aria-label="Apri menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="nav-overlay" id="nav-overlay">
+  <ul class="nav-overlay-links">
+    <li><a href="index.html"><span><span class="nav-num">01</span>Home</span></a></li>
+    <li><a href="timeline.html"><span><span class="nav-num">02</span>Timeline</span></a></li>
+    <li><a href="concetti.html"><span><span class="nav-num">03</span>Concetti</span></a></li>
+    <li><a href="domande.html"><span><span class="nav-num">04</span>Domande</span></a></li>
+    <li><a href="dialoghi.html"><span><span class="nav-num">05</span>Dialoghi</span></a></li>
+    <li><a href="orizzonti.html" class="active"><span><span class="nav-num">06</span>Orizzonti</span></a></li>
+  </ul>
+  <div class="nav-overlay-footer">
+    <span>Filosofia · 2026</span>
+    <span>In aggiornamento</span>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-meta reveal"><span class="hero-meta-dot"></span><span>Capitolo 06</span><span>/</span><span>Orizzonti</span></div>
+  <h1 class="reveal">Altri <em>orizzonti</em><br>dello stesso pensiero.</h1>
+  <p class="hero-desc reveal delay-1">L'Occidente non ha il monopolio delle grandi domande. Dall'India alla Cina, dalla Persia all'Andalusia, altre tradizioni hanno esplorato gli stessi temi con strumenti diversi. Otto concetti, visti da Oriente.</p>
+</section>
+
+
+<section class="filters-section">
+  <div class="filters-wrap">
+    <div class="filters-label">Filtra per tema</div>
+    <div class="filters-row">
+      <button class="theme-filter active" data-filter="all">
+        <span class="theme-filter-num">∞</span>
+        <span class="theme-filter-label">Tutti</span>
+      </button>
+      <button class="theme-filter" data-filter="essere"><span class="theme-filter-num">01</span><span class="theme-filter-label">L'Essere</span></button>
+      <button class="theme-filter" data-filter="divenire"><span class="theme-filter-num">02</span><span class="theme-filter-label">Il Divenire</span></button>
+      <button class="theme-filter" data-filter="se"><span class="theme-filter-num">03</span><span class="theme-filter-label">Il Sé</span></button>
+      <button class="theme-filter" data-filter="conoscenza"><span class="theme-filter-num">04</span><span class="theme-filter-label">La Conoscenza</span></button>
+      <button class="theme-filter" data-filter="etica"><span class="theme-filter-num">05</span><span class="theme-filter-label">L'Etica</span></button>
+      <button class="theme-filter" data-filter="liberta"><span class="theme-filter-num">06</span><span class="theme-filter-label">La Libertà</span></button>
+      <button class="theme-filter" data-filter="tempo"><span class="theme-filter-num">07</span><span class="theme-filter-label">Il Tempo</span></button>
+      <button class="theme-filter" data-filter="divino"><span class="theme-filter-num">08</span><span class="theme-filter-label">Il Divino</span></button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PARTE 1 — ASIA ═══ -->
+<div class="parte-divider reveal">
+  <div class="parte-divider-inner">
+    <span class="parte-num">Parte 01</span>
+    <h2 class="parte-title"><em>Asia.</em></h2>
+    <span class="parte-desc">Induismo, Buddhismo, Taoismo, Confucianesimo, Zen</span>
+  </div>
+</div>
+
+<section class="themes-grid">
+
+  <article class="theme theme-asia reveal" data-theme="essere">
+    <div class="theme-head">
+      <span class="theme-num">01</span>
+      <span class="theme-marker">Asia · Essere</span>
+    </div>
+    <h3 class="theme-title">L'Essere</h3>
+    <p class="theme-subtitle">Se tutto scorre, cosa resta davvero?</p>
+    <div class="theme-body">In Asia l'essere non è mai una cosa ferma: è un processo. Il Buddha lo smonta con una mossa radicale chiamata <em>anatman</em> (non-sé): quello che chiamiamo «io» è solo un aggregato di fenomeni — corpo, sensazioni, percezioni, pensieri — in continuo cambiamento. Nessun nucleo stabile da nessuna parte. Shankara, secoli dopo, va nella direzione opposta: esiste solo il <em>Brahman</em>, la realtà ultima. Tutto il resto — il mondo, te, io — è <em>maya</em>, illusione.</div>
+    <div class="theme-phils">
+      <span class="theme-phil">Buddha</span>
+      <span class="theme-phil">Shankara</span>
+      <span class="theme-phil">Nagarjuna</span>
+    </div>
+    <div class="theme-vs">
+      <div class="theme-vs-label">Confronto con l'Occidente</div>
+      <div class="theme-vs-text">Shankara e Parmenide si somigliano in modo impressionante: entrambi cercano un Uno immutabile dietro le apparenze. Ma Parmenide ci arriva con la logica («dal nulla non viene nulla»), Shankara con l'intuizione mistica. Il Buddha invece è più vicino a Eraclito — nessuna sostanza fissa, solo flusso.</div>
+    </div>
+  </article>
+
+  <article class="theme theme-asia reveal delay-1" data-theme="divenire">
+    <div class="theme-head">
+      <span class="theme-num">02</span>
+      <span class="theme-marker">Asia · Divenire</span>
+    </div>
+    <h3 class="theme-title">Il Divenire</h3>
+    <p class="theme-subtitle">Il Tao che si può dire non è l'eterno Tao.</p>
+    <div class="theme-body">Il Tao è il flusso stesso della realtà. Non si può definire, non si può fermare: appena provi a dirlo, l'hai già perso. Laozi da questa intuizione ricava una regola di vita: <em>wu wei</em>, «non agire». Non significa restare fermi — significa agire senza forzare, come l'acqua che scende trovando la sua strada senza combatterla. L'acqua è debole, ma scava la pietra. Chi capisce il Tao smette di remare controcorrente.</div>
+    <div class="theme-phils">
+      <span class="theme-phil">Laozi</span>
+      <span class="theme-phil">Zhuangzi</span>
+    </div>
+    <div class="theme-vs">
+      <div class="theme-vs-label">Confronto con l'Occidente</div>
+      <div class="theme-vs-text">Il Tao ricorda il Logos di Eraclito: entrambi intuiscono un ordine nascosto nel divenire. Ma mentre il Logos greco si lascia indagare con la ragione, il Tao resta indicibile — chi pretende di averlo capito, non l'ha capito. L'Occidente vuole afferrare, l'Oriente vuole lasciar andare.</div>
+    </div>
+  </article>
+
+  <article class="theme theme-asia reveal delay-2" data-theme="se">
+    <div class="theme-head">
+      <span class="theme-num">03</span>
+      <span class="theme-marker">Asia · Sé</span>
+    </div>
+    <h3 class="theme-title">Il Sé</h3>
+    <p class="theme-subtitle">C'è davvero qualcuno, dietro i pensieri?</p>
+    <div class="theme-body">L'induismo risponde sì: esiste l'<em>Atman</em>, il Sé profondo, ed è identico al <em>Brahman</em> cosmico. «Tu sei Quello» — dicono le Upanishad. La meditazione serve a scoprire questa identità nascosta. Il Buddha risponde no: non c'è nessun sé permanente, solo un flusso di stati mentali che si raccontano come «io». Due risposte opposte alla stessa domanda, entrambe nate in India nello stesso secolo.</div>
+    <div class="theme-phils">
+      <span class="theme-phil">Upanishad</span>
+      <span class="theme-phil">Buddha</span>
+    </div>
+    <div class="theme-vs">
+      <div class="theme-vs-label">Confronto con l'Occidente</div>
+      <div class="theme-vs-text">Descartes poggia tutto sul <em>cogito</em>: «penso, dunque sono». Il Buddha avrebbe risposto: c'è pensiero, ma non per forza un pensatore. Duemila anni dopo Hume, introspettandosi, arriva alla stessa conclusione del Buddha — non trova mai un «io», solo percezioni che passano.</div>
+    </div>
+  </article>
+
+  <article class="theme theme-asia reveal delay-3" data-theme="conoscenza">
+    <div class="theme-head">
+      <span class="theme-num">04</span>
+      <span class="theme-marker">Asia · Conoscenza</span>
+    </div>
+    <h3 class="theme-title">La Conoscenza</h3>
+    <p class="theme-subtitle">Si conosce con la mente o oltre la mente?</p>
+    <div class="theme-body">Per lo zen la verità non passa dalle parole. Il maestro risponde alle domande con un silenzio, un colpo di bastone, un paradosso apparentemente assurdo (i famosi <em>koan</em>: «qual è il suono di una mano sola che applaude?»). Non per provocazione — per costringere la mente razionale a fermarsi. Solo quando cessa la presa del pensiero può arrivare il <em>satori</em>, l'illuminazione improvvisa. La conoscenza vera è <em>pre</em>-concettuale.</div>
+    <div class="theme-phils">
+      <span class="theme-phil">Bodhidharma</span>
+      <span class="theme-phil">Dogen</span>
+    </div>
+    <div class="theme-vs">
+      <div class="theme-vs-label">Confronto con l'Occidente</div>
+      <div class="theme-vs-text">L'Occidente ha costruito la logica per arrivare alla verità <em>attraverso</em> il linguaggio. Lo zen fa l'opposto: sospetta del linguaggio, cerca la verità nel silenzio che c'è prima delle parole. Curiosamente, il tardo Wittgenstein arriva a una conclusione simile: «di ciò di cui non si può parlare, si deve tacere».</div>
+    </div>
+  </article>
+
+  <article class="theme theme-asia reveal" data-theme="etica">
+    <div class="theme-head">
+      <span class="theme-num">05</span>
+      <span class="theme-marker">Asia · Etica</span>
+    </div>
+    <h3 class="theme-title">L'Etica</h3>
+    <p class="theme-subtitle">Come vivere insieme senza schiacciarsi?</p>
+    <div class="theme-body">Confucio non costruisce un'etica astratta: la radica nelle relazioni concrete. Padre-figlio, sovrano-suddito, amico-amico, fratello maggiore-fratello minore. Le virtù hanno nomi precisi: <em>ren</em> (benevolenza umana), <em>li</em> (il rito, cioè il modo corretto di trattare gli altri), <em>xiao</em> (la pietà filiale). Non esistono in astratto — si esprimono nel modo in cui saluti tua madre, parli a un anziano, rispetti un amico.</div>
+    <div class="theme-phils">
+      <span class="theme-phil">Confucio</span>
+      <span class="theme-phil">Mencio</span>
+    </div>
+    <div class="theme-vs">
+      <div class="theme-vs-label">Confronto con l'Occidente</div>
+      <div class="theme-vs-text">Kant cerca una legge morale universale valida per ogni essere razionale, ovunque. Confucio la cerca dentro le relazioni concrete di questa famiglia, questo villaggio, questa società. Due approcci opposti: etica della regola contro etica della relazione. L'Asia moderna vive ancora di questa eredità — spesso tornando incomprensibile all'Occidente individualista.</div>
+    </div>
+  </article>
+
+  <article class="theme theme-asia reveal delay-1" data-theme="liberta">
+    <div class="theme-head">
+      <span class="theme-num">06</span>
+      <span class="theme-marker">Asia · Libertà</span>
+    </div>
+    <h3 class="theme-title">La Libertà</h3>
+    <p class="theme-subtitle">Libertà significa scegliere, o smettere di desiderare?</p>
+    <div class="theme-body">Per il buddhismo la libertà non è «poter fare quello che vuoi». È liberarsi dall'attaccamento stesso — dal ciclo di desideri che genera sofferenza. La parola chiave è <em>nirvana</em>, che letteralmente significa «estinzione» — spegnimento, come quando soffi su una candela. Non è il paradiso dei piaceri: è l'estinzione del fuoco del volere, che ci tiene incatenati alla <em>samsara</em>, il ciclo delle rinascite.</div>
+    <div class="theme-phils">
+      <span class="theme-phil">Buddha</span>
+      <span class="theme-phil">Nagarjuna</span>
+    </div>
+    <div class="theme-vs">
+      <div class="theme-vs-label">Confronto con l'Occidente</div>
+      <div class="theme-vs-text">Sartre: «siamo condannati a essere liberi», dobbiamo scegliere continuamente. Il Buddha: siamo condannati a desiderare, dobbiamo imparare a smettere di scegliere. Stessa parola, direzioni opposte. L'Occidente moderno vede la libertà come <em>possibilità</em>; l'Asia antica la vede come <em>liberazione da</em>.</div>
+    </div>
+  </article>
+
+  <article class="theme theme-asia reveal delay-2" data-theme="tempo">
+    <div class="theme-head">
+      <span class="theme-num">07</span>
+      <span class="theme-marker">Asia · Tempo</span>
+    </div>
+    <h3 class="theme-title">Il Tempo</h3>
+    <p class="theme-subtitle">Lineare, o ciclico come le stagioni?</p>
+    <div class="theme-body">Per l'induismo il tempo non va da un inizio a una fine: respira. Ogni <em>kalpa</em> — un giorno di Brahma — dura 4,32 miliardi di anni (numero preciso, sorprendentemente vicino all'età del sistema solare). Alla fine tutto si dissolve, poi ricomincia. Un respiro cosmico infinito che non ha mai avuto inizio e non avrà mai fine. Non c'è storia della salvezza da portare avanti — c'è solo il ritorno eterno delle cose.</div>
+    <div class="theme-phils">
+      <span class="theme-phil">Upanishad</span>
+      <span class="theme-phil">Bhagavad Gita</span>
+    </div>
+    <div class="theme-vs">
+      <div class="theme-vs-label">Confronto con l'Occidente</div>
+      <div class="theme-vs-text">L'idea cristiana di storia lineare — creazione, caduta, redenzione, fine del mondo — è radicalmente diversa. Ma Nietzsche, che aveva letto Schopenhauer (che aveva letto le Upanishad), riporta il tempo ciclico in Occidente con l'<em>eterno ritorno</em>. Un cerchio fatto ripassare dall'India all'Europa in tre secoli.</div>
+    </div>
+  </article>
+
+  <article class="theme theme-asia reveal delay-3" data-theme="divino">
+    <div class="theme-head">
+      <span class="theme-num">08</span>
+      <span class="theme-marker">Asia · Divino</span>
+    </div>
+    <h3 class="theme-title">Il Divino</h3>
+    <p class="theme-subtitle">Dio, molti dèi, o l'impersonale?</p>
+    <div class="theme-body">Per l'induismo il divino ha mille volti — Shiva distrugge, Vishnu protegge, Devi è la madre cosmica — ma è sempre uno solo: il <em>Brahman</em> impersonale che sta dietro tutte le forme. Il buddhismo fa un passo ulteriore: non serve neanche parlare di Dio. La liberazione dal dolore è una questione pratica, non teologica. Il Buddha, quando gli chiedevano se esistesse un creatore, taceva: domanda sbagliata.</div>
+    <div class="theme-phils">
+      <span class="theme-phil">Upanishad</span>
+      <span class="theme-phil">Buddha</span>
+    </div>
+    <div class="theme-vs">
+      <div class="theme-vs-label">Confronto con l'Occidente</div>
+      <div class="theme-vs-text">L'Occidente moderno si divide tra monoteismo e ateismo — Dio o non Dio. L'Oriente apre una terza via: un divino impersonale che non chiede preghiere ma comprensione. O, con il Buddha, un'etica spirituale senza bisogno di un Dio. Oggi sempre più occidentali si riconoscono in queste categorie: «spirituale ma non religioso» è una posizione antica 2500 anni.</div>
+    </div>
+  </article>
+
+</section>
+
+<!-- ═══ PARTE 2 — ISLAM ═══ -->
+<div class="parte-divider reveal">
+  <div class="parte-divider-inner">
+    <span class="parte-num">Parte 02</span>
+    <h2 class="parte-title"><em>Islam.</em></h2>
+    <span class="parte-desc">Falsafa, Sufismo, teologia speculativa</span>
+  </div>
+</div>
+
+<section class="themes-grid">
+
+  <article class="theme theme-islam reveal" data-theme="essere">
+    <div class="theme-head">
+      <span class="theme-num">01</span>
+      <span class="theme-marker">Islam · Essere</span>
+    </div>
+    <h3 class="theme-title">L'Essere</h3>
+    <p class="theme-subtitle">Cosa significa «esistere»?</p>
+    <div class="theme-body">Avicenna è il grande metafisico dell'Islam medievale, e la sua mossa più importante è una distinzione che sembra sottile ma cambia tutto: separa <em>essenza</em> (cosa una cosa è) ed <em>esistenza</em> (il fatto che è). Puoi definire perfettamente cos'è un unicorno senza che questo lo faccia esistere. In Dio le due coincidono — è l'unico essere <em>necessario</em>, non poteva non esserci. Noi invece siamo esseri <em>contingenti</em>: potevamo anche non esistere, la nostra esistenza è un regalo, non un diritto.</div>
+    <div class="theme-phils">
+      <span class="theme-phil">Avicenna</span>
+      <span class="theme-phil">Ibn Arabi</span>
+    </div>
+    <div class="theme-vs">
+      <div class="theme-vs-label">Confronto con l'Occidente</div>
+      <div class="theme-vs-text">La distinzione essenza-esistenza di Avicenna entra in Europa grazie alle traduzioni dall'arabo e diventa il nucleo della metafisica di Tommaso d'Aquino. Sette secoli dopo Heidegger riprenderà esattamente lo stesso problema — perché c'è l'essere invece del nulla? — accorgendosi che l'Occidente aveva smesso di porsi la domanda giusta.</div>
+    </div>
+  </article>
+
+  <article class="theme theme-islam reveal delay-1" data-theme="divenire">
+    <div class="theme-head">
+      <span class="theme-num">02</span>
+      <span class="theme-marker">Islam · Divenire</span>
+    </div>
+    <h3 class="theme-title">Il Divenire</h3>
+    <p class="theme-subtitle">Dio crea una volta, o ad ogni istante?</p>
+    <div class="theme-body">Al-Ghazali fa un'affermazione che sembra folle: il mondo non funziona da solo. Non ci sono cause naturali autonome. È Dio, ad ogni istante, a ricreare tutto — compreso il fatto che il fuoco bruci il cotone. Quando tocchi una fiamma e senti caldo, non è la fiamma a causare il caldo: è Dio che, <em>in quel momento</em>, stabilisce questa correlazione. È una tesi teologica — vuole proteggere l'onnipotenza divina — ma ha conseguenze filosofiche radicali: il mondo può essere qualunque cosa, in qualunque istante.</div>
+    <div class="theme-phils">
+      <span class="theme-phil">Al-Ghazali</span>
+      <span class="theme-phil">Averroè</span>
+    </div>
+    <div class="theme-vs">
+      <div class="theme-vs-label">Confronto con l'Occidente</div>
+      <div class="theme-vs-text">Al-Ghazali anticipa di settecento anni la critica di Hume al principio di causa-effetto: non vediamo mai la «causa», vediamo solo sequenze. In Francia Malebranche svilupperà un occasionalismo cristiano quasi identico. Un'idea nata a Baghdad nell'XI secolo diventa materiale filosofico vivo ancora nel Settecento europeo.</div>
+    </div>
+  </article>
+
+  <article class="theme theme-islam reveal delay-2" data-theme="se">
+    <div class="theme-head">
+      <span class="theme-num">03</span>
+      <span class="theme-marker">Islam · Sé</span>
+    </div>
+    <h3 class="theme-title">Il Sé</h3>
+    <p class="theme-subtitle">Chi è il vero «io» che cerca Dio?</p>
+    <div class="theme-body">Per i sufi — i mistici dell'Islam — il piccolo io (<em>nafs</em>) è un velo che ti separa dal Reale. L'obiettivo è <em>fana</em>, l'annichilimento di sé in Dio. Non sparizione nichilista: piuttosto, smettere di identificarti col tuo io piccolo per riconoscerti nell'Amato divino. Rumi lo dice in versi celebri: «io non sono né d'Oriente né d'Occidente, né del mare né della terra… il mio posto è il senza-luogo». Quando l'io si dissolve, resta solo l'Amore.</div>
+    <div class="theme-phils">
+      <span class="theme-phil">Rumi</span>
+      <span class="theme-phil">Al-Hallaj</span>
+    </div>
+    <div class="theme-vs">
+      <div class="theme-vs-label">Confronto con l'Occidente</div>
+      <div class="theme-vs-text">I grandi mistici cristiani — Meister Eckhart, Teresa d'Avila, Giovanni della Croce — parlano esattamente la stessa lingua. La dissoluzione dell'io nel divino è un terreno dove le religioni si somigliano più di quanto ammettano. Al-Hallaj fu giustiziato per aver detto «io sono la Verità»; Eckhart fu processato per eresia per affermazioni quasi identiche.</div>
+    </div>
+  </article>
+
+  <article class="theme theme-islam reveal delay-3" data-theme="conoscenza">
+    <div class="theme-head">
+      <span class="theme-num">04</span>
+      <span class="theme-marker">Islam · Conoscenza</span>
+    </div>
+    <h3 class="theme-title">La Conoscenza</h3>
+    <p class="theme-subtitle">Ragione e rivelazione possono parlarsi?</p>
+    <div class="theme-body">È il grande dibattito del pensiero islamico medievale. Averroè, a Cordoba, difende appassionatamente la filosofia: la ragione non contraddice il Corano, lo illumina. Anzi, il filosofo ha il dovere religioso di studiare, perché capire la natura è capire l'opera di Dio. Al-Ghazali, dall'altra parte, diffida: la ragione ha limiti, e pretendere di dimostrare Dio razionalmente è un'arroganza. Solo la rivelazione e l'esperienza interiore danno la verità ultima.</div>
+    <div class="theme-phils">
+      <span class="theme-phil">Averroè</span>
+      <span class="theme-phil">Al-Ghazali</span>
+    </div>
+    <div class="theme-vs">
+      <div class="theme-vs-label">Confronto con l'Occidente</div>
+      <div class="theme-vs-text">Lo stesso dibattito avviene in Europa tra Tommaso d'Aquino (ragione e fede si completano) e Lutero (<em>sola fide</em>, solo la fede). Averroè era letto a Parigi e influenzò direttamente la scolastica cristiana — al punto che si parlava di «averroismo latino». Un filosofo arabo che parla a cristiani, attraverso il testo greco di Aristotele che aveva commentato. Filosofia come conversazione globale, ben prima della globalizzazione.</div>
+    </div>
+  </article>
+
+  <article class="theme theme-islam reveal" data-theme="etica">
+    <div class="theme-head">
+      <span class="theme-num">05</span>
+      <span class="theme-marker">Islam · Etica</span>
+    </div>
+    <h3 class="theme-title">L'Etica</h3>
+    <p class="theme-subtitle">Agire bene è obbedire, o comprendere?</p>
+    <div class="theme-body">Due posizioni contrapposte nella teologia islamica. Per la tradizione maggioritaria l'etica è nella <em>sharia</em> — la legge rivelata da Dio: bene è ciò che Dio comanda, male è ciò che Dio proibisce, punto. Per i <em>mutaziliti</em> — corrente razionalista — il bene e il male esistono oggettivamente e sono riconoscibili dalla ragione umana, anche senza rivelazione. Non sono categorie arbitrarie: Dio comanda il bene <em>perché</em> è bene, non il contrario.</div>
+    <div class="theme-phils">
+      <span class="theme-phil">Al-Mawardi</span>
+      <span class="theme-phil">Mutaziliti</span>
+    </div>
+    <div class="theme-vs">
+      <div class="theme-vs-label">Confronto con l'Occidente</div>
+      <div class="theme-vs-text">Lo stesso rovello attraversa la teologia cristiana (Dio comanda il bene perché è bene, o è bene perché Dio lo comanda?) ed esplode nell'Illuminismo con Kant: la morale è dentro la ragione, non ha bisogno di Dio per essere riconosciuta. I mutaziliti avevano detto una cosa simile cinque secoli prima, ma persero la battaglia teologica dentro l'Islam.</div>
+    </div>
+  </article>
+
+  <article class="theme theme-islam reveal delay-1" data-theme="liberta">
+    <div class="theme-head">
+      <span class="theme-num">06</span>
+      <span class="theme-marker">Islam · Libertà</span>
+    </div>
+    <h3 class="theme-title">La Libertà</h3>
+    <p class="theme-subtitle">Se Dio sa già tutto, io scelgo davvero?</p>
+    <div class="theme-body">Il problema del libero arbitrio scuote la teologia islamica dalle origini. I <em>jabariti</em> sostengono la predestinazione assoluta: tutto è già scritto, l'uomo è come una piuma nel vento. I <em>qadariti</em> difendono la libertà umana: se non siamo liberi, la responsabilità morale non ha senso. Al-Ash'ari tenta una sintesi geniale: Dio crea tutte le azioni, ma l'uomo le «acquisisce» (<em>kasb</em>) rendendole proprie — e quindi moralmente responsabili. Risposta elegante, ma tutt'altro che chiara.</div>
+    <div class="theme-phils">
+      <span class="theme-phil">Al-Ash'ari</span>
+      <span class="theme-phil">Mutaziliti</span>
+    </div>
+    <div class="theme-vs">
+      <div class="theme-vs-label">Confronto con l'Occidente</div>
+      <div class="theme-vs-text">Stesso rovello nel cristianesimo: grazia e libero arbitrio in Agostino, predestinazione dura in Calvino, libertà difesa da Erasmo contro Lutero. La conciliazione tra prescienza divina e scelta umana è <em>il</em> problema teologico per eccellenza, in qualunque monoteismo. Oggi le neuroscienze lo ripongono in termini nuovi: se i neuroni decidono prima che io sia cosciente di decidere, dov'è la libertà?</div>
+    </div>
+  </article>
+
+  <article class="theme theme-islam reveal delay-2" data-theme="tempo">
+    <div class="theme-head">
+      <span class="theme-num">07</span>
+      <span class="theme-marker">Islam · Tempo</span>
+    </div>
+    <h3 class="theme-title">Il Tempo</h3>
+    <p class="theme-subtitle">Il mondo è eterno o creato?</p>
+    <div class="theme-body">Avicenna, seguendo Aristotele, sostiene che il mondo è eterno: emana necessariamente da Dio da sempre, come la luce dal sole. Al-Ghazali lo contesta con forza: il Corano dice che Dio ha creato il mondo <em>nel tempo</em>, dal nulla. Sostenere un mondo eterno significa limitare Dio, renderlo un principio cosmico passivo invece che un creatore libero. Il dibattito scuote l'intera filosofia medievale — e diventa una questione politica oltre che teologica.</div>
+    <div class="theme-phils">
+      <span class="theme-phil">Avicenna</span>
+      <span class="theme-phil">Al-Ghazali</span>
+    </div>
+    <div class="theme-vs">
+      <div class="theme-vs-label">Confronto con l'Occidente</div>
+      <div class="theme-vs-text">Tommaso d'Aquino eredita esattamente lo stesso dilemma: la ragione filosofica tende all'eternità del mondo, la rivelazione afferma la creazione. Soluzione tomistica elegante: per fede il mondo è creato, ma per ragione <em>pura</em> non si può dimostrare né l'una né l'altra tesi. Un rispetto delle due autorità che ha plasmato l'intellettualità cattolica fino ad oggi.</div>
+    </div>
+  </article>
+
+  <article class="theme theme-islam reveal delay-3" data-theme="divino">
+    <div class="theme-head">
+      <span class="theme-num">08</span>
+      <span class="theme-marker">Islam · Divino</span>
+    </div>
+    <h3 class="theme-title">Il Divino</h3>
+    <p class="theme-subtitle">Dio si conosce per ragione o per amore?</p>
+    <div class="theme-body">Due vie, storicamente in tensione. I filosofi (<em>falasifa</em>) arrivano a Dio attraverso la logica: un primo motore immobile, un essere necessario, una causa prima. I sufi lo cercano nell'esperienza diretta dell'amore: preghiera estatica, poesia, danza, musica. Per Ibn Arabi tutto ciò che esiste è manifestazione dell'Essere unico — <em>wahdat al-wujud</em>, «unità dell'essere». Non ci sono due cose, Dio e il mondo: c'è un solo Essere che si manifesta in infinite forme.</div>
+    <div class="theme-phils">
+      <span class="theme-phil">Ibn Arabi</span>
+      <span class="theme-phil">Rumi</span>
+    </div>
+    <div class="theme-vs">
+      <div class="theme-vs-label">Confronto con l'Occidente</div>
+      <div class="theme-vs-text">La tesi di Ibn Arabi ricorda impressionante il panteismo di Spinoza: <em>Deus sive Natura</em>, Dio ovvero Natura, un'unica sostanza infinita. Ma Ibn Arabi ci arriva attraverso il cuore, Spinoza attraverso la geometria euclidea. Stessa intuizione metafisica, due modi di toccarla. Forse la cosa più interessante della filosofia è che a volte, da culture lontanissime, due pensatori inciampano nella stessa verità.</div>
+    </div>
+  </article>
+
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo-big reveal"><em>Filosofia.</em><br>In aggiornamento.</div>
+    <div class="footer-meta reveal delay-1">
+      <div><strong>2</strong> tradizioni</div>
+      <div><strong>16</strong> temi</div>
+      <div><strong>16</strong> confronti</div>
+      <div><strong>∞</strong> conversazione</div>
+      <div style="margin-top:16px">Schema di apprendimento · 2026</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ═══ HAMBURGER ═══
+(function(){
+  var burger = document.getElementById('nav-burger');
+  var overlay = document.getElementById('nav-overlay');
+  if (!burger || !overlay) return;
+  function toggle(){
+    var isOpen = overlay.classList.contains('open');
+    if(isOpen){
+      overlay.classList.remove('open');
+      burger.classList.remove('open');
+      document.body.style.overflow = '';
+    } else {
+      overlay.classList.add('open');
+      burger.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+  }
+  burger.addEventListener('click', toggle);
+  overlay.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', function(){
+      overlay.classList.remove('open');
+      burger.classList.remove('open');
+      document.body.style.overflow = '';
+    });
+  });
+})();
+
+// ═══ SCROLL REVEAL ═══
+(function(){
+  if (!('IntersectionObserver' in window)) {
+    document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in')});
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if (entry.isIntersecting){
+        entry.target.classList.add('in');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -50px 0px' });
+  document.querySelectorAll('.reveal').forEach(function(el){ observer.observe(el); });
+})();
+
+// ═══ PROTECTION ═══
+(function(){
+  var toast = document.getElementById('protect-toast');
+  var timer = null;
+  function showToast(){
+    if (!toast) return;
+    toast.classList.add('show');
+    clearTimeout(timer);
+    timer = setTimeout(function(){ toast.classList.remove('show'); }, 1800);
+  }
+  document.addEventListener('contextmenu', function(e){ e.preventDefault(); showToast(); });
+  document.addEventListener('keydown', function(e){
+    var key = e.key || '';
+    var blocked = false;
+    if (key === 'F12') blocked = true;
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey && (key === 'I' || key === 'i' || key === 'J' || key === 'j' || key === 'C' || key === 'c')) blocked = true;
+    if ((e.ctrlKey || e.metaKey) && (key === 'U' || key === 'u' || key === 'S' || key === 's')) blocked = true;
+    if (blocked) { e.preventDefault(); showToast(); }
+  });
+})();
+</script>
+<script>
+
+// ═══ THEME FILTERS ═══
+(function(){
+  var filters = document.querySelectorAll('.theme-filter');
+  var themes = document.querySelectorAll('.theme[data-theme]');
+  var dividers = document.querySelectorAll('.parte-divider');
+  if (!filters.length) return;
+
+  filters.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var val = btn.getAttribute('data-filter');
+      filters.forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+
+      if (val === 'all') {
+        themes.forEach(function(t){ t.classList.remove('filter-hidden'); });
+        dividers.forEach(function(d){ d.classList.remove('filter-hidden'); });
+      } else {
+        themes.forEach(function(t){
+          if (t.getAttribute('data-theme') === val) {
+            t.classList.remove('filter-hidden');
+          } else {
+            t.classList.add('filter-hidden');
+          }
+        });
+        // Dividers visibili sempre (Parte 1 / Parte 2 restano come separatori)
+        dividers.forEach(function(d){ d.classList.remove('filter-hidden'); });
+      }
+      // Scroll smooth verso i temi
+      if (val !== 'all') {
+        setTimeout(function(){
+          var firstVisible = document.querySelector('.theme:not(.filter-hidden)');
+          if (firstVisible) {
+            var top = firstVisible.getBoundingClientRect().top + window.pageYOffset - 100;
+            window.scrollTo({top: top, behavior: 'smooth'});
+          }
+        }, 50);
+      }
+    });
+  });
+})();
+
+</script>
+</body>
+</html>
